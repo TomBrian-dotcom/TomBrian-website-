@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>TomBrian | Create Account</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #05070d;
+      color: #ffffff;
+      padding: 25px 16px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* LOGO */
+
+    .brand {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .logo {
+      color: #d9a441;
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .tagline {
+      color: #8f97a5;
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    /* CARD */
+
+    .card {
+      background: #11151f;
+      border: 1px solid #252b37;
+      border-radius: 18px;
+      padding: 32px 26px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .card-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .card-header h1 {
+      font-size: 28px;
+      margin-bottom: 9px;
+    }
+
+    .card-header p {
+      color: #9da5b3;
+      font-size: 14px;
+    }
+
+    /* FORM */
+
+    .form-group {
+      margin-bottom: 19px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .required {
+      color: #d9a441;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 14px 15px;
+      border-radius: 9px;
+      border: 1px solid #303746;
+      background: #080b12;
+      color: #ffffff;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input::placeholder {
+      color: #687180;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #d9a441;
+    }
+
+    select {
+      appearance: auto;
+    }
+
+    .help-text {
+      margin-top: 6px;
+      color: #727b89;
+      font-size: 12px;
+    }
+
+    /* PASSWORD */
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .password-wrapper input {
+      padding-right: 85px;
+    }
+
+    .show-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: #d9a441;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* TERMS */
+
+    .terms {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 24px 0;
+    }
+
+    .terms input {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: #d9a441;
+      flex-shrink: 0;
+    }
+
+    .terms label {
+      color: #9da5b3;
+      font-size: 13px;
+      line-height: 1.5;
+      font-weight: normal;
+      margin: 0;
+    }
+
+    .terms a {
+      color: #d9a441;
+      text-decoration: none;
+    }
+
+    /* BUTTON */
+
+    .signup-button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 9px;
+      background: #d9a441;
+      color: #05070d;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .signup-button:hover {
+      opacity: 0.9;
+    }
+
+    .signup-button:active {
+      transform: scale(0.99);
+    }
+
+    /* LOGIN */
+
+    .login-section {
+      text-align: center;
+      margin-top: 25px;
+      padding-top: 23px;
+      border-top: 1px solid #292f3a;
+      color: #9da5b3;
+      font-size: 14px;
+    }
+
+    .login-section a {
+      color: #d9a441;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    /* BACK HOME */
+
+    .back-home {
+      display: block;
+      text-align: center;
+      margin-top: 22px;
+      color: #8f97a5;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .back-home:hover {
+      color: #d9a441;
+    }
+
+    /* SECURITY NOTICE */
+
+    .security {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-top: 25px;
+      padding: 14px;
+      background: #0b0e15;
+      border: 1px solid #242a35;
+      border-radius: 9px;
+    }
+
+    .security-icon {
+      font-size: 18px;
+    }
+
+    .security p {
+      color: #7f8795;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    /* FOOTER */
+
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #656d7b;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 480px) {
+
+      body {
+        padding: 18px 12px;
+      }
+
+      .card {
+        padding: 27px 19px;
+      }
+
+      .logo {
+        font-size: 29px;
+      }
+
+      .card-header h1 {
+        font-size: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+      <div class="logo">
+        TomBrian
+      </div>
+
+      <div class="tagline">
+        Simple • Secure • Connected
+      </div>
+
+    </div>
+
+
+    <!-- SIGN UP CARD -->
+
+    <div
