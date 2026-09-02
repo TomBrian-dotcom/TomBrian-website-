@@ -164,6 +164,29 @@
       cursor: not-allowed;
     }
 
+    .message {
+      display: none;
+      margin-bottom: 20px;
+      padding: 13px;
+      border-radius: 9px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .message.success {
+      display: block;
+      background: #12351f;
+      border: 1px solid #24733d;
+      color: #8ff0aa;
+    }
+
+    .message.error {
+      display: block;
+      background: #351519;
+      border: 1px solid #7b2933;
+      color: #ff9da6;
+    }
+
     .login-section {
       text-align: center;
       margin-top: 25px;
@@ -250,6 +273,9 @@
         <p>Join TomBrian and manage your services in one place.</p>
       </div>
 
+      <!-- Messages appear here -->
+      <div id="message" class="message"></div>
+
       <form id="signupForm">
 
         <div class="form-group">
@@ -262,6 +288,7 @@
             id="fullName"
             name="fullName"
             placeholder="Enter your full name"
+            autocomplete="name"
             required
           >
         </div>
@@ -276,6 +303,7 @@
             id="phone"
             name="phone"
             placeholder="e.g. 0712345678"
+            autocomplete="tel"
             required
           >
         </div>
@@ -290,6 +318,7 @@
             id="email"
             name="email"
             placeholder="Enter your email address"
+            autocomplete="email"
             required
           >
         </div>
@@ -306,6 +335,7 @@
               name="password"
               placeholder="Create a password"
               minlength="6"
+              autocomplete="new-password"
               required
             >
 
@@ -331,6 +361,7 @@
               name="confirmPassword"
               placeholder="Confirm your password"
               minlength="6"
+              autocomplete="new-password"
               required
             >
 
@@ -354,7 +385,7 @@
           </label>
         </div>
 
-        <button type="submit" class="signup-button">
+        <button type="submit" class="signup-button" id="signupButton">
           Create Account
         </button>
 
@@ -386,19 +417,31 @@
 
   </div>
 
-  <!-- Supabase JavaScript library -->
+
+  <!-- =========================================================
+       SUPABASE JAVASCRIPT LIBRARY
+       ========================================================= -->
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
   <script>
 
     /* =========================================================
        TOMBRIAN SUPABASE CONNECTION
+
+       PUT YOUR REAL SUPABASE DETAILS BELOW
        ========================================================= */
 
     const SUPABASE_URL = https://ekqhsnzkovzmepxdajtu.supabase.co
 
     const SUPABASE_PUBLISHABLE_KEY =
       https://ekqhsnzkovzmepxdajtu.supabase.co
+
+
+    /* =========================================================
+       CONNECT TO SUPABASE
+       ========================================================= */
 
     const supabase = window.supabase.createClient(
       SUPABASE_URL,
@@ -429,6 +472,25 @@
 
 
     /* =========================================================
+       SHOW MESSAGE
+       ========================================================= */
+
+    function showMessage(text, type) {
+
+      const message = document.getElementById("message");
+
+      message.textContent = text;
+
+      message.className = "message " + type;
+
+      message.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
+
+
+    /* =========================================================
        CREATE ACCOUNT
        ========================================================= */
 
@@ -437,6 +499,11 @@
       .addEventListener("submit", async function(event) {
 
         event.preventDefault();
+
+
+        /* -----------------------------------------------------
+           GET FORM VALUES
+           ----------------------------------------------------- */
 
         const fullName =
           document.getElementById("fullName").value.trim();
@@ -454,42 +521,82 @@
           document.getElementById("confirmPassword").value;
 
 
-        /* Check passwords */
+        /* -----------------------------------------------------
+           VALIDATION
+           ----------------------------------------------------- */
 
-        if (password !== confirmPassword) {
+        if (!fullName) {
 
-          alert("Passwords do not match.");
+          showMessage(
+            "Please enter your full name.",
+            "error"
+          );
 
           return;
         }
 
 
-        /* Check email */
+        if (!phone) {
+
+          showMessage(
+            "Please enter your phone number.",
+            "error"
+          );
+
+          return;
+        }
+
 
         if (!email) {
 
-          alert("Please enter your email address.");
+          showMessage(
+            "Please enter your email address.",
+            "error"
+          );
 
           return;
         }
 
 
-        /* Disable button while processing */
+        if (password.length < 6) {
+
+          showMessage(
+            "Your password must be at least 6 characters.",
+            "error"
+          );
+
+          return;
+        }
+
+
+        if (password !== confirmPassword) {
+
+          showMessage(
+            "Passwords do not match.",
+            "error"
+          );
+
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           DISABLE BUTTON
+           ----------------------------------------------------- */
 
         const button =
-          document.querySelector(".signup-button");
+          document.getElementById("signupButton");
 
         button.disabled = true;
+
         button.textContent = "Creating Account...";
 
 
         try {
 
-          /*
-            Create the Supabase Auth account.
-
-            Name and phone are stored as user metadata.
-          */
+          /* ---------------------------------------------------
+             CREATE SUPABASE AUTH ACCOUNT
+             --------------------------------------------------- */
 
           const { data, error } =
             await supabase.auth.signUp({
@@ -507,67 +614,119 @@
 
                 emailRedirectTo:
                   window.location.origin + "/login.html"
+
               }
 
             });
 
 
+          /* ---------------------------------------------------
+             CHECK FOR SUPABASE ERROR
+             --------------------------------------------------- */
+
           if (error) {
 
             throw error;
+
           }
 
 
-          /*
-            Supabase may require the user
-            to verify their email first.
-          */
+          /* ---------------------------------------------------
+             ACCOUNT CREATED BUT EMAIL CONFIRMATION REQUIRED
+             --------------------------------------------------- */
 
           if (data.user && !data.session) {
 
-            alert(
-              "Account created successfully!\n\n" +
-              "Please check your email and click the verification link before logging in."
+            showMessage(
+              "Account created successfully! Please check your email and click the verification link before logging in.",
+              "success"
             );
 
-            window.location.href = "login.html";
+            /*
+              Keep the user's details visible instead of
+              clearing the form.
+            */
+
+            button.textContent = "Account Created";
 
             return;
           }
 
 
-          /*
-            If email confirmation is disabled,
-            the user may receive a session immediately.
-          */
+          /* ---------------------------------------------------
+             ACCOUNT CREATED AND USER IS LOGGED IN
+             --------------------------------------------------- */
 
           if (data.session) {
 
-            alert("Account created successfully!");
+            showMessage(
+              "Account created successfully! Redirecting to your dashboard...",
+              "success"
+            );
 
-            window.location.href = "dashboard.html";
+            button.textContent = "Success!";
+
+            setTimeout(function() {
+
+              window.location.href = "dashboard.html";
+
+            }, 1500);
 
             return;
           }
 
 
-          alert("Account created. Please check your email.");
+          /* ---------------------------------------------------
+             FALLBACK
+             --------------------------------------------------- */
 
-          window.location.href = "login.html";
+          showMessage(
+            "Account created. Please check your email before logging in.",
+            "success"
+          );
+
+          button.textContent = "Account Created";
 
 
         } catch (error) {
 
           console.error("Signup error:", error);
 
-          alert(
-            "Account creation failed:\n\n" +
-            error.message
+
+          /* ---------------------------------------------------
+             SHOW ACTUAL ERROR
+
+             The form values are NOT cleared.
+             --------------------------------------------------- */
+
+          let errorMessage =
+            error && error.message
+              ? error.message
+              : "Something went wrong while creating your account.";
+
+
+          /* Make common Supabase errors easier to understand */
+
+          if (
+            errorMessage
+              .toLowerCase()
+              .includes("already registered")
+          ) {
+
+            errorMessage =
+              "This email is already registered. Please use another email or login to your existing account.";
+
+          }
+
+
+          showMessage(
+            "Account creation failed: " + errorMessage,
+            "error"
           );
 
-        } finally {
 
           button.disabled = false;
+
           button.textContent = "Create Account";
 
         }
@@ -577,4 +736,4 @@
   </script>
 
 </body>
-  </html>
+        </html>
