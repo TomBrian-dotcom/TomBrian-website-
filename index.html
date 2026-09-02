@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TomBrian - Simple, Secure, Connected</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #05070d;
+      color: white;
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #222631;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: bold;
+      color: #d9a441;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 15px;
+    }
+
+    .hero {
+      min-height: 75vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .hero h1 {
+      font-size: 45px;
+      margin-bottom: 15px;
+    }
+
+    .hero h1 span {
+      color: #d9a441;
+    }
+
+    .hero p {
+      max-width: 650px;
+      color: #b9bec9;
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 14px 25px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .primary {
+      background: #d9a441;
+      color: #05070d;
+    }
+
+    .secondary {
+      border: 1px solid #d9a441;
+      color: #d9a441;
+    }
+
+    .services {
+      padding: 60px 20px;
+      text-align: center;
+      background: #0a0d14;
+    }
+
+    .services h2 {
+      font-size: 30px;
+      margin-bottom: 35px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .card {
+      background: #11151f;
+      padding: 25px;
+      border-radius: 12px;
+      border: 1px solid #222631;
+    }
+
+    .card h3 {
+      color: #d9a441;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: #aeb4c0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #888f9c;
+      border-top: 1px solid #222631;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">TomBrian</div>
+
+    <nav>
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Welcome to <span>TomBrian</span></h1>
+
+    <p>
+      Simple, secure and convenient digital services for airtime,
+      payments, transactions and commissions.
+    </p>
+
+    <div class="buttons">
+      <a href="#" class="button primary">Get Started</a>
+      <a href="#" class="button secondary">Login</a>
+    </div>
+  </section>
+
+  <section class="services" id="services">
+    <h2>Our Services</h2>
+
+    <div class="cards">
+
+      <div class="card">
+        <h3>📱 Airtime</h3>
+        <p>Convenient airtime services for your everyday needs.</p>
+      </div>
+
+      <div class="card">
+        <h3>💳 Payments</h3>
+        <p>Simple and convenient digital payment services.</p>
+      </div>
+
+      <div class="card">
+        <h3>💰 Commission</h3>
+        <p>Track your earned commissions and manage your balance.</p>
+      </div>
+
+      <div class="card">
+        <h3>📊 Transactions</h3>
+        <p>Keep track of your transactions from one place.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    © 2026 TomBrian. All rights reserved.
+  </footer>
+
+</body>
+  </html>
