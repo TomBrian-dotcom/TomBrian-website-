@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>TomBrian | Dashboard</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #05070d;
+      color: #ffffff;
+      line-height: 1.5;
+      padding-bottom: 85px;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #080b12;
+      border-bottom: 1px solid #242936;
+      padding: 15px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      color: #d9a441;
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .notification {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid #303746;
+      background: #11151f;
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 17px;
+    }
+
+    .profile-circle {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #d9a441;
+      color: #05070d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    main {
+      width: 100%;
+      max-width: 1100px;
+      margin: auto;
+      padding: 25px 18px;
+    }
+
+    .welcome {
+      margin-bottom: 24px;
+    }
+
+    .welcome h1 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    .welcome p {
+      color: #929aa8;
+      font-size: 14px;
+    }
+
+    .gold {
+      color: #d9a441;
+    }
+
+    /* =========================
+       BALANCE
+    ========================= */
+
+    .balance-card {
+      background:
+        linear-gradient(135deg, #17130a, #11151f);
+      border: 1px solid #4a3b20;
+      border-radius: 17px;
+      padding: 25px;
+      margin-bottom: 25px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .balance-card::after {
+      content: "";
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      border: 1px solid #4a3b20;
+      right: -75px;
+      top: -75px;
+    }
+
+    .balance-label {
+      color: #a8afbb;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    .balance {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .balance span {
+      font-size: 18px;
+      color: #d9a441;
+    }
+
+    .balance-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .small-button {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid #d9a441;
+      background: transparent;
+      color: #d9a441;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .small-button.primary {
+      background: #d9a441;
+      color: #05070d;
+    }
+
+    /* =========================
+       QUICK ACTIONS
+    ========================= */
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .section-title h2 {
+      font-size: 20px;
+    }
+
+    .section-title a {
+      color: #d9a441;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 13px;
+      margin-bottom: 30px;
+    }
+
+    .action-card {
+      background: #11151f;
+      border: 1px solid #252b37;
+      border-radius: 13px;
+      padding: 20px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .action-card:hover {
+      border-color: #d9a441;
+      transform: translateY(-2px);
+    }
+
+    .action-icon {
+      font-size: 27px;
+      margin-bottom: 8px;
+    }
+
+    .action-card h3 {
+      font-size: 13px;
+      color: #ffffff;
+    }
+
+    /* =========================
+       COMMISSION
+    ========================= */
+
+    .commission-card {
+      background: #11151f;
+      border: 1px solid #252b37;
+      border-radius: 15px;
+      padding: 22px;
+      margin-bottom: 30px;
+    }
+
+    .commission-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 17px;
+    }
+
+    .commission-top h3 {
+      font-size: 17px;
+    }
+
+    .commission-top a {
+      color: #d9a441;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .commission-amount {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 15px;
+    }
+
+    .commission-info {
+      display: flex;
+      justify-content: space-between;
+      color: #89919f;
+      font-size: 12px;
+    }
+
+    /* =========================
+       TRANSACTIONS
+    ========================= */
+
+    .transactions {
+      background: #11151f;
+      border: 1px solid #252b37;
+      border-radius: 15px;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .transaction {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 17px;
+      border-bottom: 1px solid #252b37;
+    }
+
+    .transaction:last-child {
+      border-bottom: none;
+    }
+
+    .transaction-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .transaction-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: #080b12;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .transaction-name {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .transaction-date {
+      color: #737c8b;
+      font-size: 11px;
+      margin-top: 3px;
+    }
+
+    .transaction-amount {
+      text-align: right;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .positive {
+      color: #63c174;
+    }
+
+    .negative {
+      color: #ffffff;
+    }
+
+    /* =========================
+       INFORMATION
+    ========================= */
+
+    .info-card {
+      background: #0c1018;
+      border: 1px solid #252b37;
+      border-radius: 13px;
+      padding: 18px;
+      color: #929aa8;
+      font-size: 13px;
+      margin-bottom: 25px;
+    }
+
+    .info-card strong {
+      color: #d9a441;
+    }
+
+    /* =========================
+       BOTTOM NAVIGATION
+    ========================= */
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      background: #080b12;
+      border-top: 1px solid #252b37;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 8px 5px;
+    }
+
+    .bottom-nav button {
+      background: transparent;
+      border: none;
+      color: #777f8d;
+      padding: 7px 3px;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .bottom-nav button.active {
+      color: #d9a441;
+    }
+
+    .bottom-icon {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 3px;
+    }
+
+    /* =========================
+       MODAL
+    ========================= */
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 500;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      width: 100%;
+      max-width: 430px;
+      background: #11151f;
+      border: 1px solid #303746;
+      border-radius: 16px;
+      padding: 25px;
+    }
+
+    .modal-content h2 {
+      margin-bottom: 10px;
+    }
+
+    .modal-content p {
+      color: #969eac;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .modal-buttons button {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #303746;
+      background: #080b12;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    .modal-buttons .confirm {
+      background: #d9a441;
+      color: #05070d;
+      border-color: #d9a441;
+      font-weight: 700;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 700px) {
+
+      .actions {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .welcome h1 {
+        font-size: 25px;
+      }
+
+      .balance {
+        font-size: 32px;
+      }
+    }
+
+    @media (min-width: 900px) {
+
+      main {
+        padding-left: 30px;
+        padding-right: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       HEADER
+  ========================= -->
+
+  <header>
+
+    <div class="logo">
+      TomBrian
+    </div>
+
+    <div class="header-right">
+
+      <button
+        class="notification"
+        onclick="showMessage('Notifications will be connected to your account.')"
+        aria-label="Notifications"
+      >
+        🔔
+      </button>
+
+      <div class="profile-circle">
+        U
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- =========================
+       MAIN CONTENT
+  ========================= -->
+
+  <main>
+
+    <!-- WELCOME -->
+
+    <div class="welcome">
+
+      <h1>
+        Welcome back, <span class="gold">Customer</span>
+      </h1>
+
+      <p>
+        Manage your TomBrian services from one place.
+      </p>
+
+    </div>
+
+
+    <!-- BALANCE -->
+
+    <section class="balance-card">
+
+      <div class="balance-label">
+        Available Balance
+      </div>
+
+      <div class="balance">
+        KES 0.00
+      </div>
+
+      <div class="balance-actions">
+
+        <button
+          class="small-button primary"
+          onclick="openAction('Top Up')"
+        >
+          + Top Up
+        </button>
+
+        <button
+          class="small-button"
+          onclick="openAction('Withdraw')"
+        >
+          Withdraw
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- QUICK ACTIONS -->
+
+    <div class="section-title">
+
+      <h2>
+        Quick Actions
+      </h2>
+
+    </div>
+
+
+    <div class="actions">
+
+      <div
+        class="action-card"
+        onclick="openAction('Sell Airtime')"
+      >
+
+        <div class="action-icon">
+          📱
+        </div>
+
+        <h3>
+          Sell Airtime
+        </h3>
+
+      </div>
+
+
+      <div
+        class="action-card"
+        onclick="openAction('Buy Airtime')"
+      >
+
+        <div class="action-icon">
+          📲
+        </div>
+
+        <h3>
+          Buy Airtime
+        </h3>
+
+      </div>
+
+
+      <div
+        class="action-card"
+        onclick="openAction('Top Up')"
+      >
+
+        <div class="action-icon">
+          ➕
+        </div>
+
+        <h3>
+          Top Up
+        </h3>
+
+      </div>
+
+
+      <div
+        class="action-card"
+        onclick="openAction('Withdraw')"
+      >
+
+        <div class="action-icon">
+          💸
+        </div>
+
+        <h3>
+          Withdraw
+        </h3>
+
+      </div>
+
+    </div>
+
+
+    <!-- COMMISSION -->
+
+    <div class="section-title">
+
+      <h2>
+        My Commission
+      </h2>
+
+      <a
+        href="#"
+        onclick="showMessage('Commission details will be available after backend integration.'); return false;"
+      >
+        View Details
+      </a>
+
+    </div>
+
+
+    <div class="commission-card">
+
+      <div class="commission-top">
+
+        <h3>
+          Commission Balance
+        </h3>
+
+        <span class="gold">
+          🏆
+        </span>
+
+      </div>
+
+      <div class="commission-amount">
+        KES 0.00
+      </div>
+
+      <div class="commission-info">
+
+        <span>
+          Available commission
+        </span>
+
+        <span>
+          Ready for withdrawal
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- TRANSACTIONS -->
+
+    <div class="section-title">
+
+      <h2>
+        Recent Transactions
+      </h2>
+
+      <a
+        href="#"
+        onclick="showMessage('Full transaction history will be added next.'); return false;"
+      >
+        View All
+      </a>
+
+    </div>
+
+
+    <div class="transactions">
+
+      <div class="transaction">
+
+        <div class="transaction-left">
+
+          <div class="transaction-icon">
+            📋
+          </div>
+
+          <div>
+
+            <div class="transaction-name">
+              No transactions yet
+            </div>
+
+            <div class="transaction-date">
+              Your transactions will appear here.
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="transaction-amount">
+          —
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- INFORMATION -->
+
+    <div class="info-card">
+
+      <strong>TomBrian Notice:</strong>
+
+      This dashboard is currently in development.
+      Account balances, commissions, transactions and
+      payment services will be connected to the secure
+      TomBrian backend before live use.
+
+    </div>
+
+  </main>
+
+
+  <!-- =========================
+       BOTTOM NAVIGATION
+  ========================= -->
+
+  <nav class="bottom-nav">
+
+    <button
+      class="active"
+      onclick="goHome()"
+    >
+
+      <span class="bottom-icon">
+        🏠
+      </span>
+
+      Home
+
+    </button>
+
+
+    <button
+      onclick="openAction('Transactions')"
+    >
+
+      <span class="bottom-icon">
+        📊
+      </span>
+
+      Transactions
+
+    </button>
+
+
+    <button
+      onclick="openAction('Commission')"
+    >
+
+      <span class="bottom-icon">
+        💰
+      </span>
+
+      Commission
+
+    </button>
+
+
+    <button
+      onclick="openAction('Account')"
+    >
+
+      <span class="bottom-icon">
+        👤
+      </span>
+
+      Account
+
+    </button>
+
+  </nav>
+
+
+  <!-- =========================
+       ACTION MODAL
+  ========================= -->
+
+  <div
+    class="modal"
+    id="actionModal"
+  >
+
+    <div class="modal-content">
+
+      <h2 id="modalTitle">
+        TomBrian
+      </h2>
+
+      <p id="modalText">
+        This service is being prepared.
+      </p>
+
+      <div class="modal-buttons">
+
+        <button
+          onclick="closeModal()"
+        >
+          Close
+        </button>
+
+        <button
+          class="confirm"
+          onclick="continueAction()"
+        >
+          Continue
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================= -->
+
+  <script>
+
+    let selectedAction = "";
+
+
+    /*
+      OPEN ACTION
+    */
+
+    function openAction(action) {
+
+      selectedAction = action;
+
+      document.getElementById("modalTitle").textContent =
+        action;
+
+      document.getElementById("modalText").textContent =
+        action +
+        " is ready for the next development stage. " +
+        "The service will be connected to the TomBrian backend.";
+
+      document
+        .getElementById("actionModal")
+        .classList
+        .add("show");
+
+    }
+
+
+    /*
+      CLOSE MODAL
+    */
+
+    function closeModal() {
+
+      document
+        .getElementById("actionModal")
+        .classList
+        .remove("show");
+
+    }
+
+
+    /*
+      CONTINUE
+    */
+
+    function continueAction() {
+
+      closeModal();
+
+      showMessage(
+        selectedAction +
+        " interface will be connected to the TomBrian backend next."
+      );
+
+    }
+
+
+    /*
+      SIMPLE MESSAGE
+    */
+
+    function showMessage(message) {
+
+      alert(message);
+
+    }
+
+
+    /*
+      HOME
+    */
+
+    function goHome() {
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
+    /*
+      CLOSE MODAL WHEN
+      CLICKING OUTSIDE
+    */
+
+    window.addEventListener(
+      "click",
+      function(event) {
+
+        const modal =
+          document.getElementById("actionModal");
+
+        if (event.target === modal) {
+
+          closeModal();
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+  </html>
