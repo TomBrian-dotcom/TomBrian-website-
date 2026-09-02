@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>TomBrian | Login</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #05070d;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 430px;
+    }
+
+    .logo {
+      text-align: center;
+      color: #d9a441;
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .tagline {
+      text-align: center;
+      color: #8f97a5;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: #11151f;
+      border: 1px solid #252b37;
+      border-radius: 16px;
+      padding: 30px 24px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 27px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #9da5b3;
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid #303746;
+      background: #080b12;
+      color: #ffffff;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #d9a441;
+    }
+
+    .login-button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 8px;
+      background: #d9a441;
+      color: #05070d;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .login-button:hover {
+      opacity: 0.9;
+    }
+
+    .forgot {
+      display: block;
+      text-align: right;
+      margin-top: 12px;
+      color: #d9a441;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 25px 0;
+      color: #737b89;
+      font-size: 13px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #2a303b;
+    }
+
+    .signup {
+      text-align: center;
+      color: #9da5b3;
+      font-size: 14px;
+    }
+
+    .signup a {
+      color: #d9a441;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 22px;
+      color: #8f97a5;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .back:hover {
+      color: #d9a441;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 25px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="logo">TomBrian</div>
+
+    <div class="tagline">
+      Simple • Secure • Connected
+    </div>
+
+    <div class="card">
+
+      <h1>Welcome Back</h1>
+
+      <p class="subtitle">
+        Login to your TomBrian account
+      </p>
+
+      <form>
+
+        <div class="form-group">
+          <label for="email">Email or Phone</label>
+
+          <input
+            type="text"
+            id="email"
+            name="email"
+            placeholder="Enter your email or phone"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+          >
+        </div>
+
+        <button type="submit" class="login-button">
+          Login
+        </button>
+
+      </form>
+
+      <a href="#" class="forgot">
+        Forgot Password?
+      </a>
+
+      <div class="divider">
+        OR
+      </div>
+
+      <div class="signup">
+        Don't have an account?
+        <a href="signup.html">Create Account</a>
+      </div>
+
+    </div>
+
+    <a href="index.html" class="back">
+      ← Back to TomBrian Home
+    </a>
+
+  </div>
+
+</body>
+          </html>
