@@ -426,27 +426,27 @@
 
 
   <script>
+/* =========================================================
+   TOMBRIAN SUPABASE CONNECTION
 
-    /* =========================================================
-       TOMBRIAN SUPABASE CONNECTION
+   PUT YOUR REAL SUPABASE DETAILS BELOW
+   ========================================================= */
 
-       PUT YOUR REAL SUPABASE DETAILS BELOW
-       ========================================================= */
+const SUPABASE_URL = "https://ekqhsnzkovzmepxdajtu.supabase.co";
 
-    const SUPABASE_URL = https://ekqhsnzkovzmepxdajtu.supabase.co
-
-    const SUPABASE_PUBLISHABLE_KEY =
-      https://ekqhsnzkovzmepxdajtu.supabase.co
+const SUPABASE_PUBLISHABLE_KEY =
+   "sb_publishable_v4DmfQMCBRvJE_dJvgk1og_v6JMXE_r";
 
 
-    /* =========================================================
-       CONNECT TO SUPABASE
-       ========================================================= */
+/* =========================================================
+   CONNECT TO SUPABASE
+   ========================================================= */
 
-    const supabase = window.supabase.createClient(
-      SUPABASE_URL,
-      "sb_publishable_v4DmfQMCBRvJE_dJvgk1og_v6JMXE_r"
-    );
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
 
 
     /* =========================================================
