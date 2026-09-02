@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>TomBrian | Create Account</title>
 
   <style>
@@ -11,10 +10,6 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
     }
 
     body {
@@ -28,10 +23,8 @@
     .page {
       width: 100%;
       max-width: 520px;
-      margin: 0 auto;
+      margin: auto;
     }
-
-    /* LOGO */
 
     .brand {
       text-align: center;
@@ -42,7 +35,6 @@
       color: #d9a441;
       font-size: 32px;
       font-weight: 800;
-      letter-spacing: 0.5px;
     }
 
     .tagline {
@@ -51,14 +43,12 @@
       margin-top: 5px;
     }
 
-    /* CARD */
-
     .card {
       background: #11151f;
       border: 1px solid #252b37;
       border-radius: 18px;
       padding: 32px 26px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 15px 40px rgba(0,0,0,.25);
     }
 
     .card-header {
@@ -76,8 +66,6 @@
       font-size: 14px;
     }
 
-    /* FORM */
-
     .form-group {
       margin-bottom: 19px;
     }
@@ -87,15 +75,13 @@
       margin-bottom: 8px;
       font-size: 14px;
       font-weight: 600;
-      color: #ffffff;
     }
 
     .required {
       color: #d9a441;
     }
 
-    input,
-    select {
+    input {
       width: 100%;
       padding: 14px 15px;
       border-radius: 9px;
@@ -104,36 +90,22 @@
       color: #ffffff;
       font-size: 15px;
       outline: none;
-      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      border-color: #d9a441;
     }
 
     input::placeholder {
       color: #687180;
     }
 
-    input:focus,
-    select:focus {
-      border-color: #d9a441;
-    }
-
-    select {
-      appearance: auto;
-    }
-
-    .help-text {
-      margin-top: 6px;
-      color: #727b89;
-      font-size: 12px;
-    }
-
-    /* PASSWORD */
-
     .password-wrapper {
       position: relative;
     }
 
     .password-wrapper input {
-      padding-right: 85px;
+      padding-right: 75px;
     }
 
     .show-password {
@@ -141,15 +113,13 @@
       right: 12px;
       top: 50%;
       transform: translateY(-50%);
-      background: transparent;
+      background: none;
       border: none;
       color: #d9a441;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: bold;
       cursor: pointer;
     }
-
-    /* TERMS */
 
     .terms {
       display: flex;
@@ -171,15 +141,7 @@
       font-size: 13px;
       line-height: 1.5;
       font-weight: normal;
-      margin: 0;
     }
-
-    .terms a {
-      color: #d9a441;
-      text-decoration: none;
-    }
-
-    /* BUTTON */
 
     .signup-button {
       width: 100%;
@@ -191,18 +153,11 @@
       font-size: 16px;
       font-weight: 800;
       cursor: pointer;
-      transition: opacity 0.2s, transform 0.1s;
     }
 
     .signup-button:hover {
-      opacity: 0.9;
+      opacity: .9;
     }
-
-    .signup-button:active {
-      transform: scale(0.99);
-    }
-
-    /* LOGIN */
 
     .login-section {
       text-align: center;
@@ -213,33 +168,23 @@
       font-size: 14px;
     }
 
-    .login-section a {
+    a {
       color: #d9a441;
       text-decoration: none;
       font-weight: 700;
     }
-
-    /* BACK HOME */
 
     .back-home {
       display: block;
       text-align: center;
       margin-top: 22px;
       color: #8f97a5;
-      text-decoration: none;
       font-size: 14px;
     }
-
-    .back-home:hover {
-      color: #d9a441;
-    }
-
-    /* SECURITY NOTICE */
 
     .security {
       display: flex;
       gap: 10px;
-      align-items: flex-start;
       margin-top: 25px;
       padding: 14px;
       background: #0b0e15;
@@ -257,20 +202,14 @@
       line-height: 1.5;
     }
 
-    /* FOOTER */
-
     footer {
       text-align: center;
       margin-top: 30px;
       color: #656d7b;
       font-size: 12px;
-      line-height: 1.6;
     }
 
-    /* MOBILE */
-
     @media (max-width: 480px) {
-
       body {
         padding: 18px 12px;
       }
@@ -294,21 +233,177 @@
 
   <div class="page">
 
-    <!-- BRAND -->
-
     <div class="brand">
+      <div class="logo">TomBrian</div>
+      <div class="tagline">Simple • Secure • Connected</div>
+    </div>
 
-      <div class="logo">
-        TomBrian
+    <div class="card">
+
+      <div class="card-header">
+        <h1>Create Account</h1>
+        <p>Join TomBrian and manage your services in one place.</p>
       </div>
 
-      <div class="tagline">
-        Simple • Secure • Connected
+      <form id="signupForm">
+
+        <div class="form-group">
+          <label for="fullName">
+            Full Name <span class="required">*</span>
+          </label>
+          <input
+            type="text"
+            id="fullName"
+            name="fullName"
+            placeholder="Enter your full name"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="phone">
+            Phone Number <span class="required">*</span>
+          </label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            placeholder="e.g. 0712345678"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="email">
+            Email Address
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email address"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password">
+            Password <span class="required">*</span>
+          </label>
+
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Create a password"
+              minlength="6"
+              required
+            >
+
+            <button
+              type="button"
+              class="show-password"
+              onclick="togglePassword('password', this)"
+            >
+              SHOW
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">
+            Confirm Password <span class="required">*</span>
+          </label>
+
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              placeholder="Confirm your password"
+              minlength="6"
+              required
+            >
+
+            <button
+              type="button"
+              class="show-password"
+              onclick="togglePassword('confirmPassword', this)"
+            >
+              SHOW
+            </button>
+          </div>
+        </div>
+
+        <div class="terms">
+          <input type="checkbox" id="terms" required>
+
+          <label for="terms">
+            I agree to the TomBrian
+            <a href="#">Terms & Conditions</a>
+            and understand that my account information will be handled securely.
+          </label>
+        </div>
+
+        <button type="submit" class="signup-button">
+          Create Account
+        </button>
+
+      </form>
+
+      <div class="login-section">
+        Already have an account?
+        <a href="login.html">Login</a>
       </div>
 
     </div>
 
+    <a href="index.html" class="back-home">
+      ← Back to Home
+    </a>
 
-    <!-- SIGN UP CARD -->
+    <div class="security">
+      <div class="security-icon">🔒</div>
 
-    <div
+      <p>
+        Your account details should only be entered on the official TomBrian
+        website. Never share your password or verification codes with anyone.
+      </p>
+    </div>
+
+    <footer>
+      © 2026 TomBrian. All rights reserved.
+    </footer>
+
+  </div>
+
+  <script>
+    function togglePassword(id, button) {
+      const input = document.getElementById(id);
+
+      if (input.type === "password") {
+        input.type = "text";
+        button.textContent = "HIDE";
+      } else {
+        input.type = "password";
+        button.textContent = "SHOW";
+      }
+    }
+
+    document.getElementById("signupForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+      }
+
+      alert("Signup page is working. Account creation will be connected next.");
+    });
+  </script>
+
+</body>
+        </html>
