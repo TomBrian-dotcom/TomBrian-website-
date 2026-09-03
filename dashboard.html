@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>TomBrian | Dashboard</title>
 
   <style>
@@ -13,279 +12,219 @@
       padding: 0;
     }
 
-    html {
-      scroll-behavior: smooth;
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f7fb;
+      color: #172033;
+      min-height: 100vh;
     }
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #05070d;
-      color: #ffffff;
-      line-height: 1.5;
-      padding-bottom: 85px;
-    }
+    /* =========================
+       HEADER
+    ========================= */
 
     header {
+      background: #111827;
+      color: white;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       position: sticky;
       top: 0;
-      z-index: 100;
-      background: #080b12;
-      border-bottom: 1px solid #242936;
-      padding: 15px 5%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      z-index: 20;
     }
 
-    .logo {
-      color: #d9a441;
-      font-size: 24px;
-      font-weight: 800;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 21px;
+      font-weight: bold;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #16a34a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
     }
 
     .header-right {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
 
     .notification {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      border: 1px solid #303746;
-      background: #11151f;
-      color: #ffffff;
+      font-size: 21px;
       cursor: pointer;
-      font-size: 17px;
     }
 
     .profile-circle {
       width: 38px;
       height: 38px;
+      background: #374151;
       border-radius: 50%;
-      background: #d9a441;
-      color: #05070d;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 800;
-      cursor: pointer;
+      font-weight: bold;
     }
 
+    /* =========================
+       MAIN
+    ========================= */
+
     main {
-      width: 100%;
       max-width: 1100px;
       margin: auto;
-      padding: 25px 18px;
+      padding: 25px 18px 100px;
+    }
+
+    .connection {
+      background: #ecfdf5;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 20px;
     }
 
     .welcome {
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .welcome h1 {
-      font-size: 28px;
-      margin-bottom: 5px;
-    }
-
-    .welcome p {
-      color: #929aa8;
-      font-size: 14px;
-    }
-
-    .gold {
-      color: #d9a441;
-    }
-
-    /* CONNECTION STATUS */
-
-    .status-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: #0c1018;
-      border: 1px solid #252b37;
-      border-radius: 10px;
-      padding: 10px 13px;
-      margin-bottom: 20px;
-      color: #929aa8;
-      font-size: 12px;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #d9a441;
-      flex-shrink: 0;
-    }
-
-    .status-bar.success .status-dot {
-      background: #63c174;
-    }
-
-    .status-bar.error .status-dot {
-      background: #e05a5a;
-    }
-
-    .balance-card {
-      background:
-        linear-gradient(135deg, #17130a, #11151f);
-      border: 1px solid #4a3b20;
-      border-radius: 17px;
-      padding: 25px;
-      margin-bottom: 25px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .balance-card::after {
-      content: "";
-      position: absolute;
-      width: 170px;
-      height: 170px;
-      border-radius: 50%;
-      border: 1px solid #4a3b20;
-      right: -75px;
-      top: -75px;
-    }
-
-    .balance-label {
-      color: #a8afbb;
-      font-size: 13px;
+      font-size: 27px;
       margin-bottom: 7px;
     }
 
+    .welcome p {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    /* =========================
+       BALANCE
+    ========================= */
+
+    .balance-card {
+      background: #111827;
+      color: white;
+      border-radius: 18px;
+      padding: 25px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .balance-label {
+      color: #cbd5e1;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
     .balance {
-      font-size: 36px;
-      font-weight: 800;
-      margin-bottom: 18px;
+      font-size: 34px;
+      font-weight: bold;
     }
 
-    .balance span {
-      font-size: 18px;
-      color: #d9a441;
-    }
-
-    .balance-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .small-button {
-      padding: 10px 16px;
-      border-radius: 8px;
-      border: 1px solid #d9a441;
-      background: transparent;
-      color: #d9a441;
-      text-decoration: none;
+    .balance-sub {
+      margin-top: 8px;
+      color: #9ca3af;
       font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
     }
 
-    .small-button.primary {
-      background: #d9a441;
-      color: #05070d;
-    }
+    /* =========================
+       SECTIONS
+    ========================= */
 
     .section-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 25px 0 14px;
     }
 
-    .section-title h2 {
-      font-size: 20px;
-    }
-
-    .section-title a {
-      color: #d9a441;
-      text-decoration: none;
-      font-size: 13px;
-    }
+    /* =========================
+       QUICK ACTIONS
+    ========================= */
 
     .actions {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 13px;
-      margin-bottom: 30px;
     }
 
-    .action-card {
-      background: #11151f;
-      border: 1px solid #252b37;
-      border-radius: 13px;
-      padding: 20px 10px;
+    .action {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 18px 10px;
       text-align: center;
       cursor: pointer;
       transition: 0.2s;
     }
 
-    .action-card:hover {
-      border-color: #d9a441;
+    .action:hover {
       transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.07);
     }
 
     .action-icon {
-      font-size: 27px;
-      margin-bottom: 8px;
+      font-size: 26px;
+      margin-bottom: 9px;
     }
 
-    .action-card h3 {
-      font-size: 13px;
-      color: #ffffff;
+    .action-title {
+      font-size: 14px;
+      font-weight: bold;
     }
+
+    /* =========================
+       COMMISSION
+    ========================= */
 
     .commission-card {
-      background: #11151f;
-      border: 1px solid #252b37;
+      background: white;
+      border: 1px solid #e5e7eb;
       border-radius: 15px;
-      padding: 22px;
-      margin-bottom: 30px;
-    }
-
-    .commission-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 17px;
-    }
-
-    .commission-top h3 {
-      font-size: 17px;
+      padding: 20px;
     }
 
     .commission-amount {
-      font-size: 28px;
-      font-weight: 800;
-      margin-bottom: 15px;
+      font-size: 27px;
+      font-weight: bold;
+      margin-top: 7px;
     }
 
-    .commission-info {
-      display: flex;
-      justify-content: space-between;
-      color: #89919f;
-      font-size: 12px;
+    .commission-card p {
+      color: #6b7280;
+      font-size: 13px;
+      margin-top: 5px;
     }
+
+    /* =========================
+       TRANSACTIONS
+    ========================= */
 
     .transactions {
-      background: #11151f;
-      border: 1px solid #252b37;
+      background: white;
+      border: 1px solid #e5e7eb;
       border-radius: 15px;
       overflow: hidden;
-      margin-bottom: 30px;
     }
 
     .transaction {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 17px;
-      border-bottom: 1px solid #252b37;
+      padding: 16px;
+      border-bottom: 1px solid #f0f0f0;
     }
 
     .transaction:last-child {
@@ -294,179 +233,250 @@
 
     .transaction-left {
       display: flex;
-      align-items: center;
       gap: 12px;
-      min-width: 0;
+      align-items: center;
     }
 
     .transaction-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      background: #080b12;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #f3f4f6;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
     }
 
-    .transaction-name {
+    .transaction-description {
+      font-weight: bold;
       font-size: 14px;
-      font-weight: 700;
     }
 
     .transaction-date {
-      color: #737c8b;
-      font-size: 11px;
+      color: #9ca3af;
+      font-size: 12px;
       margin-top: 3px;
     }
 
     .transaction-amount {
-      text-align: right;
+      font-weight: bold;
       font-size: 14px;
-      font-weight: 700;
-      white-space: nowrap;
-      margin-left: 10px;
     }
 
-    .positive {
-      color: #63c174;
+    .empty {
+      padding: 25px;
+      text-align: center;
+      color: #9ca3af;
+      font-size: 14px;
     }
 
-    .negative {
-      color: #ffffff;
-    }
+    /* =========================
+       DEVELOPMENT NOTICE
+    ========================= */
 
-    .info-card {
-      background: #0c1018;
-      border: 1px solid #252b37;
-      border-radius: 13px;
-      padding: 18px;
-      color: #929aa8;
+    .notice {
+      margin-top: 22px;
+      padding: 15px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      border-radius: 12px;
       font-size: 13px;
-      margin-bottom: 25px;
+      line-height: 1.5;
     }
 
-    .info-card strong {
-      color: #d9a441;
-    }
+    /* =========================
+       BOTTOM NAV
+    ========================= */
 
     .bottom-nav {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      z-index: 200;
-      background: #080b12;
-      border-top: 1px solid #252b37;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      padding: 8px 5px;
+      height: 68px;
+      background: white;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 30;
     }
 
-    .bottom-nav button {
-      background: transparent;
-      border: none;
-      color: #777f8d;
-      padding: 7px 3px;
+    .nav-item {
+      text-align: center;
+      color: #6b7280;
+      font-size: 12px;
       cursor: pointer;
-      font-size: 11px;
     }
 
-    .bottom-nav button.active {
-      color: #d9a441;
-    }
-
-    .bottom-icon {
-      display: block;
-      font-size: 20px;
+    .nav-icon {
+      font-size: 21px;
       margin-bottom: 3px;
     }
 
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 500;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.75);
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+    .nav-item.active {
+      color: #16a34a;
+      font-weight: bold;
     }
 
-    .modal.show {
+    /* =========================
+       MODAL
+    ========================= */
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .modal-overlay.show {
       display: flex;
     }
 
-    .modal-content {
+    .modal {
       width: 100%;
-      max-width: 430px;
-      background: #11151f;
-      border: 1px solid #303746;
-      border-radius: 16px;
-      padding: 25px;
+      max-width: 450px;
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
     }
 
-    .modal-content h2 {
-      margin-bottom: 10px;
-    }
-
-    .modal-content p {
-      color: #969eac;
-      font-size: 14px;
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 20px;
     }
 
-    .modal-buttons {
-      display: flex;
-      gap: 10px;
+    .modal-header h2 {
+      font-size: 21px;
     }
 
-    .modal-buttons button {
-      flex: 1;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #303746;
-      background: #080b12;
-      color: #ffffff;
+    .close {
+      font-size: 25px;
       cursor: pointer;
+      color: #6b7280;
     }
 
-    .modal-buttons .confirm {
-      background: #d9a441;
-      color: #05070d;
-      border-color: #d9a441;
-      font-weight: 700;
+    .form-group {
+      margin-bottom: 16px;
     }
 
-    .loading {
-      opacity: 0.65;
+    .form-group label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #16a34a;
+    }
+
+    .primary-btn {
+      width: 100%;
+      border: none;
+      background: #16a34a;
+      color: white;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    .primary-btn:hover {
+      background: #15803d;
+    }
+
+    .secondary-btn {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      background: white;
+      color: #374151;
+      padding: 13px;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .message {
+      display: none;
+      padding: 11px;
+      border-radius: 9px;
+      margin-bottom: 14px;
+      font-size: 13px;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.error {
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+
+    .message.success {
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+
+    .confirmation {
+      display: none;
+    }
+
+    .confirmation.show {
+      display: block;
+    }
+
+    .confirm-box {
+      background: #f9fafb;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 15px 0;
+    }
+
+    .confirm-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 7px 0;
+      font-size: 14px;
+    }
+
+    .confirm-row strong {
+      color: #111827;
     }
 
     @media (max-width: 700px) {
-
       .actions {
         grid-template-columns: repeat(2, 1fr);
       }
 
       .welcome h1 {
-        font-size: 25px;
-      }
-
-      .balance {
-        font-size: 32px;
-      }
-    }
-
-    @media (min-width: 900px) {
-
-      main {
-        padding-left: 30px;
-        padding-right: 30px;
+        font-size: 23px;
       }
     }
   </style>
@@ -474,291 +484,257 @@
 
 <body>
 
-<header>
+  <!-- =========================
+       HEADER
+  ========================= -->
 
-  <div class="logo">
-    TomBrian
-  </div>
-
-  <div class="header-right">
-
-    <button
-      class="notification"
-      id="notificationButton"
-      aria-label="Notifications"
-    >
-      🔔
-    </button>
-
-    <div
-      class="profile-circle"
-      id="profileCircle"
-      title="Account"
-    >
-      U
+  <header>
+    <div class="brand">
+      <div class="brand-icon">TB</div>
+      <span>TomBrian</span>
     </div>
 
-  </div>
-
-</header>
-
-
-<main>
-
-  <div class="welcome">
-
-    <h1>
-      Welcome back,
-      <span class="gold" id="customerName">
-        Customer
-      </span>
-    </h1>
-
-    <p id="customerEmail">
-      Loading your TomBrian account...
-    </p>
-
-  </div>
-
-
-  <!-- LIVE CONNECTION STATUS -->
-
-  <div
-    class="status-bar"
-    id="statusBar"
-  >
-    <span class="status-dot"></span>
-
-    <span id="statusText">
-      Connecting to your TomBrian account...
-    </span>
-  </div>
-
-
-  <!-- BALANCE -->
-
-  <section class="balance-card">
-
-    <div class="balance-label">
-      Available Balance
-    </div>
-
-    <div
-      class="balance"
-      id="balanceAmount"
-    >
-      KES 0.00
-    </div>
-
-    <div class="balance-actions">
-
-      <button
-        class="small-button primary"
-        onclick="openAction('Top Up')"
-      >
-        + Top Up
-      </button>
-
-      <button
-        class="small-button"
-        onclick="openAction('Withdraw')"
-      >
-        Withdraw
-      </button>
-
-    </div>
-
-  </section>
-
-
-  <!-- QUICK ACTIONS -->
-
-  <div class="section-title">
-
-    <h2>
-      Quick Actions
-    </h2>
-
-  </div>
-
-
-  <div class="actions">
-
-    <div
-      class="action-card"
-      onclick="openAction('Sell Airtime')"
-    >
-
-      <div class="action-icon">
-        📱
+    <div class="header-right">
+      <div class="notification" onclick="showMessageBox('Notifications are coming soon.')">
+        🔔
       </div>
 
-      <h3>
-        Sell Airtime
-      </h3>
+      <div class="profile-circle" id="profileInitial">
+        U
+      </div>
+    </div>
+  </header>
 
+
+  <!-- =========================
+       MAIN
+  ========================= -->
+
+  <main>
+
+    <div class="connection" id="connectionStatus">
+      Connecting to TomBrian...
+    </div>
+
+    <div class="welcome">
+      <h1>Welcome back, <span id="customerName">Customer</span> 👋</h1>
+      <p id="customerEmail">Loading your account...</p>
     </div>
 
 
-    <div
-      class="action-card"
-      onclick="openAction('Buy Airtime')"
-    >
+    <!-- BALANCE -->
 
-      <div class="action-icon">
-        📲
+    <div class="balance-card">
+      <div class="balance-label">Available Balance</div>
+      <div class="balance" id="balanceAmount">KES 0.00</div>
+      <div class="balance-sub">
+        Your available TomBrian balance
+      </div>
+    </div>
+
+
+    <!-- QUICK ACTIONS -->
+
+    <div class="section-title">Quick Actions</div>
+
+    <div class="actions">
+
+      <div class="action" onclick="openAction('buy')">
+        <div class="action-icon">📱</div>
+        <div class="action-title">Buy Airtime</div>
       </div>
 
-      <h3>
-        Buy Airtime
-      </h3>
-
-    </div>
-
-
-    <div
-      class="action-card"
-      onclick="openAction('Top Up')"
-    >
-
-      <div class="action-icon">
-        ➕
+      <div class="action" onclick="openAction('sell')">
+        <div class="action-icon">💵</div>
+        <div class="action-title">Sell Airtime</div>
       </div>
 
-      <h3>
-        Top Up
-      </h3>
-
-    </div>
-
-
-    <div
-      class="action-card"
-      onclick="openAction('Withdraw')"
-    >
-
-      <div class="action-icon">
-        💸
+      <div class="action" onclick="openAction('topup')">
+        <div class="action-icon">➕</div>
+        <div class="action-title">Top Up</div>
       </div>
 
-      <h3>
-        Withdraw
-      </h3>
+      <div class="action" onclick="openAction('withdraw')">
+        <div class="action-icon">💸</div>
+        <div class="action-title">Withdraw</div>
+      </div>
 
+    </div>
+
+
+    <!-- COMMISSION -->
+
+    <div class="section-title">My Commission</div>
+
+    <div class="commission-card">
+      <div>Available Commission</div>
+      <div class="commission-amount" id="commissionAmount">
+        KES 0.00
+      </div>
+      <p>Your commission earnings will appear here.</p>
+    </div>
+
+
+    <!-- TRANSACTIONS -->
+
+    <div class="section-title">Recent Transactions</div>
+
+    <div class="transactions" id="transactionsList">
+      <div class="empty">
+        Loading transactions...
+      </div>
+    </div>
+
+
+    <div class="notice">
+      <strong>TomBrian Development Notice:</strong><br>
+      Your account dashboard is now connected to Supabase.
+      Airtime purchasing and payment processing will be connected
+      to the appropriate service in the next stage.
+    </div>
+
+  </main>
+
+
+  <!-- =========================
+       BOTTOM NAVIGATION
+  ========================= -->
+
+  <div class="bottom-nav">
+
+    <div class="nav-item active" onclick="goHome()">
+      <div class="nav-icon">🏠</div>
+      Home
+    </div>
+
+    <div class="nav-item" onclick="showMessageBox('Transactions page coming next.')">
+      <div class="nav-icon">📊</div>
+      Transactions
+    </div>
+
+    <div class="nav-item" onclick="showMessageBox('Commission page coming next.')">
+      <div class="nav-icon">🏆</div>
+      Commission
+    </div>
+
+    <div class="nav-item" onclick="openAccount()">
+      <div class="nav-icon">👤</div>
+      Account
     </div>
 
   </div>
 
 
-  <!-- COMMISSION -->
+  <!-- =========================
+       BUY AIRTIME MODAL
+  ========================= -->
 
-  <div class="section-title">
+  <div class="modal-overlay" id="modalOverlay">
 
-    <h2>
-      My Commission
-    </h2>
+    <div class="modal">
 
-    <a
-      href="#"
-      onclick="
-        showMessage(
-          'Your commission section is ready. The commission records will be connected when the commission system is activated.'
-        );
-        return false;
-      "
-    >
-      View Details
-    </a>
+      <div class="modal-header">
+        <h2 id="modalTitle">Buy Airtime</h2>
+        <div class="close" onclick="closeModal()">×</div>
+      </div>
 
-  </div>
+      <div id="formMessage" class="message"></div>
 
 
-  <div class="commission-card">
+      <!-- BUY AIRTIME FORM -->
 
-    <div class="commission-top">
+      <div id="buyForm">
 
-      <h3>
-        Commission Balance
-      </h3>
+        <div class="form-group">
+          <label for="airtimeNetwork">Network</label>
 
-      <span class="gold">
-        🏆
-      </span>
-
-    </div>
-
-    <div
-      class="commission-amount"
-      id="commissionAmount"
-    >
-      KES 0.00
-    </div>
-
-    <div class="commission-info">
-
-      <span>
-        Available commission
-      </span>
-
-      <span>
-        Ready for withdrawal
-      </span>
-
-    </div>
-
-  </div>
-
-
-  <!-- TRANSACTIONS -->
-
-  <div class="section-title">
-
-    <h2>
-      Recent Transactions
-    </h2>
-
-    <a
-      href="#"
-      onclick="
-        openAction('Transactions');
-        return false;
-      "
-    >
-      View All
-    </a>
-
-  </div>
-
-
-  <div
-    class="transactions"
-    id="transactionsList"
-  >
-
-    <div class="transaction">
-
-      <div class="transaction-left">
-
-        <div class="transaction-icon">
-          📋
+          <select id="airtimeNetwork">
+            <option value="Safaricom">Safaricom</option>
+            <option value="Airtel">Airtel</option>
+            <option value="Telkom">Telkom</option>
+          </select>
         </div>
 
-        <div>
+        <div class="form-group">
+          <label for="airtimePhone">Recipient Phone Number</label>
 
-          <div class="transaction-name">
-            Loading transactions...
+          <input
+            type="tel"
+            id="airtimePhone"
+            placeholder="07XXXXXXXX"
+            maxlength="13"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="airtimeAmount">Amount (KES)</label>
+
+          <input
+            type="number"
+            id="airtimeAmount"
+            placeholder="Enter amount"
+            min="5"
+            step="1"
+          >
+        </div>
+
+        <button class="primary-btn" onclick="reviewAirtime()">
+          Continue
+        </button>
+
+      </div>
+
+
+      <!-- CONFIRMATION -->
+
+      <div id="confirmation" class="confirmation">
+
+        <p style="font-size:14px;color:#6b7280;">
+          Please confirm the airtime purchase details.
+        </p>
+
+        <div class="confirm-box">
+
+          <div class="confirm-row">
+            <span>Network</span>
+            <strong id="confirmNetwork">-</strong>
           </div>
 
-          <div class="transaction-date">
-            Please wait.
+          <div class="confirm-row">
+            <span>Phone</span>
+            <strong id="confirmPhone">-</strong>
+          </div>
+
+          <div class="confirm-row">
+            <span>Amount</span>
+            <strong id="confirmAmount">KES 0.00</strong>
           </div>
 
         </div>
 
+        <button class="primary-btn" onclick="submitAirtimePurchase()">
+          Confirm Purchase
+        </button>
+
+        <button class="secondary-btn" onclick="backToAirtimeForm()">
+          Go Back
+        </button>
+
       </div>
 
-      <div class="transaction-amount">
-        ...
+
+      <!-- OTHER ACTIONS -->
+
+      <div id="otherAction" style="display:none;">
+
+        <p id="otherActionText"
+           style="color:#6b7280;font-size:14px;line-height:1.5;margin-bottom:15px;">
+        </p>
+
+        <button class="secondary-btn" onclick="closeModal()">
+          Close
+        </button>
+
       </div>
 
     </div>
@@ -766,1200 +742,687 @@
   </div>
 
 
-  <!-- INFORMATION -->
+  <script type="module">
 
-  <div class="info-card">
-
-    <strong>TomBrian Account:</strong>
-
-    <span id="accountNotice">
-      Your dashboard is securely connected to the account currently logged in.
-    </span>
-
-  </div>
-
-</main>
+    import { createClient }
+      from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 
-<!-- BOTTOM NAVIGATION -->
+    /* =========================================================
+       SUPABASE
+    ========================================================= */
 
-<nav class="bottom-nav">
+    const SUPABASE_URL =
+      "https://ekqhsnzkovzmepxdajtu.supabase.co";
 
-  <button
-    class="active"
-    onclick="goHome()"
-  >
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_v4DmfQMCBRvJE_dJvgk1og_v6JMXE_r";
 
-    <span class="bottom-icon">
-      🏠
-    </span>
-
-    Home
-
-  </button>
-
-
-  <button
-    onclick="openAction('Transactions')"
-  >
-
-    <span class="bottom-icon">
-      📊
-    </span>
-
-    Transactions
-
-  </button>
-
-
-  <button
-    onclick="openAction('Commission')"
-  >
-
-    <span class="bottom-icon">
-      💰
-    </span>
-
-    Commission
-
-  </button>
-
-
-  <button
-    onclick="openAction('Account')"
-  >
-
-    <span class="bottom-icon">
-      👤
-    </span>
-
-    Account
-
-  </button>
-
-</nav>
-
-
-<!-- MODAL -->
-
-<div
-  class="modal"
-  id="actionModal"
->
-
-  <div class="modal-content">
-
-    <h2 id="modalTitle">
-      TomBrian
-    </h2>
-
-    <p id="modalText">
-      This service is being prepared.
-    </p>
-
-    <div class="modal-buttons">
-
-      <button
-        onclick="closeModal()"
-      >
-        Close
-      </button>
-
-      <button
-        class="confirm"
-        id="modalConfirmButton"
-        onclick="continueAction()"
-      >
-        Continue
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- =========================================================
-     SUPABASE
-========================================================= -->
-
-<script type="module">
-
-  import {
-    createClient
-  } from
-    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-
-  /* =========================================================
-     SUPABASE SETTINGS
-  ========================================================= */
-
-  const SUPABASE_URL =
-    "https://ekqhsnzkovzmepxdajtu.supabase.co";
-
-
-  const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_v4DmfQMCBRvJE_dJvgk1og_v6JMXE_r";
-
-
-  const supabase =
-    createClient(
+    const supabase = createClient(
       SUPABASE_URL,
       SUPABASE_PUBLISHABLE_KEY
     );
 
 
-  /* =========================================================
-     ELEMENTS
-  ========================================================= */
+    let currentUser = null;
+    let currentBalance = 0;
 
-  const customerNameElement =
-    document.getElementById("customerName");
 
-  const customerEmailElement =
-    document.getElementById("customerEmail");
+    /* =========================================================
+       ELEMENTS
+    ========================================================= */
 
-  const profileCircle =
-    document.getElementById("profileCircle");
+    const customerName =
+      document.getElementById("customerName");
 
-  const balanceAmount =
-    document.getElementById("balanceAmount");
+    const customerEmail =
+      document.getElementById("customerEmail");
 
-  const commissionAmount =
-    document.getElementById("commissionAmount");
+    const profileInitial =
+      document.getElementById("profileInitial");
 
-  const transactionsList =
-    document.getElementById("transactionsList");
+    const balanceAmount =
+      document.getElementById("balanceAmount");
 
-  const notificationButton =
-    document.getElementById("notificationButton");
+    const connectionStatus =
+      document.getElementById("connectionStatus");
 
-  const actionModal =
-    document.getElementById("actionModal");
+    const transactionsList =
+      document.getElementById("transactionsList");
 
-  const modalTitle =
-    document.getElementById("modalTitle");
 
-  const modalText =
-    document.getElementById("modalText");
+    /* =========================================================
+       LOAD USER
+    ========================================================= */
 
-  const modalConfirmButton =
-    document.getElementById("modalConfirmButton");
-
-  const statusBar =
-    document.getElementById("statusBar");
-
-  const statusText =
-    document.getElementById("statusText");
-
-  const accountNotice =
-    document.getElementById("accountNotice");
-
-
-  let selectedAction = "";
-
-
-  /* =========================================================
-     MONEY
-  ========================================================= */
-
-  function formatMoney(amount) {
-
-    const number =
-      Number(amount || 0);
-
-    return (
-      "KES " +
-      number.toLocaleString(
-        "en-KE",
-        {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        }
-      )
-    );
-
-  }
-
-
-  /* =========================================================
-     DATE
-  ========================================================= */
-
-  function formatDate(dateValue) {
-
-    if (!dateValue) {
-      return "";
-    }
-
-    const date =
-      new Date(dateValue);
-
-    if (isNaN(date.getTime())) {
-      return "";
-    }
-
-    return date.toLocaleDateString(
-      "en-KE",
-      {
-        day: "2-digit",
-        month: "short",
-        year: "numeric"
-      }
-    );
-
-  }
-
-
-  /* =========================================================
-     STATUS
-  ========================================================= */
-
-  function setStatus(
-    message,
-    type = ""
-  ) {
-
-    statusText.textContent =
-      message;
-
-    statusBar.className =
-      "status-bar " + type;
-
-  }
-
-
-  /* =========================================================
-     ESCAPE HTML
-  ========================================================= */
-
-  function escapeHtml(value) {
-
-    return String(value || "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-
-  }
-
-
-  /* =========================================================
-     GET LOGGED-IN USER
-  ========================================================= */
-
-  async function getCurrentUser() {
-
-    const {
-      data,
-      error
-    } =
-      await supabase.auth.getUser();
-
-
-    if (error) {
-
-      console.error(
-        "Auth error:",
-        error
-      );
-
-      return null;
-
-    }
-
-
-    return data.user || null;
-
-  }
-
-
-  /* =========================================================
-     LOAD CUSTOMER
-  ========================================================= */
-
-  async function loadCustomer(user) {
-
-    /*
-      FIRST:
-      Read name from Supabase Auth metadata.
-
-      This is important because the name is already
-      attached to the customer account.
-    */
-
-    let fullName =
-      user.user_metadata?.full_name ||
-      user.user_metadata?.name ||
-      "";
-
-
-    /*
-      Display email immediately.
-    */
-
-    customerEmailElement.textContent =
-      user.email || "";
-
-
-    /*
-      Display metadata name immediately.
-    */
-
-    if (fullName) {
-
-      customerNameElement.textContent =
-        fullName;
-
-      profileCircle.textContent =
-        fullName
-          .trim()
-          .charAt(0)
-          .toUpperCase() || "U";
-
-    }
-
-
-    /*
-      THEN:
-      Try to obtain the profile record.
-    */
-
-    try {
+    async function loadUser() {
 
       const {
         data,
         error
-      } =
-        await supabase
-          .from("profiles")
-          .select("*")
-          .eq("user_id", user.id)
-          .maybeSingle();
+      } = await supabase.auth.getUser();
 
+      if (error || !data.user) {
+
+        window.location.href =
+          new URL("login.html", window.location.href).href;
+
+        return null;
+      }
+
+      currentUser = data.user;
+
+      return currentUser;
+    }
+
+
+    /* =========================================================
+       LOAD PROFILE
+    ========================================================= */
+
+    async function loadProfile() {
+
+      if (!currentUser) return;
+
+      let name =
+        currentUser.user_metadata?.full_name ||
+        currentUser.user_metadata?.name ||
+        "Customer";
+
+      const {
+        data,
+        error
+      } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("user_id", currentUser.id)
+        .maybeSingle();
 
       if (!error && data) {
 
-        fullName =
+        name =
           data.full_name ||
           data.name ||
-          fullName ||
-          "Customer";
-
-
-        customerNameElement.textContent =
-          fullName;
-
-
-        profileCircle.textContent =
-          fullName
-            .trim()
-            .charAt(0)
-            .toUpperCase() || "U";
-
+          name;
       }
 
-      else if (error) {
+      customerName.textContent = name;
 
-        console.warn(
-          "Profile table could not be read:",
-          error
-        );
+      customerEmail.textContent =
+        currentUser.email || "";
 
-      }
-
-    }
-
-    catch (error) {
-
-      console.warn(
-        "Profile error:",
-        error
-      );
-
-    }
-
-  }
-
-
-  /* =========================================================
-     FIND BALANCE VALUE
-  ========================================================= */
-
-  function findBalanceValue(row) {
-
-    if (!row) {
-      return 0;
-    }
-
-
-    /*
-      Support several possible balance column names.
-    */
-
-    const possibleFields = [
-      "balance",
-      "balances",
-      "amount",
-      "available_balance",
-      "current_balance",
-      "wallet_balance"
-    ];
-
-
-    for (
-      const field of possibleFields
-    ) {
-
-      if (
-        row[field] !== undefined &&
-        row[field] !== null
-      ) {
-
-        return row[field];
-
-      }
+      profileInitial.textContent =
+        name.charAt(0).toUpperCase();
 
     }
 
 
-    return 0;
+    /* =========================================================
+       LOAD BALANCE
+    ========================================================= */
 
-  }
+    async function loadBalance() {
 
-
-  /* =========================================================
-     LOAD BALANCE
-  ========================================================= */
-
-  async function loadBalance(user) {
-
-    try {
+      if (!currentUser) return;
 
       const {
         data,
         error
-      } =
-        await supabase
-          .from("balances")
-          .select("*")
-          .eq("user_id", user.id)
-          .maybeSingle();
+      } = await supabase
+        .from("balances")
+        .select("*")
+        .eq("user_id", currentUser.id)
+        .maybeSingle();
 
 
       if (error) {
 
-        console.error(
-          "Balance error:",
-          error
-        );
+        console.log("Balance error:", error);
 
+        currentBalance = 0;
 
         balanceAmount.textContent =
           "KES 0.00";
 
-
-        accountNotice.textContent =
-          "Your account is logged in, but the balance could not be read from the balances table.";
-
-
-        return false;
-
+        return;
       }
 
 
-      const amount =
-        findBalanceValue(data);
+      if (!data) {
 
+        currentBalance = 0;
+
+        balanceAmount.textContent =
+          "KES 0.00";
+
+        return;
+      }
+
+
+      const possibleBalance =
+        data.balance ??
+        data.balances ??
+        data.amount ??
+        data.available_balance ??
+        0;
+
+      currentBalance =
+        Number(possibleBalance) || 0;
 
       balanceAmount.textContent =
-        formatMoney(amount);
-
-
-      return true;
+        "KES " +
+        currentBalance.toFixed(2);
 
     }
 
-    catch (error) {
 
-      console.error(
-        "Unexpected balance error:",
-        error
-      );
+    /* =========================================================
+       LOAD TRANSACTIONS
+    ========================================================= */
 
+    async function loadTransactions() {
 
-      balanceAmount.textContent =
-        "KES 0.00";
-
-
-      return false;
-
-    }
-
-  }
-
-
-  /* =========================================================
-     TRANSACTION DATE FINDER
-  ========================================================= */
-
-  function getTransactionDate(transaction) {
-
-    return (
-      transaction.created_at ||
-      transaction.createdAt ||
-      transaction.transaction_date ||
-      transaction.date ||
-      transaction.timestamp ||
-      transaction.updated_at ||
-      ""
-    );
-
-  }
-
-
-  /* =========================================================
-     TRANSACTION DESCRIPTION
-  ========================================================= */
-
-  function getTransactionDescription(transaction) {
-
-    return (
-      transaction.description ||
-      transaction.type ||
-      transaction.service ||
-      transaction.name ||
-      "TomBrian Transaction"
-    );
-
-  }
-
-
-  /* =========================================================
-     LOAD TRANSACTIONS
-  ========================================================= */
-
-  async function loadTransactions(user) {
-
-    try {
-
-      /*
-        IMPORTANT:
-        We do NOT order by created_at here.
-
-        This prevents the dashboard from breaking if
-        the transactions table uses another date column.
-      */
+      if (!currentUser) return;
 
       const {
         data,
         error
-      } =
-        await supabase
-          .from("transactions")
-          .select("*")
-          .eq("user_id", user.id)
-          .limit(20);
+      } = await supabase
+        .from("transactions")
+        .select("*")
+        .eq("user_id", currentUser.id)
+        .limit(10);
 
 
       if (error) {
 
-        console.error(
-          "Transactions error:",
+        console.log(
+          "Transaction error:",
           error
         );
 
+        transactionsList.innerHTML = `
+          <div class="empty">
+            No transactions yet
+          </div>
+        `;
 
-        showNoTransactions(
-          "Transactions could not be loaded yet."
-        );
-
-
-        return false;
-
+        return;
       }
 
 
-      if (
-        !data ||
-        data.length === 0
-      ) {
+      if (!data || data.length === 0) {
 
-        showNoTransactions(
-          "Your transactions will appear here."
-        );
+        transactionsList.innerHTML = `
+          <div class="empty">
+            No transactions yet
+          </div>
+        `;
 
-
-        return true;
-
+        return;
       }
 
 
-      /*
-        Sort newest first on the browser.
-      */
+      data.sort((a, b) => {
 
-      data.sort(
-        function(a, b) {
+        const dateA =
+          new Date(
+            a.created_at ||
+            a.createdAt ||
+            a.date ||
+            0
+          );
 
-          const dateA =
-            new Date(
-              getTransactionDate(a)
-            ).getTime() || 0;
+        const dateB =
+          new Date(
+            b.created_at ||
+            b.createdAt ||
+            b.date ||
+            0
+          );
 
+        return dateB - dateA;
 
-          const dateB =
-            new Date(
-              getTransactionDate(b)
-            ).getTime() || 0;
-
-
-          return dateB - dateA;
-
-        }
-      );
-
-
-      /*
-        Only show five on dashboard.
-      */
-
-      const recentTransactions =
-        data.slice(0, 5);
+      });
 
 
       transactionsList.innerHTML =
-        "";
+        data.slice(0, 5).map(transaction => {
 
-
-      recentTransactions.forEach(
-        function(transaction) {
+          const description =
+            transaction.description ||
+            transaction.type ||
+            "Transaction";
 
           const amount =
             Number(
-              transaction.amount ||
-              transaction.value ||
-              0
+              transaction.amount || 0
             );
-
-
-          const description =
-            getTransactionDescription(
-              transaction
-            );
-
 
           const date =
-            formatDate(
-              getTransactionDate(
-                transaction
-              )
-            );
+            transaction.created_at ||
+            transaction.createdAt ||
+            transaction.date;
 
+          const formattedDate =
+            date
+              ? new Date(date).toLocaleString()
+              : "";
 
-          const isPositive =
-            amount >= 0;
+          return `
+            <div class="transaction">
 
+              <div class="transaction-left">
 
-          const transactionElement =
-            document.createElement(
-              "div"
-            );
-
-
-          transactionElement.className =
-            "transaction";
-
-
-          transactionElement.innerHTML = `
-
-            <div class="transaction-left">
-
-              <div class="transaction-icon">
-                ${isPositive ? "💰" : "📱"}
-              </div>
-
-              <div>
-
-                <div class="transaction-name">
-                  ${escapeHtml(description)}
+                <div class="transaction-icon">
+                  💳
                 </div>
 
-                <div class="transaction-date">
-                  ${escapeHtml(
-                    date || "Transaction"
-                  )}
+                <div>
+
+                  <div class="transaction-description">
+                    ${escapeHtml(description)}
+                  </div>
+
+                  <div class="transaction-date">
+                    ${escapeHtml(formattedDate)}
+                  </div>
+
                 </div>
 
               </div>
 
-            </div>
+              <div class="transaction-amount">
+                KES ${amount.toFixed(2)}
+              </div>
 
-            <div
-              class="transaction-amount ${
-                isPositive
-                  ? "positive"
-                  : "negative"
-              }"
-            >
-              ${isPositive ? "+" : ""}
-              ${formatMoney(amount)}
             </div>
-
           `;
 
-
-          transactionsList.appendChild(
-            transactionElement
-          );
-
-        }
-      );
-
-
-      return true;
+        }).join("");
 
     }
 
-    catch (error) {
 
-      console.error(
-        "Unexpected transactions error:",
-        error
-      );
+    /* =========================================================
+       HTML ESCAPE
+    ========================================================= */
 
+    function escapeHtml(value) {
 
-      showNoTransactions(
-        "Transactions are not available yet."
-      );
-
-
-      return false;
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
     }
 
-  }
 
+    /* =========================================================
+       BUY AIRTIME REVIEW
+    ========================================================= */
 
-  /* =========================================================
-     EMPTY TRANSACTIONS
-  ========================================================= */
+    window.reviewAirtime = function () {
 
-  function showNoTransactions(
-    message
-  ) {
+      const network =
+        document.getElementById(
+          "airtimeNetwork"
+        ).value;
 
-    transactionsList.innerHTML = `
+      const phone =
+        document.getElementById(
+          "airtimePhone"
+        ).value.trim();
 
-      <div class="transaction">
-
-        <div class="transaction-left">
-
-          <div class="transaction-icon">
-            📋
-          </div>
-
-          <div>
-
-            <div class="transaction-name">
-              No transactions yet
-            </div>
-
-            <div class="transaction-date">
-              ${escapeHtml(message)}
-            </div>
-
-          </div>
-
-        </div>
-
-        <div class="transaction-amount">
-          —
-        </div>
-
-      </div>
-
-    `;
-
-  }
-
-
-  /* =========================================================
-     INITIALIZE DASHBOARD
-  ========================================================= */
-
-  async function initializeDashboard() {
-
-    setStatus(
-      "Checking your TomBrian login..."
-    );
-
-
-    try {
-
-      const user =
-        await getCurrentUser();
-
-
-      /*
-        NOT LOGGED IN
-      */
-
-      if (!user) {
-
-        setStatus(
-          "You are not logged in. Returning to login..."
+      const amount =
+        Number(
+          document.getElementById(
+            "airtimeAmount"
+          ).value
         );
 
 
-        /*
-          This keeps the GitHub Pages repository path.
-        */
+      clearFormMessage();
 
-        window.location.href =
-          new URL(
-            "login.html",
-            window.location.href
-          ).href;
 
+      /* PHONE VALIDATION */
+
+      const phoneRegex =
+        /^(?:07|01)\d{8}$/;
+
+
+      if (!phoneRegex.test(phone)) {
+
+        showFormMessage(
+          "Enter a valid Kenyan phone number, for example 0712345678.",
+          "error"
+        );
 
         return;
-
       }
 
 
-      /*
-        LOAD CUSTOMER FIRST
-      */
-
-      await loadCustomer(user);
-
-
-      /*
-        LOAD ACCOUNT DATA
-      */
-
-      const results =
-        await Promise.all([
-          loadBalance(user),
-          loadTransactions(user)
-        ]);
-
-
-      const balanceLoaded =
-        results[0];
-
-      const transactionsLoaded =
-        results[1];
-
-
-      /*
-        DASHBOARD IS ALIVE
-      */
+      /* AMOUNT VALIDATION */
 
       if (
-        balanceLoaded &&
-        transactionsLoaded
+        !Number.isFinite(amount) ||
+        amount < 5
       ) {
 
-        setStatus(
-          "TomBrian account connected successfully.",
-          "success"
+        showFormMessage(
+          "Minimum airtime amount is KES 5.",
+          "error"
         );
+
+        return;
+      }
+
+
+      if (amount > 100000) {
+
+        showFormMessage(
+          "Please enter an amount of KES 100,000 or less.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      /* BALANCE CHECK */
+
+      if (amount > currentBalance) {
+
+        showFormMessage(
+          "Insufficient TomBrian balance for this purchase.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      /* DISPLAY CONFIRMATION */
+
+      document.getElementById(
+        "confirmNetwork"
+      ).textContent = network;
+
+      document.getElementById(
+        "confirmPhone"
+      ).textContent = phone;
+
+      document.getElementById(
+        "confirmAmount"
+      ).textContent =
+        "KES " + amount.toFixed(2);
+
+
+      document.getElementById(
+        "buyForm"
+      ).style.display = "none";
+
+      document.getElementById(
+        "confirmation"
+      ).classList.add("show");
+
+    };
+
+
+    /* =========================================================
+       SUBMIT AIRTIME PURCHASE
+    ========================================================= */
+
+    window.submitAirtimePurchase = async function () {
+
+      if (!currentUser) {
+
+        showFormMessage(
+          "Your session has expired. Please log in again.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      const network =
+        document.getElementById(
+          "airtimeNetwork"
+        ).value;
+
+      const phone =
+        document.getElementById(
+          "airtimePhone"
+        ).value.trim();
+
+      const amount =
+        Number(
+          document.getElementById(
+            "airtimeAmount"
+          ).value
+        );
+
+
+      /*
+       * IMPORTANT:
+       * We are NOT sending airtime yet.
+       *
+       * The actual airtime provider/API will be
+       * connected in the next stage.
+       */
+
+      showFormMessage(
+        "Airtime purchase interface is ready. The live airtime service will be connected next.",
+        "success"
+      );
+
+
+      console.log(
+        "Airtime purchase request:",
+        {
+          user_id: currentUser.id,
+          network,
+          phone,
+          amount
+        }
+      );
+
+    };
+
+
+    /* =========================================================
+       BACK TO FORM
+    ========================================================= */
+
+    window.backToAirtimeForm = function () {
+
+      document.getElementById(
+        "confirmation"
+      ).classList.remove("show");
+
+      document.getElementById(
+        "buyForm"
+      ).style.display = "block";
+
+      clearFormMessage();
+
+    };
+
+
+    /* =========================================================
+       OPEN ACTION
+    ========================================================= */
+
+    window.openAction = function(action) {
+
+      const overlay =
+        document.getElementById(
+          "modalOverlay"
+        );
+
+      const title =
+        document.getElementById(
+          "modalTitle"
+        );
+
+      const buyForm =
+        document.getElementById(
+          "buyForm"
+        );
+
+      const confirmation =
+        document.getElementById(
+          "confirmation"
+        );
+
+      const otherAction =
+        document.getElementById(
+          "otherAction"
+        );
+
+
+      clearFormMessage();
+
+      confirmation.classList.remove("show");
+
+      buyForm.style.display = "none";
+
+      otherAction.style.display = "none";
+
+
+      if (action === "buy") {
+
+        title.textContent =
+          "Buy Airtime";
+
+        buyForm.style.display =
+          "block";
 
       }
 
       else {
 
-        setStatus(
-          "TomBrian account is connected. Some account data is not available yet.",
-          "error"
-        );
+        title.textContent =
+          action.charAt(0).toUpperCase() +
+          action.slice(1);
+
+        otherAction.style.display =
+          "block";
+
+        document.getElementById(
+          "otherActionText"
+        ).textContent =
+          getActionMessage(action);
 
       }
+
+
+      overlay.classList.add("show");
+
+    };
+
+
+    /* =========================================================
+       OTHER ACTION MESSAGE
+    ========================================================= */
+
+    function getActionMessage(action) {
+
+      if (action === "sell") {
+
+        return "Sell Airtime will allow you to sell airtime through your TomBrian account. We will build this flow next.";
+
+      }
+
+      if (action === "topup") {
+
+        return "Top Up will allow you to add money to your TomBrian balance. The M-Pesa payment connection will be added in the next stage.";
+
+      }
+
+      if (action === "withdraw") {
+
+        return "Withdraw will allow you to request money from your TomBrian earnings or balance. We will build the withdrawal flow next.";
+
+      }
+
+      return "This service is coming soon.";
 
     }
 
-    catch (error) {
 
-      console.error(
-        "Dashboard error:",
-        error
-      );
+    /* =========================================================
+       CLOSE MODAL
+    ========================================================= */
+
+    window.closeModal = function() {
+
+      document.getElementById(
+        "modalOverlay"
+      ).classList.remove("show");
+
+      clearFormMessage();
+
+    };
 
 
-      setStatus(
-        "Dashboard connected, but some information could not be loaded.",
-        "error"
-      );
+    /* =========================================================
+       FORM MESSAGE
+    ========================================================= */
+
+    function showFormMessage(
+      message,
+      type
+    ) {
+
+      const box =
+        document.getElementById(
+          "formMessage"
+        );
+
+      box.textContent = message;
+
+      box.className =
+        "message show " + type;
 
     }
 
-  }
 
+    function clearFormMessage() {
 
-  /* =========================================================
-     OPEN ACTION
-  ========================================================= */
-
-  window.openAction =
-    function(action) {
-
-      selectedAction =
-        action;
-
-
-      modalTitle.textContent =
-        action;
-
-
-      if (
-        action === "Account"
-      ) {
-
-        modalText.textContent =
-          "You are logged in to your TomBrian customer account. You can safely log out from here.";
-
-
-        modalConfirmButton.textContent =
-          "Log Out";
-
-
-        modalConfirmButton.style.display =
-          "block";
-
-
-        actionModal.classList.add(
-          "show"
+      const box =
+        document.getElementById(
+          "formMessage"
         );
 
+      box.textContent = "";
 
-        return;
+      box.className =
+        "message";
 
-      }
+    }
 
 
-      if (
-        action === "Transactions"
-      ) {
+    /* =========================================================
+       GENERAL MESSAGE
+    ========================================================= */
 
-        modalText.textContent =
-          "Your recent transactions are displayed on this dashboard. Full transaction history will be connected here next.";
+    window.showMessageBox =
+      function(message) {
 
+        alert(message);
 
-        modalConfirmButton.textContent =
-          "OK";
+      };
 
 
-        modalConfirmButton.style.display =
-          "block";
+    /* =========================================================
+       HOME
+    ========================================================= */
 
-
-        actionModal.classList.add(
-          "show"
-        );
-
-
-        return;
-
-      }
-
-
-      if (
-        action === "Commission"
-      ) {
-
-        modalText.textContent =
-          "Your commission balance is shown on the dashboard. The full commission system will be connected next.";
-
-
-        modalConfirmButton.textContent =
-          "OK";
-
-
-        modalConfirmButton.style.display =
-          "block";
-
-
-        actionModal.classList.add(
-          "show"
-        );
-
-
-        return;
-
-      }
-
-
-      /*
-        SERVICE ACTIONS
-      */
-
-      modalText.textContent =
-        action +
-        " is ready for the next TomBrian development stage. The actual service interface will be connected to the backend next.";
-
-
-      modalConfirmButton.textContent =
-        "Continue";
-
-
-      modalConfirmButton.style.display =
-        "block";
-
-
-      actionModal.classList.add(
-        "show"
-      );
-
-    };
-
-
-  /* =========================================================
-     CLOSE MODAL
-  ========================================================= */
-
-  window.closeModal =
-    function() {
-
-      actionModal.classList.remove(
-        "show"
-      );
-
-      modalConfirmButton.disabled =
-        false;
-
-    };
-
-
-  /* =========================================================
-     CONTINUE ACTION
-  ========================================================= */
-
-  window.continueAction =
-    async function() {
-
-      /*
-        ACCOUNT = LOG OUT
-      */
-
-      if (
-        selectedAction === "Account"
-      ) {
-
-        modalText.textContent =
-          "Logging out...";
-
-
-        modalConfirmButton.disabled =
-          true;
-
-
-        const {
-          error
-        } =
-          await supabase.auth.signOut();
-
-
-        if (error) {
-
-          console.error(
-            "Logout error:",
-            error
-          );
-
-
-          modalConfirmButton.disabled =
-            false;
-
-
-          modalText.textContent =
-            "Unable to log out right now. Please try again.";
-
-
-          return;
-
-        }
-
-
-        window.location.href =
-          new URL(
-            "login.html",
-            window.location.href
-          ).href;
-
-
-        return;
-
-      }
-
-
-      /*
-        FOR INFORMATIONAL ACTIONS
-      */
-
-      closeModal();
-
-
-      if (
-        selectedAction ===
-        "Transactions"
-      ) {
-
-        showMessage(
-          "Your recent transactions are already shown on this dashboard."
-        );
-
-
-        return;
-
-      }
-
-
-      if (
-        selectedAction ===
-        "Commission"
-      ) {
-
-        showMessage(
-          "Your current commission balance is displayed in the My Commission section."
-        );
-
-
-        return;
-
-      }
-
-
-      showMessage(
-        selectedAction +
-        " will be connected to the TomBrian service system next."
-      );
-
-    };
-
-
-  /* =========================================================
-     MESSAGE
-  ========================================================= */
-
-  window.showMessage =
-    function(message) {
-
-      alert(message);
-
-    };
-
-
-  /* =========================================================
-     HOME
-  ========================================================= */
-
-  window.goHome =
-    function() {
+    window.goHome = function() {
 
       window.scrollTo({
         top: 0,
@@ -1969,84 +1432,127 @@
     };
 
 
-  /* =========================================================
-     NOTIFICATIONS
-  ========================================================= */
+    /* =========================================================
+       ACCOUNT
+    ========================================================= */
 
-  notificationButton.addEventListener(
-    "click",
-    function() {
+    window.openAccount = function() {
 
-      showMessage(
-        "You currently have no new notifications."
-      );
+      const confirmed =
+        confirm(
+          "Do you want to log out of your TomBrian account?"
+        );
+
+      if (!confirmed) return;
+
+      logout();
+
+    };
+
+
+    /* =========================================================
+       LOGOUT
+    ========================================================= */
+
+    async function logout() {
+
+      await supabase.auth.signOut();
+
+      window.location.href =
+        new URL(
+          "login.html",
+          window.location.href
+        ).href;
 
     }
-  );
 
 
-  /* =========================================================
-     PROFILE BUTTON
-  ========================================================= */
+    /* =========================================================
+       CLOSE MODAL WHEN CLICKING OUTSIDE
+    ========================================================= */
 
-  profileCircle.addEventListener(
-    "click",
-    function() {
+    document
+      .getElementById("modalOverlay")
+      .addEventListener(
+        "click",
+        function(event) {
 
-      openAction(
-        "Account"
+          if (
+            event.target ===
+            this
+          ) {
+
+            closeModal();
+
+          }
+
+        }
       );
 
-    }
-  );
+
+    /* =========================================================
+       INITIALIZE DASHBOARD
+    ========================================================= */
+
+    async function initializeDashboard() {
+
+      try {
+
+        const user =
+          await loadUser();
+
+        if (!user) return;
 
 
-  /* =========================================================
-     CLOSE MODAL OUTSIDE
-  ========================================================= */
+        await loadProfile();
 
-  window.addEventListener(
-    "click",
-    function(event) {
+        await loadBalance();
 
-      if (
-        event.target ===
-        actionModal
-      ) {
+        await loadTransactions();
 
-        closeModal();
+
+        connectionStatus.textContent =
+          "✓ TomBrian account connected";
+
+
+        connectionStatus.style.background =
+          "#ecfdf5";
+
+        connectionStatus.style.color =
+          "#166534";
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Dashboard error:",
+          error
+        );
+
+        connectionStatus.textContent =
+          "Dashboard loaded with limited account data.";
+
+        connectionStatus.style.background =
+          "#fff7ed";
+
+        connectionStatus.style.color =
+          "#9a3412";
 
       }
 
     }
-  );
 
 
-  /* =========================================================
-     AUTH STATE MONITOR
-  ========================================================= */
+    /* =========================================================
+       AUTH STATE
+    ========================================================= */
 
-  supabase.auth.onAuthStateChange(
-    function(event, session) {
-
-      /*
-        If the customer signs out from another
-        place, return to login.
-      */
-
-      if (
-        event === "SIGNED_OUT" ||
-        !session
-      ) {
-
-        const currentPage =
-          window.location.pathname;
-
+    supabase.auth.onAuthStateChange(
+      (event, session) => {
 
         if (
-          currentPage.includes(
-            "dashboard.html"
-          )
+          event === "SIGNED_OUT"
         ) {
 
           window.location.href =
@@ -2058,18 +1564,14 @@
         }
 
       }
-
-    }
-  );
+    );
 
 
-  /* =========================================================
-     START
-  ========================================================= */
+    /* START */
 
-  initializeDashboard();
+    initializeDashboard();
 
-</script>
+  </script>
 
 </body>
 </html>
