@@ -74,6 +74,7 @@
       align-items: center;
       justify-content: center;
       font-weight: 800;
+      cursor: pointer;
     }
 
     /* =========================
@@ -494,7 +495,7 @@
 
       <button
         class="notification"
-        onclick="showMessage('Notifications will be connected to your account.')"
+        id="notificationButton"
         aria-label="Notifications"
       >
         🔔
@@ -502,7 +503,8 @@
 
       <div
         class="profile-circle"
-        id="profileInitial"
+        id="profileCircle"
+        title="Account"
       >
         U
       </div>
@@ -524,10 +526,7 @@
 
       <h1>
         Welcome back,
-        <span
-          class="gold"
-          id="customerName"
-        >
+        <span class="gold" id="customerName">
           Customer
         </span>
       </h1>
@@ -664,7 +663,12 @@
 
       <a
         href="#"
-        onclick="showMessage('Commission details will be connected next.'); return false;"
+        onclick="
+          showMessage(
+            'Commission details will be connected to your TomBrian account next.'
+          );
+          return false;
+        "
       >
         View Details
       </a>
@@ -686,7 +690,10 @@
 
       </div>
 
-      <div class="commission-amount">
+      <div
+        class="commission-amount"
+        id="commissionAmount"
+      >
         KES 0.00
       </div>
 
@@ -715,7 +722,12 @@
 
       <a
         href="#"
-        onclick="showMessage('Full transaction history will be connected next.'); return false;"
+        onclick="
+          showMessage(
+            'Full transaction history will be connected next.'
+          );
+          return false;
+        "
       >
         View All
       </a>
@@ -739,11 +751,11 @@
           <div>
 
             <div class="transaction-name">
-              Loading transactions...
+              No transactions yet
             </div>
 
             <div class="transaction-date">
-              Please wait.
+              Your transactions will appear here.
             </div>
 
           </div>
@@ -765,9 +777,9 @@
 
       <strong>TomBrian Notice:</strong>
 
-      Your account information is connected to your
-      secure TomBrian Supabase account. More services
-      will be connected as development continues.
+      Your dashboard is connected to your TomBrian account.
+      Account balances and transactions are loaded securely
+      for the customer who is currently logged in.
 
     </div>
 
@@ -856,12 +868,15 @@
 
       <div class="modal-buttons">
 
-        <button onclick="closeModal()">
+        <button
+          onclick="closeModal()"
+        >
           Close
         </button>
 
         <button
           class="confirm"
+          id="modalConfirmButton"
           onclick="continueAction()"
         >
           Continue
@@ -875,7 +890,7 @@
 
 
   <!-- =========================
-       SUPABASE + JAVASCRIPT
+       SUPABASE + DASHBOARD JAVASCRIPT
   ========================= -->
 
   <script type="module">
@@ -892,39 +907,114 @@
       "https://ekqhsnzkovzmepxdajtu.supabase.co";
 
 
-    /* =========================================================
-       IMPORTANT
-       
-       USE THE SAME PUBLISHABLE / ANON KEY
-       YOU USED IN signup.html AND login.html.
+    /*
+      PUBLISHABLE KEY
 
-       DO NOT USE THE SECRET / SERVICE ROLE KEY.
-    ========================================================= */
+      This is the same PUBLISHABLE key used by
+      signup.html and login.html.
+
+      DO NOT replace this with a SECRET / SERVICE ROLE key.
+    */
 
     const SUPABASE_PUBLISHABLE_KEY =
       "sb_publishable_v4DmfQMCBRvJE_dJvgk1og_v6JMXE_r";
 
 
-    /* =========================================================
-       CONNECT
-    ========================================================= */
-
-    const supabase =
-      createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-      );
+    const supabase = createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
 
 
     /* =========================================================
-       GLOBAL VARIABLES
+       PAGE ELEMENTS
     ========================================================= */
+
+    const customerNameElement =
+      document.getElementById("customerName");
+
+    const profileCircle =
+      document.getElementById("profileCircle");
+
+    const balanceAmount =
+      document.getElementById("balanceAmount");
+
+    const transactionsList =
+      document.getElementById("transactionsList");
+
+    const notificationButton =
+      document.getElementById("notificationButton");
+
+    const actionModal =
+      document.getElementById("actionModal");
+
+    const modalTitle =
+      document.getElementById("modalTitle");
+
+    const modalText =
+      document.getElementById("modalText");
+
+    const modalConfirmButton =
+      document.getElementById("modalConfirmButton");
+
 
     let selectedAction = "";
 
 
     /* =========================================================
-       GET CURRENT USER
+       FORMAT MONEY
+    ========================================================= */
+
+    function formatMoney(amount) {
+
+      const number =
+        Number(amount || 0);
+
+      return (
+        "KES " +
+        number.toLocaleString(
+          "en-KE",
+          {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          }
+        )
+      );
+
+    }
+
+
+    /* =========================================================
+       FORMAT DATE
+    ========================================================= */
+
+    function formatDate(dateValue) {
+
+      if (!dateValue) {
+        return "";
+      }
+
+      const date =
+        new Date(dateValue);
+
+      if (isNaN(date.getTime())) {
+        return "";
+      }
+
+      return date.toLocaleDateString(
+        "en-KE",
+        {
+          day: "2-digit",
+          month: "short",
+          year: "numeric"
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       GET LOGGED-IN CUSTOMER
     ========================================================= */
 
     async function getCurrentUser() {
@@ -938,11 +1028,12 @@
       if (error) {
 
         console.error(
-          "Could not get current user:",
+          "Unable to get current user:",
           error
         );
 
         return null;
+
       }
 
 
@@ -955,28 +1046,12 @@
        LOAD CUSTOMER PROFILE
     ========================================================= */
 
-    async function loadCustomerProfile(user) {
-
-      const customerName =
-        document.getElementById("customerName");
-
-      const profileInitial =
-        document.getElementById("profileInitial");
-
-
-      let fullName =
-        user.user_metadata?.full_name || "";
-
-
-      /*
-        Try to get the name from
-        the profiles table as well.
-      */
+    async function loadProfile(user) {
 
       try {
 
         const {
-          data: profile,
+          data,
           error
         } = await supabase
           .from("profiles")
@@ -985,58 +1060,60 @@
           .maybeSingle();
 
 
-        if (!error && profile) {
+        if (error) {
 
-          if (profile.full_name) {
+          console.error(
+            "Profile loading error:",
+            error
+          );
 
-            fullName =
-              profile.full_name;
-
-          }
+          return;
 
         }
 
-      } catch (error) {
 
-        console.log(
-          "Profile lookup:",
+        if (!data) {
+
+          console.log(
+            "No profile record found."
+          );
+
+          return;
+
+        }
+
+
+        const fullName =
+          data.full_name ||
+          data.name ||
+          "Customer";
+
+
+        customerNameElement.textContent =
+          fullName;
+
+
+        /*
+          Use the first letter of the customer's
+          name for the profile circle.
+        */
+
+        profileCircle.textContent =
+          fullName
+            .trim()
+            .charAt(0)
+            .toUpperCase() || "U";
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Unexpected profile error:",
           error
         );
 
       }
-
-
-      /*
-        Fallback to email if no name exists.
-      */
-
-      if (!fullName) {
-
-        fullName =
-          user.email
-            ? user.email.split("@")[0]
-            : "Customer";
-
-      }
-
-
-      customerName.textContent =
-        fullName;
-
-
-      /*
-        Get first letter for profile circle.
-      */
-
-      const firstLetter =
-        fullName
-          .trim()
-          .charAt(0)
-          .toUpperCase();
-
-
-      profileInitial.textContent =
-        firstLetter || "U";
 
     }
 
@@ -1047,14 +1124,10 @@
 
     async function loadBalance(user) {
 
-      const balanceElement =
-        document.getElementById("balanceAmount");
-
-
       try {
 
         const {
-          data: balanceRow,
+          data,
           error
         } = await supabase
           .from("balances")
@@ -1066,48 +1139,58 @@
         if (error) {
 
           console.error(
-            "Balance error:",
+            "Balance loading error:",
             error
           );
 
-          balanceElement.textContent =
+          /*
+            Keep KES 0.00 if there is a database/RLS
+            problem instead of breaking the dashboard.
+          */
+
+          balanceAmount.textContent =
             "KES 0.00";
 
           return;
+
         }
 
 
-        if (!balanceRow) {
+        if (!data) {
 
-          balanceElement.textContent =
+          balanceAmount.textContent =
             "KES 0.00";
 
           return;
+
         }
 
+
+        /*
+          The balance table may contain the amount
+          under the "balance" column.
+        */
 
         const amount =
-          Number(balanceRow.amount || 0);
+          data.balance ??
+          data.balances ??
+          data.amount ??
+          0;
 
 
-        balanceElement.textContent =
-          "KES " +
-          amount.toLocaleString(
-            "en-KE",
-            {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2
-            }
-          );
+        balanceAmount.textContent =
+          formatMoney(amount);
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         console.error(
-          "Balance loading error:",
+          "Unexpected balance error:",
           error
         );
 
-        balanceElement.textContent =
+        balanceAmount.textContent =
           "KES 0.00";
 
       }
@@ -1121,16 +1204,10 @@
 
     async function loadTransactions(user) {
 
-      const transactionsList =
-        document.getElementById(
-          "transactionsList"
-        );
-
-
       try {
 
         const {
-          data: transactions,
+          data,
           error
         } = await supabase
           .from("transactions")
@@ -1145,48 +1222,16 @@
         if (error) {
 
           console.error(
-            "Transaction error:",
+            "Transactions loading error:",
             error
           );
 
-
-          transactionsList.innerHTML = `
-
-            <div class="transaction">
-
-              <div class="transaction-left">
-
-                <div class="transaction-icon">
-                  📋
-                </div>
-
-                <div>
-
-                  <div class="transaction-name">
-                    No transactions yet
-                  </div>
-
-                  <div class="transaction-date">
-                    Your transactions will appear here.
-                  </div>
-
-                </div>
-
-              </div>
-
-              <div class="transaction-amount">
-                —
-              </div>
-
-            </div>
-
-          `;
-
           return;
+
         }
 
 
-        if (!transactions || transactions.length === 0) {
+        if (!data || data.length === 0) {
 
           transactionsList.innerHTML = `
 
@@ -1221,107 +1266,92 @@
           `;
 
           return;
+
         }
 
 
         transactionsList.innerHTML = "";
 
 
-        transactions.forEach(function(transaction) {
+        data.forEach(
+          function(transaction) {
 
-          const amount =
-            Number(transaction.amount || 0);
-
-
-          const description =
-            transaction.description ||
-            "TomBrian Transaction";
+            const amount =
+              Number(
+                transaction.amount || 0
+              );
 
 
-          let dateText =
-            "";
+            const description =
+              transaction.description ||
+              transaction.type ||
+              "TomBrian Transaction";
 
-
-          if (transaction.created_at) {
 
             const date =
-              new Date(
+              formatDate(
                 transaction.created_at
               );
 
 
-            dateText =
-              date.toLocaleString(
-                "en-KE",
-                {
-                  dateStyle: "medium",
-                  timeStyle: "short"
-                }
-              );
+            const isPositive =
+              amount >= 0;
 
-          } else {
 
-            dateText =
-              "Recent transaction";
+            const transactionElement =
+              document.createElement("div");
+
+
+            transactionElement.className =
+              "transaction";
+
+
+            transactionElement.innerHTML = `
+
+              <div class="transaction-left">
+
+                <div class="transaction-icon">
+                  ${isPositive ? "💰" : "📱"}
+                </div>
+
+                <div>
+
+                  <div class="transaction-name">
+                    ${escapeHtml(description)}
+                  </div>
+
+                  <div class="transaction-date">
+                    ${escapeHtml(date)}
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div
+                class="transaction-amount
+                ${isPositive ? "positive" : "negative"}"
+              >
+                ${isPositive ? "+" : ""}
+                ${formatMoney(amount)}
+              </div>
+
+            `;
+
+
+            transactionsList.appendChild(
+              transactionElement
+            );
 
           }
+        );
 
+      }
 
-          const transactionElement =
-            document.createElement("div");
-
-
-          transactionElement.className =
-            "transaction";
-
-
-          transactionElement.innerHTML = `
-
-            <div class="transaction-left">
-
-              <div class="transaction-icon">
-                📋
-              </div>
-
-              <div>
-
-                <div class="transaction-name">
-                  ${escapeHtml(description)}
-                </div>
-
-                <div class="transaction-date">
-                  ${escapeHtml(dateText)}
-                </div>
-
-              </div>
-
-            </div>
-
-            <div class="transaction-amount">
-
-              KES ${amount.toLocaleString(
-                "en-KE",
-                {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2
-                }
-              )}
-
-            </div>
-
-          `;
-
-
-          transactionsList.appendChild(
-            transactionElement
-          );
-
-        });
-
-      } catch (error) {
+      catch (error) {
 
         console.error(
-          "Transaction loading error:",
+          "Unexpected transaction error:",
           error
         );
 
@@ -1332,16 +1362,16 @@
 
     /* =========================================================
        ESCAPE HTML
-       ========================================================= */
+    ========================================================= */
 
     function escapeHtml(value) {
 
-      return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
     }
 
@@ -1352,50 +1382,48 @@
 
     async function initializeDashboard() {
 
-      const user =
-        await getCurrentUser();
+      try {
+
+        const user =
+          await getCurrentUser();
 
 
-      /*
-        If nobody is logged in,
-        return to login page.
-      */
+        /*
+          Customer is not logged in.
+          Send them back to login.html.
+        */
 
-      if (!user) {
+        if (!user) {
 
-        window.location.href =
-          "login.html";
+          window.location.href =
+            "login.html";
 
-        return;
+          return;
+
+        }
+
+
+        /*
+          Load all customer information.
+        */
+
+        await Promise.all([
+          loadProfile(user),
+          loadBalance(user),
+          loadTransactions(user)
+        ]);
+
 
       }
 
+      catch (error) {
 
-      /*
-        Load customer information.
-      */
+        console.error(
+          "Dashboard initialization error:",
+          error
+        );
 
-      await loadCustomerProfile(
-        user
-      );
-
-
-      /*
-        Load customer's balance.
-      */
-
-      await loadBalance(
-        user
-      );
-
-
-      /*
-        Load customer's transactions.
-      */
-
-      await loadTransactions(
-        user
-      );
+      }
 
     }
 
@@ -1404,117 +1432,203 @@
        OPEN ACTION
     ========================================================= */
 
-    function openAction(action) {
-
-      selectedAction =
-        action;
-
-
-      document.getElementById(
-        "modalTitle"
-      ).textContent =
-        action;
-
-
-      document.getElementById(
-        "modalText"
-      ).textContent =
-        action +
-        " is ready for the next development stage. " +
-        "The service will be connected to the TomBrian backend.";
-
-
-      document.getElementById(
-        "actionModal"
-      ).classList.add(
-        "show"
-      );
-
-    }
-
-
-    /*
-      Make function available to HTML onclick.
-    */
-
     window.openAction =
-      openAction;
+      function(action) {
+
+        selectedAction =
+          action;
+
+
+        modalTitle.textContent =
+          action;
+
+
+        /*
+          ACCOUNT ACTION
+        */
+
+        if (action === "Account") {
+
+          modalText.textContent =
+            "You are currently logged in to your TomBrian customer account. You can log out safely below.";
+
+          modalConfirmButton.textContent =
+            "Log Out";
+
+          modalConfirmButton.style.display =
+            "block";
+
+          actionModal
+            .classList
+            .add("show");
+
+          return;
+
+        }
+
+
+        /*
+          OTHER ACTIONS
+        */
+
+        modalText.textContent =
+          action +
+          " is ready for the next development stage. " +
+          "The service will be connected to the TomBrian backend.";
+
+
+        modalConfirmButton.textContent =
+          "Continue";
+
+
+        modalConfirmButton.style.display =
+          "block";
+
+
+        actionModal
+          .classList
+          .add("show");
+
+      };
 
 
     /* =========================================================
        CLOSE MODAL
     ========================================================= */
 
-    function closeModal() {
-
-      document.getElementById(
-        "actionModal"
-      ).classList.remove(
-        "show"
-      );
-
-    }
-
-
     window.closeModal =
-      closeModal;
+      function() {
+
+        actionModal
+          .classList
+          .remove("show");
+
+      };
 
 
     /* =========================================================
        CONTINUE ACTION
     ========================================================= */
 
-    function continueAction() {
-
-      closeModal();
-
-
-      showMessage(
-        selectedAction +
-        " interface will be connected to the TomBrian backend next."
-      );
-
-    }
-
-
     window.continueAction =
-      continueAction;
+      async function() {
+
+        /*
+          ACCOUNT = LOG OUT
+        */
+
+        if (selectedAction === "Account") {
+
+          modalText.textContent =
+            "Logging out...";
+
+          modalConfirmButton.disabled =
+            true;
+
+
+          const {
+            error
+          } = await supabase.auth.signOut();
+
+
+          if (error) {
+
+            console.error(
+              "Logout error:",
+              error
+            );
+
+
+            modalConfirmButton.disabled =
+              false;
+
+
+            modalText.textContent =
+              "Unable to log out right now. Please try again.";
+
+            return;
+
+          }
+
+
+          window.location.href =
+            "login.html";
+
+          return;
+
+        }
+
+
+        /*
+          OTHER SERVICES
+        */
+
+        closeModal();
+
+
+        window.showMessage(
+          selectedAction +
+          " interface will be connected to the TomBrian backend next."
+        );
+
+      };
 
 
     /* =========================================================
        SIMPLE MESSAGE
     ========================================================= */
 
-    function showMessage(message) {
-
-      alert(message);
-
-    }
-
-
     window.showMessage =
-      showMessage;
+      function(message) {
+
+        alert(message);
+
+      };
 
 
     /* =========================================================
        HOME
     ========================================================= */
 
-    function goHome() {
-
-      window.scrollTo({
-
-        top: 0,
-
-        behavior: "smooth"
-
-      });
-
-    }
-
-
     window.goHome =
-      goHome;
+      function() {
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+
+      };
+
+
+    /* =========================================================
+       NOTIFICATIONS
+    ========================================================= */
+
+    notificationButton.addEventListener(
+      "click",
+      function() {
+
+        showMessage(
+          "You currently have no new notifications."
+        );
+
+      }
+    );
+
+
+    /* =========================================================
+       PROFILE BUTTON
+    ========================================================= */
+
+    profileCircle.addEventListener(
+      "click",
+      function() {
+
+        openAction("Account");
+
+      }
+    );
 
 
     /* =========================================================
@@ -1525,13 +1639,7 @@
       "click",
       function(event) {
 
-        const modal =
-          document.getElementById(
-            "actionModal"
-          );
-
-
-        if (event.target === modal) {
+        if (event.target === actionModal) {
 
           closeModal();
 
