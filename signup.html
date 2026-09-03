@@ -449,11 +449,11 @@
 
 
     /* =========================================================
-       PASTE YOUR SUPABASE PUBLISHABLE KEY BELOW
+       SUPABASE PUBLISHABLE KEY
        
        IMPORTANT:
-       Use the PUBLISHABLE / ANON key.
-
+       This must be your PUBLISHABLE / ANON key.
+       
        DO NOT use the Supabase SECRET / SERVICE ROLE key.
        ========================================================= */
 
@@ -686,9 +686,14 @@
                   phone: phone
                 },
 
+                /* =================================================
+                   IMPORTANT:
+                   SEND EMAIL VERIFICATION DIRECTLY TO TOMBRIAN
+                   LOGIN PAGE ON GITHUB PAGES.
+                   ================================================= */
+
                 emailRedirectTo:
-                  window.location.origin +
-                  "/login.html"
+                  "https://tombrian-dotcom.github.io/TomBrian-website-/login.html"
 
               }
 
