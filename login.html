@@ -90,6 +90,10 @@
       border-color: #d9a441;
     }
 
+    input::placeholder {
+      color: #687180;
+    }
+
     .login-button {
       width: 100%;
       padding: 15px;
@@ -107,6 +111,11 @@
       opacity: 0.9;
     }
 
+    .login-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .forgot {
       display: block;
       text-align: right;
@@ -114,6 +123,40 @@
       color: #d9a441;
       text-decoration: none;
       font-size: 13px;
+    }
+
+    .forgot:hover {
+      text-decoration: underline;
+    }
+
+    .message {
+      display: none;
+      margin-bottom: 20px;
+      padding: 13px;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .message.success {
+      display: block;
+      background: #12351f;
+      border: 1px solid #24733d;
+      color: #8ff0aa;
+    }
+
+    .message.error {
+      display: block;
+      background: #351519;
+      border: 1px solid #7b2933;
+      color: #ff9da6;
+    }
+
+    .message.info {
+      display: block;
+      background: #111f35;
+      border: 1px solid #294d7b;
+      color: #9dc5ff;
     }
 
     .divider {
@@ -184,58 +227,520 @@
         Login to your TomBrian account
       </p>
 
-      <form>
+      <!-- =====================================================
+           MESSAGE AREA
+           ===================================================== -->
+
+      <div id="message" class="message"></div>
+
+
+      <!-- =====================================================
+           LOGIN FORM
+           ===================================================== -->
+
+      <form id="loginForm">
 
         <div class="form-group">
-          <label for="email">Email or Phone</label>
+
+          <label for="email">
+            Email Address
+          </label>
 
           <input
-            type="text"
+            type="email"
             id="email"
             name="email"
-            placeholder="Enter your email or phone"
+            placeholder="Enter your email address"
+            autocomplete="email"
             required
           >
+
         </div>
 
+
         <div class="form-group">
-          <label for="password">Password</label>
+
+          <label for="password">
+            Password
+          </label>
 
           <input
             type="password"
             id="password"
             name="password"
             placeholder="Enter your password"
+            autocomplete="current-password"
             required
           >
+
         </div>
 
-        <button type="submit" class="login-button">
+
+        <button
+          type="submit"
+          class="login-button"
+          id="loginButton"
+        >
           Login
         </button>
 
       </form>
 
-      <a href="#" class="forgot">
+
+      <!-- =====================================================
+           FORGOT PASSWORD
+           ===================================================== -->
+
+      <a
+        href="#"
+        class="forgot"
+        id="forgotPassword"
+      >
         Forgot Password?
       </a>
+
+
+      <!-- =====================================================
+           DIVIDER
+           ===================================================== -->
 
       <div class="divider">
         OR
       </div>
 
+
+      <!-- =====================================================
+           CREATE ACCOUNT
+           ===================================================== -->
+
       <div class="signup">
+
         Don't have an account?
-        <a href="signup.html">Create Account</a>
+
+        <a href="signup.html">
+          Create Account
+        </a>
+
       </div>
 
     </div>
 
-    <a href="index.html" class="back">
+
+    <!-- =======================================================
+         BACK HOME
+         ======================================================= -->
+
+    <a
+      href="index.html"
+      class="back"
+    >
       ← Back to TomBrian Home
     </a>
 
   </div>
 
+
+  <!-- =========================================================
+       SUPABASE + LOGIN JAVASCRIPT
+       ========================================================= -->
+
+  <script type="module">
+
+    /* =========================================================
+       LOAD SUPABASE
+       ========================================================= */
+
+    import { createClient } from
+      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+
+    /* =========================================================
+       TOMBRIAN SUPABASE CONNECTION
+       ========================================================= */
+
+    const SUPABASE_URL =
+      "https://ekqhsnzkovzmepxdajtu.supabase.co";
+
+
+    /* =========================================================
+       PASTE YOUR SUPABASE PUBLISHABLE KEY BELOW
+
+       IMPORTANT:
+       Use the SAME publishable key that you used in signup.html.
+
+       DO NOT use the Supabase SECRET / SERVICE ROLE key.
+       ========================================================= */
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
+
+
+    /* =========================================================
+       CONNECT TO SUPABASE
+       ========================================================= */
+
+    const supabase =
+      createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+      );
+
+
+    /* =========================================================
+       GET PAGE ELEMENTS
+       ========================================================= */
+
+    const loginForm =
+      document.getElementById("loginForm");
+
+    const loginButton =
+      document.getElementById("loginButton");
+
+    const forgotPassword =
+      document.getElementById("forgotPassword");
+
+    const message =
+      document.getElementById("message");
+
+
+    /* =========================================================
+       SHOW MESSAGE
+       ========================================================= */
+
+    function showMessage(text, type) {
+
+      message.textContent = text;
+
+      message.className =
+        "message " + type;
+
+      message.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+    }
+
+
+    /* =========================================================
+       LOGIN
+       ========================================================= */
+
+    loginForm.addEventListener(
+      "submit",
+      async function(event) {
+
+        event.preventDefault();
+
+
+        /* -----------------------------------------------------
+           GET LOGIN DETAILS
+           ----------------------------------------------------- */
+
+        const email =
+          document
+            .getElementById("email")
+            .value
+            .trim();
+
+        const password =
+          document
+            .getElementById("password")
+            .value;
+
+
+        /* -----------------------------------------------------
+           BASIC VALIDATION
+           ----------------------------------------------------- */
+
+        if (!email) {
+
+          showMessage(
+            "Please enter your email address.",
+            "error"
+          );
+
+          return;
+        }
+
+
+        if (!password) {
+
+          showMessage(
+            "Please enter your password.",
+            "error"
+          );
+
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           DISABLE LOGIN BUTTON
+           ----------------------------------------------------- */
+
+        loginButton.disabled = true;
+
+        loginButton.textContent =
+          "Logging in...";
+
+
+        try {
+
+          /* ---------------------------------------------------
+             SUPABASE LOGIN
+             --------------------------------------------------- */
+
+          const { data, error } =
+            await supabase.auth.signInWithPassword({
+
+              email: email,
+
+              password: password
+
+            });
+
+
+          /* ---------------------------------------------------
+             CHECK LOGIN ERROR
+             --------------------------------------------------- */
+
+          if (error) {
+
+            throw error;
+
+          }
+
+
+          /* ---------------------------------------------------
+             CHECK USER
+             --------------------------------------------------- */
+
+          if (!data.user) {
+
+            throw new Error(
+              "Login was not completed. Please try again."
+            );
+
+          }
+
+
+          /* ---------------------------------------------------
+             SUCCESS
+             --------------------------------------------------- */
+
+          showMessage(
+            "Login successful! Redirecting...",
+            "success"
+          );
+
+
+          loginButton.textContent =
+            "Success!";
+
+
+          /* ---------------------------------------------------
+             REDIRECT
+             --------------------------------------------------- */
+
+          setTimeout(
+            function() {
+
+              window.location.href =
+                "dashboard.html";
+
+            },
+            1000
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "TomBrian Login Error:",
+            error
+          );
+
+
+          let errorMessage =
+            error && error.message
+              ? error.message
+              : "Something went wrong while logging in.";
+
+
+          const lowerErrorMessage =
+            errorMessage.toLowerCase();
+
+
+          /* ---------------------------------------------------
+             INVALID LOGIN
+             --------------------------------------------------- */
+
+          if (
+            lowerErrorMessage.includes(
+              "invalid login credentials"
+            )
+          ) {
+
+            errorMessage =
+              "Incorrect email or password. Please check your details and try again.";
+
+          }
+
+
+          /* ---------------------------------------------------
+             EMAIL NOT CONFIRMED
+             --------------------------------------------------- */
+
+          if (
+            lowerErrorMessage.includes(
+              "email not confirmed"
+            )
+          ) {
+
+            errorMessage =
+              "Your email has not been verified yet. Please open the verification email sent by TomBrian and click the verification link before logging in.";
+
+          }
+
+
+          /* ---------------------------------------------------
+             INVALID API KEY
+             --------------------------------------------------- */
+
+          if (
+            lowerErrorMessage.includes(
+              "invalid api key"
+            )
+          ) {
+
+            errorMessage =
+              "Supabase connection failed. Please check the publishable key in login.html.";
+
+          }
+
+
+          /* ---------------------------------------------------
+             SHOW ERROR
+             --------------------------------------------------- */
+
+          showMessage(
+            "Login failed: " + errorMessage,
+            "error"
+          );
+
+
+          /* ---------------------------------------------------
+             ENABLE BUTTON AGAIN
+             --------------------------------------------------- */
+
+          loginButton.disabled = false;
+
+          loginButton.textContent =
+            "Login";
+
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       FORGOT PASSWORD
+       ========================================================= */
+
+    forgotPassword.addEventListener(
+      "click",
+      async function(event) {
+
+        event.preventDefault();
+
+
+        const email =
+          document
+            .getElementById("email")
+            .value
+            .trim();
+
+
+        /* -----------------------------------------------------
+           EMAIL REQUIRED
+           ----------------------------------------------------- */
+
+        if (!email) {
+
+          showMessage(
+            "Please enter your email address first, then click Forgot Password.",
+            "error"
+          );
+
+          return;
+        }
+
+
+        try {
+
+          forgotPassword.textContent =
+            "Sending...";
+
+
+          /* ---------------------------------------------------
+             SEND PASSWORD RESET EMAIL
+             --------------------------------------------------- */
+
+          const { error } =
+            await supabase.auth.resetPasswordForEmail(
+              email,
+              {
+                redirectTo:
+                  window.location.origin +
+                  "/reset-password.html"
+              }
+            );
+
+
+          if (error) {
+
+            throw error;
+
+          }
+
+
+          showMessage(
+            "Password reset instructions have been sent to your email. Please check your inbox.",
+            "success"
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "Password Reset Error:",
+            error
+          );
+
+
+          showMessage(
+            "Password reset failed: " +
+            (
+              error && error.message
+                ? error.message
+                : "Please try again."
+            ),
+            "error"
+          );
+
+        }
+
+
+        forgotPassword.textContent =
+          "Forgot Password?";
+
+      }
+    );
+
+
+  </script>
+
 </body>
-          </html>
+</html>
