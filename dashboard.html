@@ -500,7 +500,10 @@
         🔔
       </button>
 
-      <div class="profile-circle">
+      <div
+        class="profile-circle"
+        id="profileInitial"
+      >
         U
       </div>
 
@@ -520,7 +523,13 @@
     <div class="welcome">
 
       <h1>
-        Welcome back, <span class="gold">Customer</span>
+        Welcome back,
+        <span
+          class="gold"
+          id="customerName"
+        >
+          Customer
+        </span>
       </h1>
 
       <p>
@@ -538,7 +547,10 @@
         Available Balance
       </div>
 
-      <div class="balance">
+      <div
+        class="balance"
+        id="balanceAmount"
+      >
         KES 0.00
       </div>
 
@@ -652,7 +664,7 @@
 
       <a
         href="#"
-        onclick="showMessage('Commission details will be available after backend integration.'); return false;"
+        onclick="showMessage('Commission details will be connected next.'); return false;"
       >
         View Details
       </a>
@@ -703,7 +715,7 @@
 
       <a
         href="#"
-        onclick="showMessage('Full transaction history will be added next.'); return false;"
+        onclick="showMessage('Full transaction history will be connected next.'); return false;"
       >
         View All
       </a>
@@ -711,7 +723,10 @@
     </div>
 
 
-    <div class="transactions">
+    <div
+      class="transactions"
+      id="transactionsList"
+    >
 
       <div class="transaction">
 
@@ -724,11 +739,11 @@
           <div>
 
             <div class="transaction-name">
-              No transactions yet
+              Loading transactions...
             </div>
 
             <div class="transaction-date">
-              Your transactions will appear here.
+              Please wait.
             </div>
 
           </div>
@@ -750,10 +765,9 @@
 
       <strong>TomBrian Notice:</strong>
 
-      This dashboard is currently in development.
-      Account balances, commissions, transactions and
-      payment services will be connected to the secure
-      TomBrian backend before live use.
+      Your account information is connected to your
+      secure TomBrian Supabase account. More services
+      will be connected as development continues.
 
     </div>
 
@@ -842,9 +856,7 @@
 
       <div class="modal-buttons">
 
-        <button
-          onclick="closeModal()"
-        >
+        <button onclick="closeModal()">
           Close
         </button>
 
@@ -863,59 +875,599 @@
 
 
   <!-- =========================
-       JAVASCRIPT
+       SUPABASE + JAVASCRIPT
   ========================= -->
 
-  <script>
+  <script type="module">
+
+    /* =========================================================
+       SUPABASE CONNECTION
+    ========================================================= */
+
+    import { createClient } from
+      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+
+    const SUPABASE_URL =
+      "https://ekqhsnzkovzmepxdajtu.supabase.co";
+
+
+    /* =========================================================
+       IMPORTANT
+       
+       USE THE SAME PUBLISHABLE / ANON KEY
+       YOU USED IN signup.html AND login.html.
+
+       DO NOT USE THE SECRET / SERVICE ROLE KEY.
+    ========================================================= */
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_v4DmfQMCBRvJE_dJvgk1og_v6JMXE_r";
+
+
+    /* =========================================================
+       CONNECT
+    ========================================================= */
+
+    const supabase =
+      createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+      );
+
+
+    /* =========================================================
+       GLOBAL VARIABLES
+    ========================================================= */
 
     let selectedAction = "";
 
 
-    /*
-      OPEN ACTION
-    */
+    /* =========================================================
+       GET CURRENT USER
+    ========================================================= */
+
+    async function getCurrentUser() {
+
+      const {
+        data,
+        error
+      } = await supabase.auth.getUser();
+
+
+      if (error) {
+
+        console.error(
+          "Could not get current user:",
+          error
+        );
+
+        return null;
+      }
+
+
+      return data.user;
+
+    }
+
+
+    /* =========================================================
+       LOAD CUSTOMER PROFILE
+    ========================================================= */
+
+    async function loadCustomerProfile(user) {
+
+      const customerName =
+        document.getElementById("customerName");
+
+      const profileInitial =
+        document.getElementById("profileInitial");
+
+
+      let fullName =
+        user.user_metadata?.full_name || "";
+
+
+      /*
+        Try to get the name from
+        the profiles table as well.
+      */
+
+      try {
+
+        const {
+          data: profile,
+          error
+        } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+
+        if (!error && profile) {
+
+          if (profile.full_name) {
+
+            fullName =
+              profile.full_name;
+
+          }
+
+        }
+
+      } catch (error) {
+
+        console.log(
+          "Profile lookup:",
+          error
+        );
+
+      }
+
+
+      /*
+        Fallback to email if no name exists.
+      */
+
+      if (!fullName) {
+
+        fullName =
+          user.email
+            ? user.email.split("@")[0]
+            : "Customer";
+
+      }
+
+
+      customerName.textContent =
+        fullName;
+
+
+      /*
+        Get first letter for profile circle.
+      */
+
+      const firstLetter =
+        fullName
+          .trim()
+          .charAt(0)
+          .toUpperCase();
+
+
+      profileInitial.textContent =
+        firstLetter || "U";
+
+    }
+
+
+    /* =========================================================
+       LOAD CUSTOMER BALANCE
+    ========================================================= */
+
+    async function loadBalance(user) {
+
+      const balanceElement =
+        document.getElementById("balanceAmount");
+
+
+      try {
+
+        const {
+          data: balanceRow,
+          error
+        } = await supabase
+          .from("balances")
+          .select("*")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+
+        if (error) {
+
+          console.error(
+            "Balance error:",
+            error
+          );
+
+          balanceElement.textContent =
+            "KES 0.00";
+
+          return;
+        }
+
+
+        if (!balanceRow) {
+
+          balanceElement.textContent =
+            "KES 0.00";
+
+          return;
+        }
+
+
+        const amount =
+          Number(balanceRow.amount || 0);
+
+
+        balanceElement.textContent =
+          "KES " +
+          amount.toLocaleString(
+            "en-KE",
+            {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            }
+          );
+
+      } catch (error) {
+
+        console.error(
+          "Balance loading error:",
+          error
+        );
+
+        balanceElement.textContent =
+          "KES 0.00";
+
+      }
+
+    }
+
+
+    /* =========================================================
+       LOAD RECENT TRANSACTIONS
+    ========================================================= */
+
+    async function loadTransactions(user) {
+
+      const transactionsList =
+        document.getElementById(
+          "transactionsList"
+        );
+
+
+      try {
+
+        const {
+          data: transactions,
+          error
+        } = await supabase
+          .from("transactions")
+          .select("*")
+          .eq("user_id", user.id)
+          .order("created_at", {
+            ascending: false
+          })
+          .limit(5);
+
+
+        if (error) {
+
+          console.error(
+            "Transaction error:",
+            error
+          );
+
+
+          transactionsList.innerHTML = `
+
+            <div class="transaction">
+
+              <div class="transaction-left">
+
+                <div class="transaction-icon">
+                  📋
+                </div>
+
+                <div>
+
+                  <div class="transaction-name">
+                    No transactions yet
+                  </div>
+
+                  <div class="transaction-date">
+                    Your transactions will appear here.
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="transaction-amount">
+                —
+              </div>
+
+            </div>
+
+          `;
+
+          return;
+        }
+
+
+        if (!transactions || transactions.length === 0) {
+
+          transactionsList.innerHTML = `
+
+            <div class="transaction">
+
+              <div class="transaction-left">
+
+                <div class="transaction-icon">
+                  📋
+                </div>
+
+                <div>
+
+                  <div class="transaction-name">
+                    No transactions yet
+                  </div>
+
+                  <div class="transaction-date">
+                    Your transactions will appear here.
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="transaction-amount">
+                —
+              </div>
+
+            </div>
+
+          `;
+
+          return;
+        }
+
+
+        transactionsList.innerHTML = "";
+
+
+        transactions.forEach(function(transaction) {
+
+          const amount =
+            Number(transaction.amount || 0);
+
+
+          const description =
+            transaction.description ||
+            "TomBrian Transaction";
+
+
+          let dateText =
+            "";
+
+
+          if (transaction.created_at) {
+
+            const date =
+              new Date(
+                transaction.created_at
+              );
+
+
+            dateText =
+              date.toLocaleString(
+                "en-KE",
+                {
+                  dateStyle: "medium",
+                  timeStyle: "short"
+                }
+              );
+
+          } else {
+
+            dateText =
+              "Recent transaction";
+
+          }
+
+
+          const transactionElement =
+            document.createElement("div");
+
+
+          transactionElement.className =
+            "transaction";
+
+
+          transactionElement.innerHTML = `
+
+            <div class="transaction-left">
+
+              <div class="transaction-icon">
+                📋
+              </div>
+
+              <div>
+
+                <div class="transaction-name">
+                  ${escapeHtml(description)}
+                </div>
+
+                <div class="transaction-date">
+                  ${escapeHtml(dateText)}
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="transaction-amount">
+
+              KES ${amount.toLocaleString(
+                "en-KE",
+                {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                }
+              )}
+
+            </div>
+
+          `;
+
+
+          transactionsList.appendChild(
+            transactionElement
+          );
+
+        });
+
+      } catch (error) {
+
+        console.error(
+          "Transaction loading error:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       ESCAPE HTML
+       ========================================================= */
+
+    function escapeHtml(value) {
+
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+    }
+
+
+    /* =========================================================
+       INITIALIZE DASHBOARD
+    ========================================================= */
+
+    async function initializeDashboard() {
+
+      const user =
+        await getCurrentUser();
+
+
+      /*
+        If nobody is logged in,
+        return to login page.
+      */
+
+      if (!user) {
+
+        window.location.href =
+          "login.html";
+
+        return;
+
+      }
+
+
+      /*
+        Load customer information.
+      */
+
+      await loadCustomerProfile(
+        user
+      );
+
+
+      /*
+        Load customer's balance.
+      */
+
+      await loadBalance(
+        user
+      );
+
+
+      /*
+        Load customer's transactions.
+      */
+
+      await loadTransactions(
+        user
+      );
+
+    }
+
+
+    /* =========================================================
+       OPEN ACTION
+    ========================================================= */
 
     function openAction(action) {
 
-      selectedAction = action;
-
-      document.getElementById("modalTitle").textContent =
+      selectedAction =
         action;
 
-      document.getElementById("modalText").textContent =
+
+      document.getElementById(
+        "modalTitle"
+      ).textContent =
+        action;
+
+
+      document.getElementById(
+        "modalText"
+      ).textContent =
         action +
         " is ready for the next development stage. " +
         "The service will be connected to the TomBrian backend.";
 
-      document
-        .getElementById("actionModal")
-        .classList
-        .add("show");
+
+      document.getElementById(
+        "actionModal"
+      ).classList.add(
+        "show"
+      );
 
     }
 
 
     /*
-      CLOSE MODAL
+      Make function available to HTML onclick.
     */
+
+    window.openAction =
+      openAction;
+
+
+    /* =========================================================
+       CLOSE MODAL
+    ========================================================= */
 
     function closeModal() {
 
-      document
-        .getElementById("actionModal")
-        .classList
-        .remove("show");
+      document.getElementById(
+        "actionModal"
+      ).classList.remove(
+        "show"
+      );
 
     }
 
 
-    /*
-      CONTINUE
-    */
+    window.closeModal =
+      closeModal;
+
+
+    /* =========================================================
+       CONTINUE ACTION
+    ========================================================= */
 
     function continueAction() {
 
       closeModal();
+
 
       showMessage(
         selectedAction +
@@ -925,9 +1477,13 @@
     }
 
 
-    /*
-      SIMPLE MESSAGE
-    */
+    window.continueAction =
+      continueAction;
+
+
+    /* =========================================================
+       SIMPLE MESSAGE
+    ========================================================= */
 
     function showMessage(message) {
 
@@ -936,31 +1492,44 @@
     }
 
 
-    /*
-      HOME
-    */
+    window.showMessage =
+      showMessage;
+
+
+    /* =========================================================
+       HOME
+    ========================================================= */
 
     function goHome() {
 
       window.scrollTo({
+
         top: 0,
+
         behavior: "smooth"
+
       });
 
     }
 
 
-    /*
-      CLOSE MODAL WHEN
-      CLICKING OUTSIDE
-    */
+    window.goHome =
+      goHome;
+
+
+    /* =========================================================
+       CLOSE MODAL WHEN CLICKING OUTSIDE
+    ========================================================= */
 
     window.addEventListener(
       "click",
       function(event) {
 
         const modal =
-          document.getElementById("actionModal");
+          document.getElementById(
+            "actionModal"
+          );
+
 
         if (event.target === modal) {
 
@@ -971,7 +1540,14 @@
       }
     );
 
+
+    /* =========================================================
+       START DASHBOARD
+    ========================================================= */
+
+    initializeDashboard();
+
   </script>
 
 </body>
-  </html>
+</html>
