@@ -48,7 +48,7 @@
       border: 1px solid #252b37;
       border-radius: 18px;
       padding: 32px 26px;
-      box-shadow: 0 15px 40px rgba(0,0,0,.25);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
     }
 
     .card-header {
@@ -156,11 +156,11 @@
     }
 
     .signup-button:hover {
-      opacity: .9;
+      opacity: 0.9;
     }
 
     .signup-button:disabled {
-      opacity: .6;
+      opacity: 0.6;
       cursor: not-allowed;
     }
 
@@ -278,6 +278,7 @@
 
       <form id="signupForm">
 
+        <!-- FULL NAME -->
         <div class="form-group">
           <label for="fullName">
             Full Name <span class="required">*</span>
@@ -293,6 +294,7 @@
           >
         </div>
 
+        <!-- PHONE -->
         <div class="form-group">
           <label for="phone">
             Phone Number <span class="required">*</span>
@@ -308,6 +310,7 @@
           >
         </div>
 
+        <!-- EMAIL -->
         <div class="form-group">
           <label for="email">
             Email Address <span class="required">*</span>
@@ -323,12 +326,14 @@
           >
         </div>
 
+        <!-- PASSWORD -->
         <div class="form-group">
           <label for="password">
             Password <span class="required">*</span>
           </label>
 
           <div class="password-wrapper">
+
             <input
               type="password"
               id="password"
@@ -346,15 +351,18 @@
             >
               SHOW
             </button>
+
           </div>
         </div>
 
+        <!-- CONFIRM PASSWORD -->
         <div class="form-group">
           <label for="confirmPassword">
             Confirm Password <span class="required">*</span>
           </label>
 
           <div class="password-wrapper">
+
             <input
               type="password"
               id="confirmPassword"
@@ -372,25 +380,39 @@
             >
               SHOW
             </button>
+
           </div>
         </div>
 
+        <!-- TERMS -->
         <div class="terms">
-          <input type="checkbox" id="terms" required>
+
+          <input
+            type="checkbox"
+            id="terms"
+            required
+          >
 
           <label for="terms">
             I agree to the TomBrian
-            <a href="#">Terms & Conditions</a>
+            <a href="#">Terms &amp; Conditions</a>
             and understand that my account information will be handled securely.
           </label>
+
         </div>
 
-        <button type="submit" class="signup-button" id="signupButton">
+        <!-- SIGNUP BUTTON -->
+        <button
+          type="submit"
+          class="signup-button"
+          id="signupButton"
+        >
           Create Account
         </button>
 
       </form>
 
+      <!-- LOGIN -->
       <div class="login-section">
         Already have an account?
         <a href="login.html">Login</a>
@@ -398,17 +420,21 @@
 
     </div>
 
+    <!-- BACK HOME -->
     <a href="index.html" class="back-home">
       ← Back to Home
     </a>
 
+    <!-- SECURITY MESSAGE -->
     <div class="security">
+
       <div class="security-icon">🔒</div>
 
       <p>
         Your account details should only be entered on the official TomBrian
         website. Never share your password or verification codes with anyone.
       </p>
+
     </div>
 
     <footer>
@@ -426,27 +452,39 @@
 
 
   <script>
-/* =========================================================
-   TOMBRIAN SUPABASE CONNECTION
 
-   PUT YOUR REAL SUPABASE DETAILS BELOW
-   ========================================================= */
+    /* =========================================================
+       TOMBRIAN SUPABASE CONNECTION
+       ========================================================= */
 
-const SUPABASE_URL = "https://ekqhsnzkovzmepxdajtu.supabase.co";
-
-const SUPABASE_PUBLISHABLE_KEY =
-   "sb_publishable_v4DmfQMCBRvJE_dJvgk1og_v6JMXE_r";
+    const SUPABASE_URL =
+      "https://ekqhsnzkovzmepxdajtu.supabase.co";
 
 
-/* =========================================================
-   CONNECT TO SUPABASE
-   ========================================================= */
+    /*
+       =========================================================
+       PASTE YOUR SUPABASE PUBLISHABLE KEY BELOW
 
-const supabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
+       IMPORTANT:
+       Use the PUBLISHABLE / ANON key.
 
+       DO NOT paste your Supabase SECRET / SERVICE ROLE key
+       into this website.
+       =========================================================
+    */
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_v4DmfQMCBRvJE_dJvgk1og_v6JMXE_r";
+
+
+    /* =========================================================
+       CONNECT TO SUPABASE
+       ========================================================= */
+
+    const supabase = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
 
 
     /* =========================================================
@@ -666,6 +704,7 @@ const supabase = window.supabase.createClient(
 
             button.textContent = "Success!";
 
+
             setTimeout(function() {
 
               window.location.href = "dashboard.html";
@@ -695,8 +734,6 @@ const supabase = window.supabase.createClient(
 
           /* ---------------------------------------------------
              SHOW ACTUAL ERROR
-
-             The form values are NOT cleared.
              --------------------------------------------------- */
 
           let errorMessage =
@@ -705,16 +742,31 @@ const supabase = window.supabase.createClient(
               : "Something went wrong while creating your account.";
 
 
-          /* Make common Supabase errors easier to understand */
+          /* ---------------------------------------------------
+             MAKE COMMON SUPABASE ERRORS EASIER TO UNDERSTAND
+             --------------------------------------------------- */
+
+          const lowerErrorMessage =
+            errorMessage.toLowerCase();
+
 
           if (
-            errorMessage
-              .toLowerCase()
-              .includes("already registered")
+            lowerErrorMessage.includes("already registered") ||
+            lowerErrorMessage.includes("user already registered")
           ) {
 
             errorMessage =
               "This email is already registered. Please use another email or login to your existing account.";
+
+          }
+
+
+          if (
+            lowerErrorMessage.includes("invalid api key")
+          ) {
+
+            errorMessage =
+              "Supabase connection failed. Please check the publishable key in signup.html.";
 
           }
 
@@ -736,4 +788,4 @@ const supabase = window.supabase.createClient(
   </script>
 
 </body>
-        </html>
+</html>
