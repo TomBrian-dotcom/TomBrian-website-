@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>TomBrian | Create Account</title>
 
   <style>
@@ -273,12 +274,10 @@
         <p>Join TomBrian and manage your services in one place.</p>
       </div>
 
-      <!-- Messages appear here -->
       <div id="message" class="message"></div>
 
       <form id="signupForm">
 
-        <!-- FULL NAME -->
         <div class="form-group">
           <label for="fullName">
             Full Name <span class="required">*</span>
@@ -294,7 +293,6 @@
           >
         </div>
 
-        <!-- PHONE -->
         <div class="form-group">
           <label for="phone">
             Phone Number <span class="required">*</span>
@@ -310,7 +308,6 @@
           >
         </div>
 
-        <!-- EMAIL -->
         <div class="form-group">
           <label for="email">
             Email Address <span class="required">*</span>
@@ -326,7 +323,6 @@
           >
         </div>
 
-        <!-- PASSWORD -->
         <div class="form-group">
           <label for="password">
             Password <span class="required">*</span>
@@ -347,7 +343,7 @@
             <button
               type="button"
               class="show-password"
-              onclick="togglePassword('password', this)"
+              id="showPasswordButton"
             >
               SHOW
             </button>
@@ -355,7 +351,6 @@
           </div>
         </div>
 
-        <!-- CONFIRM PASSWORD -->
         <div class="form-group">
           <label for="confirmPassword">
             Confirm Password <span class="required">*</span>
@@ -376,7 +371,7 @@
             <button
               type="button"
               class="show-password"
-              onclick="togglePassword('confirmPassword', this)"
+              id="showConfirmPasswordButton"
             >
               SHOW
             </button>
@@ -384,7 +379,6 @@
           </div>
         </div>
 
-        <!-- TERMS -->
         <div class="terms">
 
           <input
@@ -401,7 +395,6 @@
 
         </div>
 
-        <!-- SIGNUP BUTTON -->
         <button
           type="submit"
           class="signup-button"
@@ -412,7 +405,6 @@
 
       </form>
 
-      <!-- LOGIN -->
       <div class="login-section">
         Already have an account?
         <a href="login.html">Login</a>
@@ -420,12 +412,10 @@
 
     </div>
 
-    <!-- BACK HOME -->
     <a href="index.html" class="back-home">
       ← Back to Home
     </a>
 
-    <!-- SECURITY MESSAGE -->
     <div class="security">
 
       <div class="security-icon">🔒</div>
@@ -444,34 +434,28 @@
   </div>
 
 
-  <!-- =========================================================
-       SUPABASE JAVASCRIPT LIBRARY
-       ========================================================= -->
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-  <script>
+  <script type="module">
 
     /* =========================================================
        TOMBRIAN SUPABASE CONNECTION
        ========================================================= */
 
+    import { createClient } from
+      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+
     const SUPABASE_URL =
       "https://ekqhsnzkovzmepxdajtu.supabase.co";
 
 
-    /*
-       =========================================================
+    /* =========================================================
        PASTE YOUR SUPABASE PUBLISHABLE KEY BELOW
-
+       
        IMPORTANT:
        Use the PUBLISHABLE / ANON key.
 
-       DO NOT paste your Supabase SECRET / SERVICE ROLE key
-       into this website.
-       =========================================================
-    */
+       DO NOT use the Supabase SECRET / SERVICE ROLE key.
+       ========================================================= */
 
     const SUPABASE_PUBLISHABLE_KEY =
       "sb_publishable_v4DmfQMCBRvJE_dJvgk1og_v6JMXE_r";
@@ -481,32 +465,80 @@
        CONNECT TO SUPABASE
        ========================================================= */
 
-    const supabase = window.supabase.createClient(
+    const supabase = createClient(
       SUPABASE_URL,
       SUPABASE_PUBLISHABLE_KEY
     );
 
 
     /* =========================================================
+       GET PAGE ELEMENTS
+       ========================================================= */
+
+    const signupForm =
+      document.getElementById("signupForm");
+
+    const signupButton =
+      document.getElementById("signupButton");
+
+    const message =
+      document.getElementById("message");
+
+    const passwordInput =
+      document.getElementById("password");
+
+    const confirmPasswordInput =
+      document.getElementById("confirmPassword");
+
+    const showPasswordButton =
+      document.getElementById("showPasswordButton");
+
+    const showConfirmPasswordButton =
+      document.getElementById("showConfirmPasswordButton");
+
+
+    /* =========================================================
        SHOW / HIDE PASSWORD
        ========================================================= */
 
-    function togglePassword(id, button) {
+    showPasswordButton.addEventListener(
+      "click",
+      function() {
 
-      const input = document.getElementById(id);
+        if (passwordInput.type === "password") {
 
-      if (input.type === "password") {
+          passwordInput.type = "text";
+          showPasswordButton.textContent = "HIDE";
 
-        input.type = "text";
-        button.textContent = "HIDE";
+        } else {
 
-      } else {
+          passwordInput.type = "password";
+          showPasswordButton.textContent = "SHOW";
 
-        input.type = "password";
-        button.textContent = "SHOW";
+        }
 
       }
-    }
+    );
+
+
+    showConfirmPasswordButton.addEventListener(
+      "click",
+      function() {
+
+        if (confirmPasswordInput.type === "password") {
+
+          confirmPasswordInput.type = "text";
+          showConfirmPasswordButton.textContent = "HIDE";
+
+        } else {
+
+          confirmPasswordInput.type = "password";
+          showConfirmPasswordButton.textContent = "SHOW";
+
+        }
+
+      }
+    );
 
 
     /* =========================================================
@@ -515,16 +547,16 @@
 
     function showMessage(text, type) {
 
-      const message = document.getElementById("message");
-
       message.textContent = text;
 
-      message.className = "message " + type;
+      message.className =
+        "message " + type;
 
       message.scrollIntoView({
         behavior: "smooth",
         block: "center"
       });
+
     }
 
 
@@ -532,9 +564,9 @@
        CREATE ACCOUNT
        ========================================================= */
 
-    document
-      .getElementById("signupForm")
-      .addEventListener("submit", async function(event) {
+    signupForm.addEventListener(
+      "submit",
+      async function(event) {
 
         event.preventDefault();
 
@@ -544,19 +576,25 @@
            ----------------------------------------------------- */
 
         const fullName =
-          document.getElementById("fullName").value.trim();
+          document.getElementById("fullName")
+            .value
+            .trim();
 
         const phone =
-          document.getElementById("phone").value.trim();
+          document.getElementById("phone")
+            .value
+            .trim();
 
         const email =
-          document.getElementById("email").value.trim();
+          document.getElementById("email")
+            .value
+            .trim();
 
         const password =
-          document.getElementById("password").value;
+          passwordInput.value;
 
         const confirmPassword =
-          document.getElementById("confirmPassword").value;
+          confirmPasswordInput.value;
 
 
         /* -----------------------------------------------------
@@ -622,12 +660,10 @@
            DISABLE BUTTON
            ----------------------------------------------------- */
 
-        const button =
-          document.getElementById("signupButton");
+        signupButton.disabled = true;
 
-        button.disabled = true;
-
-        button.textContent = "Creating Account...";
+        signupButton.textContent =
+          "Creating Account...";
 
 
         try {
@@ -651,7 +687,8 @@
                 },
 
                 emailRedirectTo:
-                  window.location.origin + "/login.html"
+                  window.location.origin +
+                  "/login.html"
 
               }
 
@@ -659,7 +696,7 @@
 
 
           /* ---------------------------------------------------
-             CHECK FOR SUPABASE ERROR
+             CHECK SUPABASE ERROR
              --------------------------------------------------- */
 
           if (error) {
@@ -670,7 +707,7 @@
 
 
           /* ---------------------------------------------------
-             ACCOUNT CREATED BUT EMAIL CONFIRMATION REQUIRED
+             EMAIL CONFIRMATION REQUIRED
              --------------------------------------------------- */
 
           if (data.user && !data.session) {
@@ -680,19 +717,15 @@
               "success"
             );
 
-            /*
-              Keep the user's details visible instead of
-              clearing the form.
-            */
-
-            button.textContent = "Account Created";
+            signupButton.textContent =
+              "Account Created";
 
             return;
           }
 
 
           /* ---------------------------------------------------
-             ACCOUNT CREATED AND USER IS LOGGED IN
+             ACCOUNT CREATED AND LOGGED IN
              --------------------------------------------------- */
 
           if (data.session) {
@@ -702,14 +735,19 @@
               "success"
             );
 
-            button.textContent = "Success!";
+            signupButton.textContent =
+              "Success!";
 
 
-            setTimeout(function() {
+            setTimeout(
+              function() {
 
-              window.location.href = "dashboard.html";
+                window.location.href =
+                  "dashboard.html";
 
-            }, 1500);
+              },
+              1500
+            );
 
             return;
           }
@@ -724,17 +762,17 @@
             "success"
           );
 
-          button.textContent = "Account Created";
+          signupButton.textContent =
+            "Account Created";
 
 
         } catch (error) {
 
-          console.error("Signup error:", error);
+          console.error(
+            "TomBrian Signup Error:",
+            error
+          );
 
-
-          /* ---------------------------------------------------
-             SHOW ACTUAL ERROR
-             --------------------------------------------------- */
 
           let errorMessage =
             error && error.message
@@ -742,17 +780,21 @@
               : "Something went wrong while creating your account.";
 
 
-          /* ---------------------------------------------------
-             MAKE COMMON SUPABASE ERRORS EASIER TO UNDERSTAND
-             --------------------------------------------------- */
-
           const lowerErrorMessage =
             errorMessage.toLowerCase();
 
 
+          /* ---------------------------------------------------
+             COMMON SUPABASE ERRORS
+             --------------------------------------------------- */
+
           if (
-            lowerErrorMessage.includes("already registered") ||
-            lowerErrorMessage.includes("user already registered")
+            lowerErrorMessage.includes(
+              "already registered"
+            ) ||
+            lowerErrorMessage.includes(
+              "user already registered"
+            )
           ) {
 
             errorMessage =
@@ -762,28 +804,33 @@
 
 
           if (
-            lowerErrorMessage.includes("invalid api key")
+            lowerErrorMessage.includes(
+              "invalid api key"
+            )
           ) {
 
             errorMessage =
-              "Supabase connection failed. Please check the publishable key in signup.html.";
+              "Supabase connection failed. Please check your publishable key in signup.html.";
 
           }
 
 
           showMessage(
-            "Account creation failed: " + errorMessage,
+            "Account creation failed: " +
+            errorMessage,
             "error"
           );
 
 
-          button.disabled = false;
+          signupButton.disabled = false;
 
-          button.textContent = "Create Account";
+          signupButton.textContent =
+            "Create Account";
 
         }
 
-      });
+      }
+    );
 
   </script>
 
