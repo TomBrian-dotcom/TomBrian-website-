@@ -67,6 +67,22 @@
       font-size: 14px;
     }
 
+    .referral-box {
+      display: none;
+      margin-bottom: 22px;
+      padding: 12px 14px;
+      border-radius: 9px;
+      background: #172415;
+      border: 1px solid #395b2f;
+      color: #a9e59a;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .referral-box strong {
+      color: #d9a441;
+    }
+
     .form-group {
       margin-bottom: 19px;
     }
@@ -274,6 +290,16 @@
         <p>Join TomBrian and manage your services in one place.</p>
       </div>
 
+      <!-- =====================================================
+           REFERRAL INFORMATION
+           ===================================================== -->
+
+      <div id="referralBox" class="referral-box">
+        You were invited to join TomBrian.
+        Referral code:
+        <strong id="referralCodeDisplay"></strong>
+      </div>
+
       <div id="message" class="message"></div>
 
       <form id="signupForm">
@@ -450,10 +476,10 @@
 
     /* =========================================================
        SUPABASE PUBLISHABLE KEY
-       
+
        IMPORTANT:
        This must be your PUBLISHABLE / ANON key.
-       
+
        DO NOT use the Supabase SECRET / SERVICE ROLE key.
        ========================================================= */
 
@@ -495,6 +521,46 @@
 
     const showConfirmPasswordButton =
       document.getElementById("showConfirmPasswordButton");
+
+    const referralBox =
+      document.getElementById("referralBox");
+
+    const referralCodeDisplay =
+      document.getElementById("referralCodeDisplay");
+
+
+    /* =========================================================
+       GET REFERRAL CODE FROM URL
+
+       Example:
+
+       signup.html?ref=ABC123
+
+       The value ABC123 becomes the referral code.
+       ========================================================= */
+
+    const urlParams =
+      new URLSearchParams(window.location.search);
+
+    const referralCode =
+      (urlParams.get("ref") || "").trim();
+
+
+    /* =========================================================
+       SHOW REFERRAL INFORMATION
+
+       Only display the box when a referral code exists.
+       ========================================================= */
+
+    if (referralCode) {
+
+      referralCodeDisplay.textContent =
+        referralCode;
+
+      referralBox.style.display =
+        "block";
+
+    }
 
 
     /* =========================================================
@@ -670,7 +736,28 @@
 
           /* ---------------------------------------------------
              CREATE SUPABASE AUTH ACCOUNT
+
+             The referral code is attached to the user's
+             metadata when one exists.
              --------------------------------------------------- */
+
+          const userMetadata = {
+            full_name: fullName,
+            phone: phone
+          };
+
+
+          /* ---------------------------------------------------
+             ADD REFERRAL CODE WHEN PRESENT
+             --------------------------------------------------- */
+
+          if (referralCode) {
+
+            userMetadata.referral_code =
+              referralCode;
+
+          }
+
 
           const { data, error } =
             await supabase.auth.signUp({
@@ -681,15 +768,10 @@
 
               options: {
 
-                data: {
-                  full_name: fullName,
-                  phone: phone
-                },
+                data: userMetadata,
 
                 /* =================================================
-                   IMPORTANT:
-                   SEND EMAIL VERIFICATION DIRECTLY TO TOMBRIAN
-                   LOGIN PAGE ON GITHUB PAGES.
+                   EMAIL VERIFICATION REDIRECT
                    ================================================= */
 
                 emailRedirectTo:
@@ -717,10 +799,22 @@
 
           if (data.user && !data.session) {
 
-            showMessage(
-              "Account created successfully! Please check your email and click the verification link before logging in.",
-              "success"
-            );
+            if (referralCode) {
+
+              showMessage(
+                "Account created successfully! Your referral has been recorded. Please check your email and click the verification link before logging in.",
+                "success"
+              );
+
+            } else {
+
+              showMessage(
+                "Account created successfully! Please check your email and click the verification link before logging in.",
+                "success"
+              );
+
+            }
+
 
             signupButton.textContent =
               "Account Created";
