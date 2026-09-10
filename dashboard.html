@@ -1,4314 +1,3233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TomBrian | Dashboard</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f5f7fb;
-      color: #172033;
-      min-height: 100vh;
-    }
-
-    body.no-scroll {
-      overflow: hidden;
-    }
-
-    header {
-      background: #111827;
-      color: white;
-      padding: 18px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 20;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 21px;
-      font-weight: bold;
-    }
-
-    .brand-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: #16a34a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .notification {
-      font-size: 21px;
-      cursor: pointer;
-    }
-
-    .profile-circle {
-      width: 38px;
-      height: 38px;
-      background: #374151;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    main {
-      max-width: 1100px;
-      margin: auto;
-      padding: 25px 18px 100px;
-    }
-
-    .connection {
-      background: #ecfdf5;
-      border: 1px solid #bbf7d0;
-      color: #166534;
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-size: 13px;
-      margin-bottom: 20px;
-    }
-
-    .welcome {
-      margin-bottom: 20px;
-    }
-
-    .welcome h1 {
-      font-size: 27px;
-      margin-bottom: 7px;
-    }
-
-    .welcome p {
-      color: #6b7280;
-      font-size: 14px;
-    }
-
-    .balance-card {
-      background: #111827;
-      color: white;
-      border-radius: 18px;
-      padding: 25px;
-      margin-bottom: 24px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-    }
-
-    .balance-label {
-      color: #cbd5e1;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    .balance {
-      font-size: 34px;
-      font-weight: bold;
-    }
-
-    .balance-sub {
-      margin-top: 8px;
-      color: #9ca3af;
-      font-size: 13px;
-    }
-
-    .section-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin: 25px 0 14px;
-    }
-
-    .actions {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 13px;
-    }
-
-    .action {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      padding: 18px 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: 0.2s;
-      user-select: none;
-    }
-
-    .action:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.07);
-      border-color: #16a34a;
-    }
-
-    .action:active {
-      transform: scale(0.98);
-    }
-
-    .action-icon {
-      font-size: 26px;
-      margin-bottom: 9px;
-    }
-
-    .action-title {
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    .commission-card {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 15px;
-      padding: 20px;
-    }
-
-    .commission-amount {
-      font-size: 27px;
-      font-weight: bold;
-      margin-top: 7px;
-    }
-
-    .commission-card p {
-      color: #6b7280;
-      font-size: 13px;
-      margin-top: 5px;
-    }
-
-    .transactions {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 15px;
-      overflow: hidden;
-    }
-
-    .transaction {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px;
-      border-bottom: 1px solid #f0f0f0;
-    }
-
-    .transaction:last-child {
-      border-bottom: none;
-    }
-
-    .transaction-left {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .transaction-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: #f3f4f6;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .transaction-description {
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    .transaction-date {
-      color: #9ca3af;
-      font-size: 12px;
-      margin-top: 3px;
-    }
-
-    .transaction-amount {
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    .empty {
-      padding: 25px;
-      text-align: center;
-      color: #9ca3af;
-      font-size: 14px;
-    }
-
-    .notice {
-      margin-top: 22px;
-      padding: 15px;
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      color: #9a3412;
-      border-radius: 12px;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 68px;
-      background: white;
-      border-top: 1px solid #e5e7eb;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 30;
-    }
-
-    .nav-item {
-      text-align: center;
-      color: #6b7280;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .nav-icon {
-      font-size: 21px;
-      margin-bottom: 3px;
-    }
-
-    .nav-item.active {
-      color: #16a34a;
-      font-weight: bold;
-    }
-
-    /* =========================================================
-       SERVICE MODAL
-    ========================================================= */
-
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-      overflow-y: auto;
-    }
-
-    .modal-overlay.show {
-      display: flex;
-    }
-
-    .modal {
-      width: 100%;
-      max-width: 450px;
-      max-height: 90vh;
-      overflow-y: auto;
-      background: white;
-      border-radius: 18px;
-      padding: 24px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .modal-header h2 {
-      font-size: 21px;
-    }
-
-    .close {
-      font-size: 25px;
-      cursor: pointer;
-      color: #6b7280;
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 7px;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      font-size: 15px;
-      outline: none;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus {
-      border-color: #16a34a;
-    }
-
-    .form-group input[readonly] {
-      background: #f3f4f6;
-      color: #6b7280;
-    }
-
-    .primary-btn {
-      width: 100%;
-      border: none;
-      background: #16a34a;
-      color: white;
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 5px;
-    }
-
-    .primary-btn:hover {
-      background: #15803d;
-    }
-
-    .secondary-btn {
-      width: 100%;
-      border: 1px solid #d1d5db;
-      background: white;
-      color: #374151;
-      padding: 13px;
-      border-radius: 10px;
-      font-size: 14px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    .danger-btn {
-      width: 100%;
-      border: none;
-      background: #dc2626;
-      color: white;
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    .danger-btn:hover {
-      background: #b91c1c;
-    }
-
-    .message {
-      display: none;
-      padding: 11px;
-      border-radius: 9px;
-      margin-bottom: 14px;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .message.show {
-      display: block;
-    }
-
-    .message.error {
-      background: #fef2f2;
-      color: #b91c1c;
-      border: 1px solid #fecaca;
-    }
-
-    .message.success {
-      background: #f0fdf4;
-      color: #15803d;
-      border: 1px solid #bbf7d0;
-    }
-
-    .confirmation {
-      display: none;
-    }
-
-    .confirmation.show {
-      display: block;
-    }
-
-    .confirm-box {
-      background: #f9fafb;
-      border-radius: 12px;
-      padding: 16px;
-      margin: 15px 0;
-    }
-
-    .confirm-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 7px 0;
-      font-size: 14px;
-      gap: 15px;
-    }
-
-    .confirm-row strong {
-      color: #111827;
-      text-align: right;
-    }
-
-    .info-box {
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      color: #1e40af;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 13px;
-      line-height: 1.5;
-      margin-bottom: 16px;
-    }
-
-    .warning-box {
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      color: #9a3412;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 13px;
-      line-height: 1.5;
-      margin-bottom: 16px;
-    }
-
-    /* =========================================================
-       ACCOUNT PAGE
-    ========================================================= */
-
-    .account-page {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: #f5f7fb;
-      z-index: 200;
-      overflow-y: auto;
-      padding-bottom: 30px;
-    }
-
-    .account-page.show {
-      display: block;
-    }
-
-    .account-header {
-      background: #111827;
-      color: white;
-      padding: 18px 20px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      position: sticky;
-      top: 0;
-      z-index: 5;
-    }
-
-    .account-back {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: #374151;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .account-header-title {
-      font-size: 20px;
-      font-weight: bold;
-    }
-
-    .account-content {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 25px 18px 40px;
-    }
-
-    .profile-card {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 18px;
-      padding: 25px;
-      text-align: center;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-      margin-bottom: 18px;
-    }
-
-    .large-profile-circle {
-      width: 82px;
-      height: 82px;
-      border-radius: 50%;
-      background: #16a34a;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 14px;
-      font-size: 31px;
-      font-weight: bold;
-    }
-
-    .profile-card h2 {
-      font-size: 22px;
-      margin-bottom: 5px;
-    }
-
-    .profile-card p {
-      color: #6b7280;
-      font-size: 14px;
-    }
-
-    .account-balance-card {
-      background: #111827;
-      color: white;
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 18px;
-    }
-
-    .account-balance-label {
-      color: #cbd5e1;
-      font-size: 13px;
-    }
-
-    .account-balance-value {
-      font-size: 28px;
-      font-weight: bold;
-      margin-top: 6px;
-    }
-
-    .account-section {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 16px;
-      overflow: hidden;
-      margin-bottom: 18px;
-    }
-
-    .account-section-title {
-      padding: 17px 18px;
-      border-bottom: 1px solid #e5e7eb;
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    .account-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      padding: 16px 18px;
-      border-bottom: 1px solid #f0f0f0;
-    }
-
-    .account-row:last-child {
-      border-bottom: none;
-    }
-
-    .account-row-label {
-      color: #6b7280;
-      font-size: 12px;
-      margin-bottom: 4px;
-    }
-
-    .account-row-value {
-      font-size: 14px;
-      font-weight: bold;
-      word-break: break-word;
-    }
-
-    .account-row-icon {
-      font-size: 20px;
-      margin-right: 5px;
-    }
-
-    .account-action {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 17px 18px;
-      background: white;
-      border: none;
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: bold;
-      color: #172033;
-      border-bottom: 1px solid #f0f0f0;
-    }
-
-    .account-action:last-child {
-      border-bottom: none;
-    }
-
-    .account-action:hover {
-      background: #f9fafb;
-    }
-
-    .account-action-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: #f3f4f6;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-    }
-
-    .account-action-arrow {
-      margin-left: auto;
-      color: #9ca3af;
-      font-size: 20px;
-    }
-
-    .account-footer {
-      text-align: center;
-      color: #9ca3af;
-      font-size: 12px;
-      margin-top: 25px;
-    }
-
-    /* =========================================================
-       ACCOUNT MODALS
-    ========================================================= */
-
-    .account-modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      z-index: 300;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-      overflow-y: auto;
-    }
-
-    .account-modal-overlay.show {
-      display: flex;
-    }
-
-    .account-modal {
-      width: 100%;
-      max-width: 450px;
-      background: white;
-      border-radius: 18px;
-      padding: 24px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-
-    .account-modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-
-    .account-modal-header h2 {
-      font-size: 21px;
-    }
-
-    .account-modal-close {
-      font-size: 25px;
-      color: #6b7280;
-      cursor: pointer;
-    }
-
-    .account-note {
-      color: #6b7280;
-      font-size: 12px;
-      line-height: 1.5;
-      margin-top: -8px;
-      margin-bottom: 15px;
-    }
-
-    @media (max-width: 700px) {
-      .actions {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .welcome h1 {
-        font-size: 23px;
-      }
-
-      .account-row {
-        align-items: flex-start;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .brand {
-        font-size: 18px;
-      }
-
-      .balance {
-        font-size: 29px;
-      }
-
-      .account-content {
-        padding-left: 14px;
-        padding-right: 14px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TomBrian | Dashboard</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f5f7fb;
+  color:#172033;
+  min-height:100vh;
+}
+
+body.no-scroll{overflow:hidden}
+
+header{
+  background:#111827;
+  color:white;
+  padding:18px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:21px;
+  font-weight:bold;
+}
+
+.brand-icon{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#16a34a;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.notification{
+  font-size:21px;
+  cursor:pointer;
+}
+
+.profile-circle{
+  width:38px;
+  height:38px;
+  background:#374151;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  cursor:pointer;
+  user-select:none;
+}
+
+main{
+  max-width:1100px;
+  margin:auto;
+  padding:25px 18px 100px;
+}
+
+.connection{
+  background:#ecfdf5;
+  border:1px solid #bbf7d0;
+  color:#166534;
+  padding:10px 14px;
+  border-radius:10px;
+  font-size:13px;
+  margin-bottom:20px;
+}
+
+.welcome{margin-bottom:20px}
+
+.welcome h1{
+  font-size:27px;
+  margin-bottom:7px;
+}
+
+.welcome p{
+  color:#6b7280;
+  font-size:14px;
+}
+
+.balance-card{
+  background:#111827;
+  color:white;
+  border-radius:18px;
+  padding:25px;
+  margin-bottom:24px;
+  box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+.balance-label{
+  color:#cbd5e1;
+  font-size:14px;
+  margin-bottom:8px;
+}
+
+.balance{
+  font-size:34px;
+  font-weight:bold;
+}
+
+.balance-sub{
+  margin-top:8px;
+  color:#9ca3af;
+  font-size:13px;
+}
+
+.section-title{
+  font-size:18px;
+  font-weight:bold;
+  margin:25px 0 14px;
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:13px;
+}
+
+.action{
+  background:white;
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  padding:18px 10px;
+  text-align:center;
+  cursor:pointer;
+  transition:.2s;
+  user-select:none;
+}
+
+.action:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 18px rgba(0,0,0,.07);
+  border-color:#16a34a;
+}
+
+.action:active{transform:scale(.98)}
+
+.action-icon{
+  font-size:26px;
+  margin-bottom:9px;
+}
+
+.action-title{
+  font-size:14px;
+  font-weight:bold;
+}
+
+.commission-card,
+.transactions{
+  background:white;
+  border:1px solid #e5e7eb;
+  border-radius:15px;
+}
+
+.commission-card{padding:20px}
+
+.commission-amount{
+  font-size:27px;
+  font-weight:bold;
+  margin-top:7px;
+}
+
+.commission-card p{
+  color:#6b7280;
+  font-size:13px;
+  margin-top:5px;
+}
+
+.transactions{overflow:hidden}
+
+.transaction{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px;
+  border-bottom:1px solid #f0f0f0;
+}
+
+.transaction:last-child{border-bottom:none}
+
+.transaction-left{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.transaction-icon{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#f3f4f6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.transaction-description{
+  font-weight:bold;
+  font-size:14px;
+}
+
+.transaction-date{
+  color:#9ca3af;
+  font-size:12px;
+  margin-top:3px;
+}
+
+.transaction-amount{
+  font-weight:bold;
+  font-size:14px;
+}
+
+.empty{
+  padding:25px;
+  text-align:center;
+  color:#9ca3af;
+  font-size:14px;
+}
+
+.notice{
+  margin-top:22px;
+  padding:15px;
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  color:#9a3412;
+  border-radius:12px;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:68px;
+  background:white;
+  border-top:1px solid #e5e7eb;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:30;
+}
+
+.nav-item{
+  text-align:center;
+  color:#6b7280;
+  font-size:12px;
+  cursor:pointer;
+}
+
+.nav-icon{
+  font-size:21px;
+  margin-bottom:3px;
+}
+
+.nav-item.active{
+  color:#16a34a;
+  font-weight:bold;
+}
+
+/* ================= SERVICE MODAL ================= */
+
+.modal-overlay,
+.account-modal-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  overflow-y:auto;
+}
+
+.modal-overlay{z-index:100}
+.account-modal-overlay{z-index:300}
+
+.modal-overlay.show,
+.account-modal-overlay.show{
+  display:flex;
+}
+
+.modal,
+.account-modal{
+  width:100%;
+  max-width:450px;
+  background:white;
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 20px 50px rgba(0,0,0,.2);
+  max-height:90vh;
+  overflow-y:auto;
+}
+
+.modal-header,
+.account-modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.modal-header h2,
+.account-modal-header h2{
+  font-size:21px;
+}
+
+.close,
+.account-modal-close{
+  font-size:25px;
+  cursor:pointer;
+  color:#6b7280;
+}
+
+.form-group{margin-bottom:16px}
+
+.form-group label{
+  display:block;
+  margin-bottom:7px;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.form-group input,
+.form-group select{
+  width:100%;
+  padding:13px;
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  font-size:15px;
+  outline:none;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+  border-color:#16a34a;
+}
+
+.form-group input[readonly]{
+  background:#f3f4f6;
+  color:#6b7280;
+}
+
+.primary-btn,
+.secondary-btn,
+.danger-btn{
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.primary-btn{
+  border:none;
+  background:#16a34a;
+  color:white;
+  margin-top:5px;
+}
+
+.primary-btn:hover{background:#15803d}
+
+.secondary-btn{
+  border:1px solid #d1d5db;
+  background:white;
+  color:#374151;
+  margin-top:10px;
+}
+
+.danger-btn{
+  border:none;
+  background:#dc2626;
+  color:white;
+  margin-top:10px;
+}
+
+.message{
+  display:none;
+  padding:11px;
+  border-radius:9px;
+  margin-bottom:14px;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.message.show{display:block}
+
+.message.error{
+  background:#fef2f2;
+  color:#b91c1c;
+  border:1px solid #fecaca;
+}
+
+.message.success{
+  background:#f0fdf4;
+  color:#15803d;
+  border:1px solid #bbf7d0;
+}
+
+.confirmation{display:none}
+.confirmation.show{display:block}
+
+.confirm-box{
+  background:#f9fafb;
+  border-radius:12px;
+  padding:16px;
+  margin:15px 0;
+}
+
+.confirm-row{
+  display:flex;
+  justify-content:space-between;
+  padding:7px 0;
+  font-size:14px;
+  gap:15px;
+}
+
+.confirm-row strong{
+  color:#111827;
+  text-align:right;
+}
+
+.info-box,
+.warning-box{
+  border-radius:10px;
+  padding:12px;
+  font-size:13px;
+  line-height:1.5;
+  margin-bottom:16px;
+}
+
+.info-box{
+  background:#eff6ff;
+  border:1px solid #bfdbfe;
+  color:#1e40af;
+}
+
+.warning-box{
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  color:#9a3412;
+}
+
+/* ================= ACCOUNT PAGE ================= */
+
+.account-page{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#f5f7fb;
+  z-index:200;
+  overflow-y:auto;
+  padding-bottom:30px;
+}
+
+.account-page.show{display:block}
+
+.account-header{
+  background:#111827;
+  color:white;
+  padding:18px 20px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  position:sticky;
+  top:0;
+  z-index:5;
+}
+
+.account-back{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#374151;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  cursor:pointer;
+}
+
+.account-header-title{
+  font-size:20px;
+  font-weight:bold;
+}
+
+.account-content{
+  max-width:700px;
+  margin:auto;
+  padding:25px 18px 40px;
+}
+
+.profile-card{
+  background:white;
+  border:1px solid #e5e7eb;
+  border-radius:18px;
+  padding:25px;
+  text-align:center;
+  box-shadow:0 8px 25px rgba(0,0,0,.05);
+  margin-bottom:18px;
+}
+
+.large-profile-circle{
+  width:82px;
+  height:82px;
+  border-radius:50%;
+  background:#16a34a;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 14px;
+  font-size:31px;
+  font-weight:bold;
+}
+
+.profile-card h2{
+  font-size:22px;
+  margin-bottom:5px;
+}
+
+.profile-card p{
+  color:#6b7280;
+  font-size:14px;
+}
+
+.account-balance-card{
+  background:#111827;
+  color:white;
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:18px;
+}
+
+.account-balance-label{
+  color:#cbd5e1;
+  font-size:13px;
+}
+
+.account-balance-value{
+  font-size:28px;
+  font-weight:bold;
+  margin-top:6px;
+}
+
+.account-section{
+  background:white;
+  border:1px solid #e5e7eb;
+  border-radius:16px;
+  overflow:hidden;
+  margin-bottom:18px;
+}
+
+.account-section-title{
+  padding:17px 18px;
+  border-bottom:1px solid #e5e7eb;
+  font-size:16px;
+  font-weight:bold;
+}
+
+.account-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  padding:16px 18px;
+  border-bottom:1px solid #f0f0f0;
+}
+
+.account-row:last-child{border-bottom:none}
+
+.account-row-label{
+  color:#6b7280;
+  font-size:12px;
+  margin-bottom:4px;
+}
+
+.account-row-value{
+  font-size:14px;
+  font-weight:bold;
+  word-break:break-word;
+}
+
+.account-row-icon{
+  font-size:20px;
+}
+
+.account-action{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:17px 18px;
+  background:white;
+  border:none;
+  width:100%;
+  text-align:left;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:bold;
+  color:#172033;
+  border-bottom:1px solid #f0f0f0;
+}
+
+.account-action:last-child{border-bottom:none}
+
+.account-action:hover{background:#f9fafb}
+
+.account-action-icon{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  background:#f3f4f6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+}
+
+.account-action-arrow{
+  margin-left:auto;
+  color:#9ca3af;
+  font-size:20px;
+}
+
+.account-footer{
+  text-align:center;
+  color:#9ca3af;
+  font-size:12px;
+  margin-top:25px;
+}
+
+/* ================= INVITE ================= */
+
+.invite-card{
+  background:linear-gradient(135deg,#111827,#1f2937);
+  color:white;
+  border-radius:18px;
+  padding:22px;
+  margin-bottom:18px;
+}
+
+.invite-card h2{
+  font-size:21px;
+  margin-bottom:8px;
+}
+
+.invite-card p{
+  color:#d1d5db;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.referral-box{
+  background:white;
+  border:1px solid #e5e7eb;
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:18px;
+}
+
+.referral-label{
+  font-size:12px;
+  color:#6b7280;
+  margin-bottom:7px;
+}
+
+.referral-code{
+  font-size:22px;
+  font-weight:bold;
+  letter-spacing:1px;
+  margin-bottom:14px;
+}
+
+.referral-link{
+  width:100%;
+  padding:12px;
+  background:#f3f4f6;
+  border:1px solid #e5e7eb;
+  border-radius:10px;
+  font-size:12px;
+  margin-bottom:10px;
+}
+
+/* ================= SETTINGS ================= */
+
+.setting-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:17px 18px;
+  border-bottom:1px solid #f0f0f0;
+}
+
+.setting-row:last-child{border-bottom:none}
+
+.setting-info strong{
+  display:block;
+  font-size:14px;
+  margin-bottom:4px;
+}
+
+.setting-info span{
+  display:block;
+  color:#6b7280;
+  font-size:12px;
+  line-height:1.4;
+}
+
+.switch{
+  position:relative;
+  width:48px;
+  height:27px;
+  flex:none;
+}
+
+.switch input{display:none}
+
+.slider{
+  position:absolute;
+  inset:0;
+  background:#d1d5db;
+  border-radius:20px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.slider:before{
+  content:"";
+  position:absolute;
+  width:21px;
+  height:21px;
+  left:3px;
+  top:3px;
+  background:white;
+  border-radius:50%;
+  transition:.2s;
+}
+
+.switch input:checked + .slider{
+  background:#16a34a;
+}
+
+.switch input:checked + .slider:before{
+  transform:translateX(21px);
+}
+
+/* ================= ABOUT ================= */
+
+.about-logo{
+  width:78px;
+  height:78px;
+  border-radius:50%;
+  background:#16a34a;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 15px;
+  font-size:27px;
+  font-weight:bold;
+}
+
+.about-card{
+  background:white;
+  border:1px solid #e5e7eb;
+  border-radius:18px;
+  padding:25px;
+  text-align:center;
+  margin-bottom:18px;
+}
+
+.about-card h2{
+  font-size:23px;
+  margin-bottom:8px;
+}
+
+.about-card p{
+  color:#6b7280;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.about-list{
+  background:white;
+  border:1px solid #e5e7eb;
+  border-radius:16px;
+  overflow:hidden;
+}
+
+.about-list-row{
+  padding:16px 18px;
+  border-bottom:1px solid #f0f0f0;
+  font-size:14px;
+}
+
+.about-list-row:last-child{border-bottom:none}
+
+.about-list-row strong{
+  display:block;
+  margin-bottom:4px;
+}
+
+.about-list-row span{
+  color:#6b7280;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.account-subpage{
+  display:none;
+}
+
+.account-subpage.show{
+  display:block;
+}
+
+.account-main-view.hide{
+  display:none;
+}
+
+.account-subpage-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.small-back{
+  border:none;
+  background:#111827;
+  color:white;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.account-subpage-header h2{
+  font-size:21px;
+}
+
+@media(max-width:700px){
+  .actions{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .welcome h1{
+    font-size:23px;
+  }
+
+  .account-row{
+    align-items:flex-start;
+  }
+}
+
+@media(max-width:420px){
+  .brand{font-size:18px}
+  .balance{font-size:29px}
+  .account-content{
+    padding-left:14px;
+    padding-right:14px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <!-- =========================================================
-       MAIN DASHBOARD HEADER
-  ========================================================= -->
-
-  <header>
-
-    <div class="brand">
-      <div class="brand-icon">TB</div>
-      <span>TomBrian</span>
-    </div>
-
-    <div class="header-right">
-
-      <div
-        class="notification"
-        onclick="showMessageBox('Notifications are coming soon.')"
-      >
-        🔔
-      </div>
-
-      <div
-        class="profile-circle"
-        id="profileInitial"
-        onclick="openAccount()"
-      >
-        U
-      </div>
-
-    </div>
-
-  </header>
-
-
-  <!-- =========================================================
-       MAIN DASHBOARD
-  ========================================================= -->
-
-  <main>
-
-    <div class="connection" id="connectionStatus">
-      Connecting to TomBrian...
-    </div>
-
-
-    <div class="welcome">
-
-      <h1>
-        Welcome back,
-        <span id="customerName">Customer</span>
-        👋
-      </h1>
-
-      <p id="customerEmail">
-        Loading your account...
-      </p>
-
-    </div>
-
-
-    <div class="balance-card">
-
-      <div class="balance-label">
-        Available Balance
-      </div>
-
-      <div
-        class="balance"
-        id="balanceAmount"
-      >
-        KES 0.00
-      </div>
-
-      <div class="balance-sub">
-        Your available TomBrian balance
-      </div>
-
-    </div>
-
-
-    <div class="section-title">
-      Quick Actions
-    </div>
-
-
-    <div class="actions">
-
-      <div
-        class="action"
-        onclick="openAction('buy')"
-      >
-        <div class="action-icon">📱</div>
-        <div class="action-title">
-          Buy Airtime
-        </div>
-      </div>
-
-
-      <div
-        class="action"
-        onclick="openAction('sell')"
-      >
-        <div class="action-icon">💵</div>
-        <div class="action-title">
-          Sell Airtime
-        </div>
-      </div>
-
-
-      <div
-        class="action"
-        onclick="openAction('topup')"
-      >
-        <div class="action-icon">➕</div>
-        <div class="action-title">
-          Top Up
-        </div>
-      </div>
-
-
-      <div
-        class="action"
-        onclick="openAction('withdraw')"
-      >
-        <div class="action-icon">💸</div>
-        <div class="action-title">
-          Withdraw
-        </div>
-      </div>
-
-    </div>
-
-
-    <div class="section-title">
-      My Commission
-    </div>
-
-
-    <div
-      class="commission-card"
-      id="commissionSection"
-    >
-
-      <div>
-        Available Commission
-      </div>
-
-      <div
-        class="commission-amount"
-        id="commissionAmount"
-      >
-        KES 0.00
-      </div>
-
-      <p>
-        Your commission earnings will appear here.
-      </p>
-
-    </div>
-
-
-    <div class="section-title">
-      Recent Transactions
-    </div>
-
-
-    <div
-      class="transactions"
-      id="transactionsList"
-    >
-
-      <div class="empty">
-        Loading transactions...
-      </div>
-
-    </div>
-
-
-    <div class="notice">
-
-      <strong>TomBrian:</strong><br>
-
-      Your dashboard is connected to your TomBrian account.
-      Service requests can now be entered and reviewed.
-      Live airtime, M-Pesa and withdrawal processing will be
-      connected to the appropriate service before real transactions
-      are enabled.
-
-    </div>
-
-  </main>
-
-
-  <!-- =========================================================
-       BOTTOM NAVIGATION
-  ========================================================= -->
-
-  <div class="bottom-nav">
-
-    <div
-      class="nav-item active"
-      onclick="goHome()"
-    >
-      <div class="nav-icon">🏠</div>
-      Home
-    </div>
-
-
-    <div
-      class="nav-item"
-      onclick="showTransactions()"
-    >
-      <div class="nav-icon">📊</div>
-      Transactions
-    </div>
-
-
-    <div
-      class="nav-item"
-      onclick="showCommission()"
-    >
-      <div class="nav-icon">🏆</div>
-      Commission
-    </div>
-
-
-    <div
-      class="nav-item"
-      onclick="openAccount()"
-    >
-      <div class="nav-icon">👤</div>
-      Account
-    </div>
-
+<header>
+  <div class="brand">
+    <div class="brand-icon">TB</div>
+    <span>TomBrian</span>
   </div>
 
-
-  <!-- =========================================================
-       SERVICE MODAL
-  ========================================================= -->
-
-  <div
-    class="modal-overlay"
-    id="modalOverlay"
-  >
-
-    <div class="modal">
-
-      <div class="modal-header">
-
-        <h2 id="modalTitle">
-          TomBrian
-        </h2>
-
-        <div
-          class="close"
-          onclick="closeModal()"
-        >
-          ×
-        </div>
-
-      </div>
-
-
-      <div
-        id="formMessage"
-        class="message"
-      ></div>
-
-
-      <!-- BUY AIRTIME -->
-
-      <div
-        id="buyForm"
-        style="display:none;"
-      >
-
-        <div class="form-group">
-
-          <label for="airtimeNetwork">
-            Network
-          </label>
-
-          <select id="airtimeNetwork">
-
-            <option value="Safaricom">
-              Safaricom
-            </option>
-
-            <option value="Airtel">
-              Airtel
-            </option>
-
-            <option value="Telkom">
-              Telkom
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="airtimePhone">
-            Recipient Phone Number
-          </label>
-
-          <input
-            type="tel"
-            id="airtimePhone"
-            placeholder="07XXXXXXXX"
-            maxlength="13"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="airtimeAmount">
-            Amount (KES)
-          </label>
-
-          <input
-            type="number"
-            id="airtimeAmount"
-            placeholder="Enter amount"
-            min="5"
-            step="1"
-          >
-
-        </div>
-
-
-        <button
-          class="primary-btn"
-          onclick="reviewAirtime()"
-        >
-          Continue
-        </button>
-
-      </div>
-
-
-      <!-- SELL AIRTIME -->
-
-      <div
-        id="sellForm"
-        style="display:none;"
-      >
-
-        <div class="info-box">
-
-          Enter the airtime details you want to sell.
-          Your available balance will be checked before
-          the request can continue.
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="sellNetwork">
-            Network
-          </label>
-
-          <select id="sellNetwork">
-
-            <option value="Safaricom">
-              Safaricom
-            </option>
-
-            <option value="Airtel">
-              Airtel
-            </option>
-
-            <option value="Telkom">
-              Telkom
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="sellPhone">
-            Your Airtime Phone Number
-          </label>
-
-          <input
-            type="tel"
-            id="sellPhone"
-            placeholder="07XXXXXXXX"
-            maxlength="13"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="sellAmount">
-            Airtime Amount (KES)
-          </label>
-
-          <input
-            type="number"
-            id="sellAmount"
-            placeholder="Enter amount"
-            min="10"
-            step="1"
-          >
-
-        </div>
-
-
-        <button
-          class="primary-btn"
-          onclick="reviewSellAirtime()"
-        >
-          Continue
-        </button>
-
-      </div>
-
-
-      <!-- TOP UP -->
-
-      <div
-        id="topupForm"
-        style="display:none;"
-      >
-
-        <div class="info-box">
-
-          Enter the amount you want to add to your
-          TomBrian balance. The live M-Pesa STK payment
-          connection will be enabled before real money
-          is processed.
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="topupPhone">
-            M-Pesa Phone Number
-          </label>
-
-          <input
-            type="tel"
-            id="topupPhone"
-            placeholder="07XXXXXXXX"
-            maxlength="13"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="topupAmount">
-            Amount (KES)
-          </label>
-
-          <input
-            type="number"
-            id="topupAmount"
-            placeholder="Enter amount"
-            min="10"
-            step="1"
-          >
-
-        </div>
-
-
-        <button
-          class="primary-btn"
-          onclick="reviewTopup()"
-        >
-          Continue
-        </button>
-
-      </div>
-
-
-      <!-- WITHDRAW -->
-
-      <div
-        id="withdrawForm"
-        style="display:none;"
-      >
-
-        <div class="warning-box">
-
-          Withdrawals require sufficient available
-          TomBrian balance. Enter an amount at or below
-          your available balance to continue.
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="withdrawPhone">
-            M-Pesa Phone Number
-          </label>
-
-          <input
-            type="tel"
-            id="withdrawPhone"
-            placeholder="07XXXXXXXX"
-            maxlength="13"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="withdrawAmount">
-            Amount (KES)
-          </label>
-
-          <input
-            type="number"
-            id="withdrawAmount"
-            placeholder="Enter amount"
-            min="10"
-            step="1"
-          >
-
-        </div>
-
-
-        <button
-          class="primary-btn"
-          onclick="reviewWithdraw()"
-        >
-          Continue
-        </button>
-
-      </div>
-
-
-      <!-- CONFIRMATION -->
-
-      <div
-        id="confirmation"
-        class="confirmation"
-      >
-
-        <p
-          id="confirmationIntro"
-          style="font-size:14px;color:#6b7280;"
-        >
-          Please confirm the details.
-        </p>
-
-
-        <div class="confirm-box">
-
-          <div class="confirm-row">
-
-            <span>
-              Service
-            </span>
-
-            <strong id="confirmService">
-              -
-            </strong>
-
-          </div>
-
-
-          <div class="confirm-row">
-
-            <span>
-              Network
-            </span>
-
-            <strong id="confirmNetwork">
-              -
-            </strong>
-
-          </div>
-
-
-          <div class="confirm-row">
-
-            <span>
-              Phone
-            </span>
-
-            <strong id="confirmPhone">
-              -
-            </strong>
-
-          </div>
-
-
-          <div class="confirm-row">
-
-            <span>
-              Amount
-            </span>
-
-            <strong id="confirmAmount">
-              KES 0.00
-            </strong>
-
-          </div>
-
-        </div>
-
-
-        <button
-          class="primary-btn"
-          onclick="submitCurrentAction()"
-        >
-          Confirm Request
-        </button>
-
-
-        <button
-          class="secondary-btn"
-          onclick="backToCurrentForm()"
-        >
-          Go Back
-        </button>
-
-      </div>
-
-
-      <!-- RESULT -->
-
-      <div
-        id="resultAction"
-        style="display:none;"
-      >
-
-        <div
-          class="info-box"
-          id="resultText"
-        ></div>
-
-
-        <button
-          class="primary-btn"
-          onclick="closeModal()"
-        >
-          Done
-        </button>
-
-      </div>
-
+  <div class="header-right">
+    <div class="notification"
+      onclick="showMessageBox('Notifications are coming soon.')">
+      🔔
     </div>
 
+    <div class="profile-circle"
+      id="profileInitial"
+      onclick="openAccount()">
+      U
+    </div>
+  </div>
+</header>
+
+<main>
+
+<div class="connection" id="connectionStatus">
+  Connecting to TomBrian...
+</div>
+
+<div class="welcome">
+  <h1>
+    Welcome back,
+    <span id="customerName">Customer</span>
+    👋
+  </h1>
+  <p id="customerEmail">Loading your account...</p>
+</div>
+
+<div class="balance-card">
+  <div class="balance-label">Available Balance</div>
+
+  <div class="balance" id="balanceAmount">
+    KES 0.00
   </div>
 
+  <div class="balance-sub">
+    Your available TomBrian balance
+  </div>
+</div>
 
-  <!-- =========================================================
-       ACCOUNT PAGE
-  ========================================================= -->
+<div class="section-title">Quick Actions</div>
 
-  <div
-    class="account-page"
-    id="accountPage"
-  >
+<div class="actions">
 
-    <div class="account-header">
-
-      <div
-        class="account-back"
-        onclick="closeAccountPage()"
-      >
-        ←
-      </div>
-
-      <div class="account-header-title">
-        My Account
-      </div>
-
-    </div>
-
-
-    <div class="account-content">
-
-      <!-- PROFILE -->
-
-      <div class="profile-card">
-
-        <div
-          class="large-profile-circle"
-          id="accountProfileInitial"
-        >
-          U
-        </div>
-
-        <h2 id="accountProfileName">
-          Customer
-        </h2>
-
-        <p id="accountProfileEmail">
-          Loading...
-        </p>
-
-      </div>
-
-
-      <!-- BALANCE -->
-
-      <div class="account-balance-card">
-
-        <div class="account-balance-label">
-          Available Balance
-        </div>
-
-        <div
-          class="account-balance-value"
-          id="accountBalance"
-        >
-          KES 0.00
-        </div>
-
-      </div>
-
-
-      <!-- PERSONAL INFORMATION -->
-
-      <div class="account-section">
-
-        <div class="account-section-title">
-          Personal Information
-        </div>
-
-
-        <div class="account-row">
-
-          <div>
-
-            <div class="account-row-label">
-              Full Name
-            </div>
-
-            <div
-              class="account-row-value"
-              id="accountFullName"
-            >
-              Not set
-            </div>
-
-          </div>
-
-          <div class="account-row-icon">
-            👤
-          </div>
-
-        </div>
-
-
-        <div class="account-row">
-
-          <div>
-
-            <div class="account-row-label">
-              Phone Number
-            </div>
-
-            <div
-              class="account-row-value"
-              id="accountPhone"
-            >
-              Not set
-            </div>
-
-          </div>
-
-          <div class="account-row-icon">
-            📱
-          </div>
-
-        </div>
-
-
-        <div class="account-row">
-
-          <div>
-
-            <div class="account-row-label">
-              Email
-            </div>
-
-            <div
-              class="account-row-value"
-              id="accountEmail"
-            >
-              Not set
-            </div>
-
-          </div>
-
-          <div class="account-row-icon">
-            ✉️
-          </div>
-
-        </div>
-
-
-        <div class="account-row">
-
-          <div>
-
-            <div class="account-row-label">
-              TomBrian Account ID
-            </div>
-
-            <div
-              class="account-row-value"
-              id="accountId"
-            >
-              Loading...
-            </div>
-
-          </div>
-
-          <div class="account-row-icon">
-            🆔
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- ACCOUNT ACTIONS -->
-
-      <div class="account-section">
-
-        <div class="account-section-title">
-          Account Settings
-        </div>
-
-
-        <button
-          class="account-action"
-          onclick="openEditProfile()"
-        >
-
-          <div class="account-action-icon">
-            ✏️
-          </div>
-
-          <span>
-            Edit Profile
-          </span>
-
-          <span class="account-action-arrow">
-            ›
-          </span>
-
-        </button>
-
-
-        <button
-          class="account-action"
-          onclick="openChangePassword()"
-        >
-
-          <div class="account-action-icon">
-            🔒
-          </div>
-
-          <span>
-            Change Password
-          </span>
-
-          <span class="account-action-arrow">
-            ›
-          </span>
-
-        </button>
-
-
-        <button
-          class="account-action"
-          onclick="confirmLogout()"
-        >
-
-          <div
-            class="account-action-icon"
-            style="background:#fef2f2;"
-          >
-            🚪
-          </div>
-
-          <span style="color:#dc2626;">
-            Sign Out
-          </span>
-
-          <span class="account-action-arrow">
-            ›
-          </span>
-
-        </button>
-
-      </div>
-
-
-      <div class="account-footer">
-        TomBrian • Dream • Work • Achieve
-      </div>
-
-    </div>
-
+  <div class="action" onclick="openAction('buy')">
+    <div class="action-icon">📱</div>
+    <div class="action-title">Buy Airtime</div>
   </div>
 
-
-  <!-- =========================================================
-       EDIT PROFILE MODAL
-  ========================================================= -->
-
-  <div
-    class="account-modal-overlay"
-    id="editProfileModal"
-  >
-
-    <div class="account-modal">
-
-      <div class="account-modal-header">
-
-        <h2>
-          Edit Profile
-        </h2>
-
-        <div
-          class="account-modal-close"
-          onclick="closeEditProfile()"
-        >
-          ×
-        </div>
-
-      </div>
-
-
-      <div
-        id="profileMessage"
-        class="message"
-      ></div>
-
-
-      <div class="form-group">
-
-        <label for="editFullName">
-          Full Name
-        </label>
-
-        <input
-          type="text"
-          id="editFullName"
-          placeholder="Enter your full name"
-          maxlength="100"
-        >
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="editPhone">
-          Phone Number
-        </label>
-
-        <input
-          type="tel"
-          id="editPhone"
-          placeholder="07XXXXXXXX"
-          maxlength="13"
-        >
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="editEmail">
-          Email
-        </label>
-
-        <input
-          type="email"
-          id="editEmail"
-          readonly
-        >
-
-      </div>
-
-
-      <div class="account-note">
-        Your email is currently displayed as read-only to avoid
-        accidentally changing the email used for your TomBrian login.
-      </div>
-
-
-      <button
-        class="primary-btn"
-        id="saveProfileButton"
-        onclick="saveProfile()"
-      >
-        Save Changes
-      </button>
-
-
-      <button
-        class="secondary-btn"
-        onclick="closeEditProfile()"
-      >
-        Cancel
-      </button>
-
-    </div>
-
+  <div class="action" onclick="openAction('sell')">
+    <div class="action-icon">💵</div>
+    <div class="action-title">Sell Airtime</div>
   </div>
 
-
-  <!-- =========================================================
-       CHANGE PASSWORD MODAL
-  ========================================================= -->
-
-  <div
-    class="account-modal-overlay"
-    id="passwordModal"
-  >
-
-    <div class="account-modal">
-
-      <div class="account-modal-header">
-
-        <h2>
-          Change Password
-        </h2>
-
-        <div
-          class="account-modal-close"
-          onclick="closeChangePassword()"
-        >
-          ×
-        </div>
-
-      </div>
-
-
-      <div
-        id="passwordMessage"
-        class="message"
-      ></div>
-
-
-      <div class="form-group">
-
-        <label for="newPassword">
-          New Password
-        </label>
-
-        <input
-          type="password"
-          id="newPassword"
-          placeholder="Enter new password"
-          minlength="6"
-        >
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="confirmPassword">
-          Confirm New Password
-        </label>
-
-        <input
-          type="password"
-          id="confirmPassword"
-          placeholder="Confirm new password"
-          minlength="6"
-        >
-
-      </div>
-
-
-      <div class="account-note">
-        Your new password must contain at least 6 characters.
-      </div>
-
-
-      <button
-        class="primary-btn"
-        id="changePasswordButton"
-        onclick="changePassword()"
-      >
-        Update Password
-      </button>
-
-
-      <button
-        class="secondary-btn"
-        onclick="closeChangePassword()"
-      >
-        Cancel
-      </button>
-
-    </div>
-
+  <div class="action" onclick="openAction('topup')">
+    <div class="action-icon">➕</div>
+    <div class="action-title">Top Up</div>
   </div>
 
+  <div class="action" onclick="openAction('withdraw')">
+    <div class="action-icon">💸</div>
+    <div class="action-title">Withdraw</div>
+  </div>
 
-  <script type="module">
+</div>
+
+<div class="section-title">My Commission</div>
 
-    import { createClient }
-      from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+<div class="commission-card" id="commissionSection">
+  <div>Available Commission</div>
 
+  <div class="commission-amount" id="commissionAmount">
+    KES 0.00
+  </div>
 
-    /* =========================================================
-       SUPABASE
-    ========================================================= */
+  <p>Your commission earnings will appear here.</p>
+</div>
 
-    const SUPABASE_URL =
-      "https://ekqhsnzkovzmepxdajtu.supabase.co";
+<div class="section-title">Recent Transactions</div>
 
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_v4DmfQMCBRvJE_dJvgk1og_v6JMXE_r";
+<div class="transactions" id="transactionsList">
+  <div class="empty">Loading transactions...</div>
+</div>
+
+<div class="notice">
+  <strong>TomBrian:</strong><br>
+  Your dashboard is connected to your TomBrian account.
+  Service requests can now be entered and reviewed.
+  Live airtime, M-Pesa and withdrawal processing will be
+  connected to the appropriate service before real transactions
+  are enabled.
+</div>
+
+</main>
+
+<!-- BOTTOM NAV -->
+
+<div class="bottom-nav">
+
+  <div class="nav-item active" onclick="goHome()">
+    <div class="nav-icon">🏠</div>
+    Home
+  </div>
+
+  <div class="nav-item" onclick="showTransactions()">
+    <div class="nav-icon">📊</div>
+    Transactions
+  </div>
+
+  <div class="nav-item" onclick="showCommission()">
+    <div class="nav-icon">🏆</div>
+    Commission
+  </div>
+
+  <div class="nav-item" onclick="openAccount()">
+    <div class="nav-icon">👤</div>
+    Account
+  </div>
+
+</div>
+
+<!-- SERVICE MODAL -->
+
+<div class="modal-overlay" id="modalOverlay">
+
+<div class="modal">
+
+<div class="modal-header">
+  <h2 id="modalTitle">TomBrian</h2>
+  <div class="close" onclick="closeModal()">×</div>
+</div>
+
+<div id="formMessage" class="message"></div>
+
+<div id="buyForm" style="display:none">
+
+<div class="form-group">
+<label>Network</label>
+<select id="airtimeNetwork">
+<option value="Safaricom">Safaricom</option>
+<option value="Airtel">Airtel</option>
+<option value="Telkom">Telkom</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Recipient Phone Number</label>
+<input id="airtimePhone"
+type="tel"
+placeholder="07XXXXXXXX"
+maxlength="13">
+</div>
+
+<div class="form-group">
+<label>Amount (KES)</label>
+<input id="airtimeAmount"
+type="number"
+placeholder="Enter amount"
+min="5"
+step="1">
+</div>
+
+<button class="primary-btn" onclick="reviewAirtime()">
+Continue
+</button>
+
+</div>
+
+<div id="sellForm" style="display:none">
+
+<div class="info-box">
+Enter the airtime details you want to sell.
+Your available balance will be checked before the request can continue.
+</div>
+
+<div class="form-group">
+<label>Network</label>
+<select id="sellNetwork">
+<option value="Safaricom">Safaricom</option>
+<option value="Airtel">Airtel</option>
+<option value="Telkom">Telkom</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Your Airtime Phone Number</label>
+<input id="sellPhone"
+type="tel"
+placeholder="07XXXXXXXX"
+maxlength="13">
+</div>
+
+<div class="form-group">
+<label>Airtime Amount (KES)</label>
+<input id="sellAmount"
+type="number"
+placeholder="Enter amount"
+min="10"
+step="1">
+</div>
+
+<button class="primary-btn" onclick="reviewSellAirtime()">
+Continue
+</button>
+
+</div>
+
+<div id="topupForm" style="display:none">
+
+<div class="info-box">
+Enter the amount you want to add to your TomBrian balance.
+The live M-Pesa STK payment connection will be enabled before
+real money is processed.
+</div>
+
+<div class="form-group">
+<label>M-Pesa Phone Number</label>
+<input id="topupPhone"
+type="tel"
+placeholder="07XXXXXXXX"
+maxlength="13">
+</div>
+
+<div class="form-group">
+<label>Amount (KES)</label>
+<input id="topupAmount"
+type="number"
+placeholder="Enter amount"
+min="10"
+step="1">
+</div>
+
+<button class="primary-btn" onclick="reviewTopup()">
+Continue
+</button>
+
+</div>
+
+<div id="withdrawForm" style="display:none">
+
+<div class="warning-box">
+Withdrawals require sufficient available TomBrian balance.
+</div>
 
+<div class="form-group">
+<label>M-Pesa Phone Number</label>
+<input id="withdrawPhone"
+type="tel"
+placeholder="07XXXXXXXX"
+maxlength="13">
+</div>
 
-    const supabase =
-      createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-      );
+<div class="form-group">
+<label>Amount (KES)</label>
+<input id="withdrawAmount"
+type="number"
+placeholder="Enter amount"
+min="10"
+step="1">
+</div>
 
+<button class="primary-btn" onclick="reviewWithdraw()">
+Continue
+</button>
 
-    let currentUser = null;
-    let currentBalance = 0;
-    let currentAction = null;
+</div>
 
+<div id="confirmation" class="confirmation">
 
-    /* =========================================================
-       ELEMENTS
-    ========================================================= */
+<p style="font-size:14px;color:#6b7280">
+Please confirm the details before continuing.
+</p>
 
-    const customerName =
-      document.getElementById(
-        "customerName"
-      );
+<div class="confirm-box">
 
-    const customerEmail =
-      document.getElementById(
-        "customerEmail"
-      );
+<div class="confirm-row">
+<span>Service</span>
+<strong id="confirmService">-</strong>
+</div>
 
-    const profileInitial =
-      document.getElementById(
-        "profileInitial"
-      );
+<div class="confirm-row">
+<span>Network</span>
+<strong id="confirmNetwork">-</strong>
+</div>
 
-    const balanceAmount =
-      document.getElementById(
-        "balanceAmount"
-      );
+<div class="confirm-row">
+<span>Phone</span>
+<strong id="confirmPhone">-</strong>
+</div>
 
-    const connectionStatus =
-      document.getElementById(
-        "connectionStatus"
-      );
+<div class="confirm-row">
+<span>Amount</span>
+<strong id="confirmAmount">KES 0.00</strong>
+</div>
 
-    const transactionsList =
-      document.getElementById(
-        "transactionsList"
-      );
+</div>
 
+<button class="primary-btn"
+onclick="submitCurrentAction()">
+Confirm Request
+</button>
 
-    /* =========================================================
-       LOAD USER
-    ========================================================= */
+<button class="secondary-btn"
+onclick="backToCurrentForm()">
+Go Back
+</button>
 
-    async function loadUser() {
+</div>
 
-      const {
-        data,
-        error
-      } =
-        await supabase.auth.getUser();
+<div id="resultAction" style="display:none">
 
+<div class="info-box" id="resultText"></div>
 
-      if (
-        error ||
-        !data.user
-      ) {
+<button class="primary-btn" onclick="closeModal()">
+Done
+</button>
 
-        window.location.href =
-          new URL(
-            "login.html",
-            window.location.href
-          ).href;
+</div>
 
-        return null;
-      }
+</div>
+</div>
 
+<!-- ACCOUNT PAGE -->
 
-      currentUser =
-        data.user;
+<div class="account-page" id="accountPage">
 
+<div class="account-header">
 
-      return currentUser;
+<div class="account-back"
+onclick="closeAccountPage()">
+←
+</div>
 
-    }
+<div class="account-header-title">
+My Account
+</div>
 
+</div>
 
-    /* =========================================================
-       LOAD PROFILE
-    ========================================================= */
+<div class="account-content">
 
-    async function loadProfile() {
+<!-- ACCOUNT MAIN -->
 
-      if (!currentUser) return;
+<div id="accountMainView" class="account-main-view">
 
+<div class="profile-card">
 
-      let name =
-        currentUser.user_metadata?.full_name ||
-        currentUser.user_metadata?.name ||
-        "Customer";
+<div class="large-profile-circle"
+id="accountProfileInitial">
+U
+</div>
 
+<h2 id="accountProfileName">
+Customer
+</h2>
 
-      let phone =
-        currentUser.user_metadata?.phone ||
-        currentUser.phone ||
-        "";
+<p id="accountProfileEmail">
+Loading...
+</p>
 
+</div>
 
-      const {
-        data,
-        error
-      } =
-        await supabase
-          .from("profiles")
-          .select("*")
-          .eq(
-            "user_id",
-            currentUser.id
-          )
-          .maybeSingle();
+<div class="account-balance-card">
 
+<div class="account-balance-label">
+Available Balance
+</div>
 
-      if (
-        !error &&
-        data
-      ) {
+<div class="account-balance-value"
+id="accountBalance">
+KES 0.00
+</div>
 
-        name =
-          data.full_name ||
-          data.name ||
-          name;
+</div>
 
+<!-- PROFILE -->
 
-        phone =
-          data.phone ||
-          phone;
+<div class="account-section">
 
-      }
+<div class="account-section-title">
+Profile
+</div>
 
+<button class="account-action"
+onclick="openEditProfile()">
 
-      customerName.textContent =
-        name;
+<div class="account-action-icon">👤</div>
 
+<span>My Profile</span>
 
-      customerEmail.textContent =
-        currentUser.email || "";
+<span class="account-action-arrow">›</span>
 
+</button>
 
-      profileInitial.textContent =
-        name
-          .charAt(0)
-          .toUpperCase();
+</div>
 
+<!-- INVITE -->
 
-      /* ACCOUNT PAGE */
+<div class="account-section">
 
-      const accountName =
-        document.getElementById(
-          "accountProfileName"
-        );
+<div class="account-section-title">
+Invite Friends
+</div>
 
-      const accountEmail =
-        document.getElementById(
-          "accountProfileEmail"
-        );
+<button class="account-action"
+onclick="openInviteFriends()">
 
-      const accountInitial =
-        document.getElementById(
-          "accountProfileInitial"
-        );
+<div class="account-action-icon">🎁</div>
 
-      const accountFullName =
-        document.getElementById(
-          "accountFullName"
-        );
+<span>Invite Friends & Earn</span>
 
-      const accountPhone =
-        document.getElementById(
-          "accountPhone"
-        );
+<span class="account-action-arrow">›</span>
 
-      const accountEmailValue =
-        document.getElementById(
-          "accountEmail"
-        );
+</button>
 
-      const accountId =
-        document.getElementById(
-          "accountId"
-        );
+</div>
 
+<!-- SETTINGS -->
 
-      if (accountName)
-        accountName.textContent =
-          name;
+<div class="account-section">
 
+<div class="account-section-title">
+Settings
+</div>
 
-      if (accountEmail)
-        accountEmail.textContent =
-          currentUser.email ||
-          "No email set";
+<button class="account-action"
+onclick="openSettings()">
 
+<div class="account-action-icon">⚙️</div>
 
-      if (accountInitial)
-        accountInitial.textContent =
-          name
-            .charAt(0)
-            .toUpperCase();
+<span>App Settings</span>
 
+<span class="account-action-arrow">›</span>
 
-      if (accountFullName)
-        accountFullName.textContent =
-          name || "Not set";
+</button>
 
+</div>
 
-      if (accountPhone)
-        accountPhone.textContent =
-          phone || "Not set";
+<!-- ABOUT -->
 
+<div class="account-section">
 
-      if (accountEmailValue)
-        accountEmailValue.textContent =
-          currentUser.email ||
-          "Not set";
+<div class="account-section-title">
+About
+</div>
 
+<button class="account-action"
+onclick="openAbout()">
 
-      if (accountId)
-        accountId.textContent =
-          currentUser.id;
+<div class="account-action-icon">ℹ️</div>
 
+<span>About TomBrian</span>
 
-      return {
-        name,
-        phone
-      };
+<span class="account-action-arrow">›</span>
 
-    }
+</button>
 
+</div>
 
-    /* =========================================================
-       LOAD BALANCE
-    ========================================================= */
+<!-- SECURITY -->
 
-    async function loadBalance() {
+<div class="account-section">
 
-      if (!currentUser) return;
+<div class="account-section-title">
+Security
+</div>
 
+<button class="account-action"
+onclick="openChangePassword()">
 
-      const {
-        data,
-        error
-      } =
-        await supabase
-          .from("balances")
-          .select("*")
-          .eq(
-            "user_id",
-            currentUser.id
-          )
-          .maybeSingle();
+<div class="account-action-icon">🔒</div>
 
+<span>Change Password</span>
 
-      if (error) {
+<span class="account-action-arrow">›</span>
 
-        console.log(
-          "Balance error:",
-          error
-        );
+</button>
 
+<button class="account-action"
+onclick="confirmLogout()">
 
-        currentBalance =
-          0;
+<div class="account-action-icon"
+style="background:#fef2f2">
+🚪
+</div>
 
+<span style="color:#dc2626">
+Sign Out
+</span>
 
-        balanceAmount.textContent =
-          "KES 0.00";
+<span class="account-action-arrow">›</span>
 
+</button>
 
-        updateAccountBalance();
+</div>
 
+<div class="account-footer">
+TomBrian • Dream • Work • Achieve
+</div>
 
-        return;
+</div>
 
-      }
+<!-- INVITE PAGE -->
 
+<div id="inviteView" class="account-subpage">
 
-      if (!data) {
+<div class="account-subpage-header">
 
-        currentBalance =
-          0;
+<button class="small-back"
+onclick="closeAccountSubpage()">
+←
+</button>
 
+<h2>Invite Friends</h2>
 
-        balanceAmount.textContent =
-          "KES 0.00";
+</div>
 
+<div class="invite-card">
 
-        updateAccountBalance();
+<h2>🎁 Invite Friends</h2>
 
+<p>
+Invite your friends to join TomBrian.
+Share your referral link and grow your TomBrian network.
+</p>
 
-        return;
+</div>
 
-      }
+<div class="referral-box">
 
+<div class="referral-label">
+YOUR REFERRAL CODE
+</div>
 
-      const possibleBalance =
-        data.balance ??
-        data.balances ??
-        data.amount ??
-        data.available_balance ??
-        0;
+<div class="referral-code"
+id="referralCode">
+Loading...
+</div>
 
+<div class="referral-label">
+YOUR INVITE LINK
+</div>
 
-      currentBalance =
-        Number(
-          possibleBalance
-        ) || 0;
+<input
+class="referral-link"
+id="referralLink"
+readonly
+>
 
+<button class="primary-btn"
+onclick="copyReferralLink()">
+📋 Copy Invite Link
+</button>
 
-      balanceAmount.textContent =
-        "KES " +
-        currentBalance.toFixed(2);
+<button class="secondary-btn"
+onclick="shareReferralLink()">
+📤 Share With Friends
+</button>
 
+</div>
 
-      updateAccountBalance();
+<div class="info-box">
+Your personal invite link is connected to your TomBrian
+account. When referral rewards are enabled, eligible
+referrals will be tracked through this link.
+</div>
 
-    }
+</div>
 
+<!-- SETTINGS PAGE -->
 
-    /* =========================================================
-       ACCOUNT BALANCE
-    ========================================================= */
+<div id="settingsView" class="account-subpage">
 
-    function updateAccountBalance() {
+<div class="account-subpage-header">
 
-      const accountBalance =
-        document.getElementById(
-          "accountBalance"
-        );
+<button class="small-back"
+onclick="closeAccountSubpage()">
+←
+</button>
 
+<h2>Settings</h2>
 
-      if (accountBalance) {
+</div>
 
-        accountBalance.textContent =
-          "KES " +
-          Number(
-            currentBalance || 0
-          ).toFixed(2);
+<div class="account-section">
 
-      }
+<div class="account-section-title">
+Preferences
+</div>
 
-    }
+<div class="setting-row">
 
+<div class="setting-info">
+<strong>Notifications</strong>
+<span>Receive TomBrian account notifications.</span>
+</div>
 
-    /* =========================================================
-       LOAD TRANSACTIONS
-    ========================================================= */
+<label class="switch">
+<input type="checkbox"
+id="notificationSetting"
+onchange="saveNotificationSetting()">
+<span class="slider"></span>
+</label>
 
-    async function loadTransactions() {
+</div>
 
-      if (!currentUser) return;
+<div class="setting-row">
 
+<div class="setting-info">
+<strong>Transaction Alerts</strong>
+<span>Get alerts about account transactions.</span>
+</div>
 
-      const {
-        data,
-        error
-      } =
-        await supabase
-          .from("transactions")
-          .select("*")
-          .eq(
-            "user_id",
-            currentUser.id
-          )
-          .limit(10);
+<label class="switch">
+<input type="checkbox"
+id="transactionSetting"
+onchange="saveTransactionSetting()"
+checked>
+<span class="slider"></span>
+</label>
 
+</div>
 
-      if (error) {
+</div>
 
-        console.log(
-          "Transaction error:",
-          error
-        );
+<div class="account-section">
 
+<div class="account-section-title">
+Account
+</div>
 
-        transactionsList.innerHTML = `
-          <div class="empty">
-            No transactions yet
-          </div>
-        `;
+<button class="account-action"
+onclick="openEditProfile()">
 
+<div class="account-action-icon">👤</div>
 
-        return;
+<span>Edit Profile</span>
 
-      }
+<span class="account-action-arrow">›</span>
 
+</button>
 
-      if (
-        !data ||
-        data.length === 0
-      ) {
+<button class="account-action"
+onclick="openChangePassword()">
 
-        transactionsList.innerHTML = `
-          <div class="empty">
-            No transactions yet
-          </div>
-        `;
+<div class="account-action-icon">🔒</div>
 
+<span>Change Password</span>
 
-        return;
+<span class="account-action-arrow">›</span>
 
-      }
+</button>
 
+</div>
 
-      data.sort(
-        (a, b) => {
+<div class="info-box">
+More TomBrian settings will be added here as additional
+services and account features are connected.
+</div>
 
-          const dateA =
-            new Date(
-              a.created_at ||
-              a.createdAt ||
-              a.date ||
-              0
-            );
+</div>
 
+<!-- ABOUT PAGE -->
 
-          const dateB =
-            new Date(
-              b.created_at ||
-              b.createdAt ||
-              b.date ||
-              0
-            );
+<div id="aboutView" class="account-subpage">
 
+<div class="account-subpage-header">
 
-          return dateB - dateA;
+<button class="small-back"
+onclick="closeAccountSubpage()">
+←
+</button>
 
-        }
-      );
+<h2>About TomBrian</h2>
 
+</div>
 
-      transactionsList.innerHTML =
-        data
-          .slice(0, 5)
-          .map(
-            transaction => {
+<div class="about-card">
 
-              const description =
-                transaction.description ||
-                transaction.type ||
-                "Transaction";
+<div class="about-logo">
+TB
+</div>
 
+<h2>TomBrian</h2>
 
-              const amount =
-                Number(
-                  transaction.amount ||
-                  0
-                );
+<p>
+Dream • Work • Achieve
+</p>
 
+<p style="margin-top:12px">
+TomBrian is your platform for convenient digital services,
+airtime, account management and future financial services.
+</p>
 
-              const date =
-                transaction.created_at ||
-                transaction.createdAt ||
-                transaction.date;
+</div>
 
+<div class="about-list">
 
-              const formattedDate =
-                date
-                  ? new Date(
-                      date
-                    ).toLocaleString()
-                  : "";
+<div class="about-list-row">
+<strong>Version</strong>
+<span>TomBrian Web 1.0</span>
+</div>
 
+<div class="about-list-row">
+<strong>Our Goal</strong>
+<span>
+To provide simple, reliable and convenient digital services
+for TomBrian customers.
+</span>
+</div>
 
-              return `
+<div class="about-list-row">
+<strong>Services</strong>
+<span>
+Airtime, account services, transactions, referrals and
+additional services as they become available.
+</span>
+</div>
 
-                <div class="transaction">
+<div class="about-list-row">
+<strong>Support</strong>
+<span>
+TomBrian customer support and additional help options will
+be connected as the platform grows.
+</span>
+</div>
 
-                  <div class="transaction-left">
+</div>
 
-                    <div class="transaction-icon">
-                      💳
-                    </div>
+<div class="account-footer">
+TomBrian • Dream • Work • Achieve
+</div>
 
-                    <div>
+</div>
 
-                      <div class="transaction-description">
-                        ${escapeHtml(description)}
-                      </div>
+</div>
 
-                      <div class="transaction-date">
-                        ${escapeHtml(formattedDate)}
-                      </div>
+</div>
+</div>
 
-                    </div>
+<!-- EDIT PROFILE -->
 
-                  </div>
+<div class="account-modal-overlay" id="editProfileModal">
 
-                  <div class="transaction-amount">
-                    KES ${amount.toFixed(2)}
-                  </div>
+<div class="account-modal">
 
-                </div>
+<div class="account-modal-header">
+<h2>Edit Profile</h2>
 
-              `;
+<div class="account-modal-close"
+onclick="closeEditProfile()">
+×
+</div>
+</div>
 
-            }
-          )
-          .join("");
+<div id="profileMessage" class="message"></div>
 
-    }
+<div class="form-group">
+<label>Full Name</label>
+<input
+type="text"
+id="editFullName"
+placeholder="Enter your full name"
+maxlength="100">
+</div>
 
+<div class="form-group">
+<label>Phone Number</label>
+<input
+type="tel"
+id="editPhone"
+placeholder="07XXXXXXXX"
+maxlength="13">
+</div>
 
-    /* =========================================================
-       ESCAPE HTML
-    ========================================================= */
+<div class="form-group">
+<label>Email</label>
+<input
+type="email"
+id="editEmail"
+readonly>
+</div>
 
-    function escapeHtml(value) {
+<button
+class="primary-btn"
+id="saveProfileButton"
+onclick="saveProfile()">
+Save Changes
+</button>
 
-      return String(
-        value || ""
-      )
-        .replace(
-          /&/g,
-          "&amp;"
-        )
-        .replace(
-          /</g,
-          "&lt;"
-        )
-        .replace(
-          />/g,
-          "&gt;"
-        )
-        .replace(
-          /"/g,
-          "&quot;"
-        )
-        .replace(
-          /'/g,
-          "&#039;"
-        );
+<button
+class="secondary-btn"
+onclick="closeEditProfile()">
+Cancel
+</button>
 
-    }
+</div>
+</div>
 
+<!-- PASSWORD -->
 
-    /* =========================================================
-       PHONE VALIDATION
-    ========================================================= */
+<div class="account-modal-overlay" id="passwordModal">
 
-    function validKenyanPhone(phone) {
+<div class="account-modal">
 
-      return /^(?:07|01)\d{8}$/.test(
-        phone
-      );
+<div class="account-modal-header">
 
-    }
+<h2>Change Password</h2>
 
+<div class="account-modal-close"
+onclick="closeChangePassword()">
+×
+</div>
 
-    /* =========================================================
-       AMOUNT VALIDATION
-    ========================================================= */
+</div>
 
-    function validAmount(amount) {
+<div id="passwordMessage" class="message"></div>
 
-      return (
-        Number.isFinite(amount) &&
-        amount >= 5 &&
-        amount <= 100000
-      );
+<div class="form-group">
+<label>New Password</label>
+<input
+type="password"
+id="newPassword"
+placeholder="Enter new password"
+minlength="6">
+</div>
 
-    }
+<div class="form-group">
+<label>Confirm New Password</label>
+<input
+type="password"
+id="confirmPassword"
+placeholder="Confirm new password"
+minlength="6">
+</div>
 
+<button
+class="primary-btn"
+id="changePasswordButton"
+onclick="changePassword()">
+Update Password
+</button>
 
-    /* =========================================================
-       BALANCE WARNING
-    ========================================================= */
+<button
+class="secondary-btn"
+onclick="closeChangePassword()">
+Cancel
+</button>
 
-    function showInsufficientBalance(
-      amount,
-      service
-    ) {
+</div>
+</div>
 
-      const available =
-        currentBalance.toFixed(2);
+<script type="module">
 
+import { createClient }
+from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-      showFormMessage(
+const SUPABASE_URL =
+"https://ekqhsnzkovzmepxdajtu.supabase.co";
 
-        "⚠️ Insufficient TomBrian balance. " +
-        "Your available balance is KES " +
-        available +
-        ". You cannot " +
-        service +
-        " KES " +
-        Number(amount).toFixed(2) +
-        " with your current balance.",
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_v4DmfQMCBRvJE_dJvgk1og_v6JMXE_r";
 
-        "error"
+const supabase =
+createClient(
+SUPABASE_URL,
+SUPABASE_PUBLISHABLE_KEY
+);
 
-      );
+let currentUser=null;
+let currentBalance=0;
+let currentAction=null;
+let currentProfilePhone="";
 
-    }
+const customerName=
+document.getElementById("customerName");
 
+const customerEmail=
+document.getElementById("customerEmail");
 
-    /* =========================================================
-       BUY AIRTIME REVIEW
-    ========================================================= */
+const profileInitial=
+document.getElementById("profileInitial");
 
-    window.reviewAirtime =
-      function() {
+const balanceAmount=
+document.getElementById("balanceAmount");
 
-        const network =
-          document.getElementById(
-            "airtimeNetwork"
-          ).value;
+const connectionStatus=
+document.getElementById("connectionStatus");
 
+const transactionsList=
+document.getElementById("transactionsList");
 
-        const phone =
-          document.getElementById(
-            "airtimePhone"
-          ).value.trim();
+/* ================= USER ================= */
 
+async function loadUser(){
 
-        const amount =
-          Number(
-            document.getElementById(
-              "airtimeAmount"
-            ).value
-          );
+const {data,error}=
+await supabase.auth.getUser();
 
+if(error||!data.user){
 
-        clearFormMessage();
+window.location.href=
+new URL(
+"login.html",
+window.location.href
+).href;
 
+return null;
+}
 
-        if (
-          !validKenyanPhone(phone)
-        ) {
+currentUser=data.user;
 
-          showFormMessage(
-            "Enter a valid Kenyan phone number, for example 0712345678.",
-            "error"
-          );
+return currentUser;
+}
 
-          return;
+/* ================= PROFILE ================= */
 
-        }
+async function loadProfile(){
 
+if(!currentUser)return;
 
-        if (
-          !validAmount(amount)
-        ) {
+let name=
+currentUser.user_metadata?.full_name||
+currentUser.user_metadata?.name||
+"Customer";
 
-          showFormMessage(
-            "Enter an amount between KES 5 and KES 100,000.",
-            "error"
-          );
+let phone=
+currentUser.user_metadata?.phone||
+currentUser.phone||
+"";
 
-          return;
+const {data,error}=
+await supabase
+.from("profiles")
+.select("*")
+.eq("user_id",currentUser.id)
+.maybeSingle();
 
-        }
+if(!error&&data){
 
+name=
+data.full_name||
+data.name||
+name;
 
-        if (
-          amount > currentBalance
-        ) {
+phone=
+data.phone||
+phone;
+}
 
-          showInsufficientBalance(
-            amount,
-            "buy airtime"
-          );
+currentProfilePhone=phone;
 
-          return;
+customerName.textContent=name;
 
-        }
+customerEmail.textContent=
+currentUser.email||"";
 
+profileInitial.textContent=
+name.charAt(0).toUpperCase();
 
-        prepareConfirmation(
-          "buy",
-          "Buy Airtime",
-          network,
-          phone,
-          amount
-        );
+document.getElementById(
+"accountProfileName"
+).textContent=name;
 
-      };
+document.getElementById(
+"accountProfileEmail"
+).textContent=
+currentUser.email||"No email set";
 
+document.getElementById(
+"accountProfileInitial"
+).textContent=
+name.charAt(0).toUpperCase();
 
-    /* =========================================================
-       SELL AIRTIME REVIEW
-    ========================================================= */
+document.getElementById(
+"accountFullName"
+)?.textContent;
 
-    window.reviewSellAirtime =
-      function() {
+const accountPhone=
+document.getElementById("accountPhone");
 
-        const network =
-          document.getElementById(
-            "sellNetwork"
-          ).value;
+if(accountPhone)
+accountPhone.textContent=
+phone||"Not set";
 
+const accountEmail=
+document.getElementById("accountEmail");
 
-        const phone =
-          document.getElementById(
-            "sellPhone"
-          ).value.trim();
+if(accountEmail)
+accountEmail.textContent=
+currentUser.email||"Not set";
 
+const accountId=
+document.getElementById("accountId");
 
-        const amount =
-          Number(
-            document.getElementById(
-              "sellAmount"
-            ).value
-          );
+if(accountId)
+accountId.textContent=
+currentUser.id;
 
+}
 
-        clearFormMessage();
+/* ================= BALANCE ================= */
 
+async function loadBalance(){
 
-        if (
-          !validKenyanPhone(phone)
-        ) {
+if(!currentUser)return;
 
-          showFormMessage(
-            "Enter a valid Kenyan phone number, for example 0712345678.",
-            "error"
-          );
+const {data,error}=
+await supabase
+.from("balances")
+.select("*")
+.eq("user_id",currentUser.id)
+.maybeSingle();
 
-          return;
+if(error||!data){
 
-        }
+currentBalance=0;
 
+balanceAmount.textContent=
+"KES 0.00";
 
-        if (
-          !Number.isFinite(amount) ||
-          amount < 10 ||
-          amount > 100000
-        ) {
+updateAccountBalance();
 
-          showFormMessage(
-            "Enter a sell amount between KES 10 and KES 100,000.",
-            "error"
-          );
+return;
+}
 
-          return;
+const possibleBalance=
+data.balance??
+data.balances??
+data.amount??
+data.available_balance??
+0;
 
-        }
+currentBalance=
+Number(possibleBalance)||0;
 
+balanceAmount.textContent=
+"KES "+currentBalance.toFixed(2);
 
-        if (
-          amount > currentBalance
-        ) {
+updateAccountBalance();
+}
 
-          showInsufficientBalance(
-            amount,
-            "sell airtime"
-          );
+function updateAccountBalance(){
 
-          return;
+const element=
+document.getElementById("accountBalance");
 
-        }
+if(element){
 
+element.textContent=
+"KES "+
+Number(currentBalance||0)
+.toFixed(2);
 
-        prepareConfirmation(
-          "sell",
-          "Sell Airtime",
-          network,
-          phone,
-          amount
-        );
+}
+}
 
-      };
+/* ================= TRANSACTIONS ================= */
 
+async function loadTransactions(){
 
-    /* =========================================================
-       TOP UP REVIEW
-    ========================================================= */
+if(!currentUser)return;
 
-    window.reviewTopup =
-      function() {
+const {data,error}=
+await supabase
+.from("transactions")
+.select("*")
+.eq("user_id",currentUser.id)
+.limit(10);
 
-        const phone =
-          document.getElementById(
-            "topupPhone"
-          ).value.trim();
+if(error||!data||data.length===0){
 
+transactionsList.innerHTML=
+`<div class="empty">No transactions yet</div>`;
 
-        const amount =
-          Number(
-            document.getElementById(
-              "topupAmount"
-            ).value
-          );
+return;
+}
 
+data.sort((a,b)=>{
 
-        clearFormMessage();
+const dateA=
+new Date(
+a.created_at||
+a.createdAt||
+a.date||
+0
+);
 
+const dateB=
+new Date(
+b.created_at||
+b.createdAt||
+b.date||
+0
+);
 
-        if (
-          !validKenyanPhone(phone)
-        ) {
+return dateB-dateA;
+});
 
-          showFormMessage(
-            "Enter a valid Kenyan M-Pesa phone number.",
-            "error"
-          );
+transactionsList.innerHTML=
+data.slice(0,5)
+.map(transaction=>{
 
-          return;
+const description=
+transaction.description||
+transaction.type||
+"Transaction";
 
-        }
+const amount=
+Number(transaction.amount||0);
 
+const date=
+transaction.created_at||
+transaction.createdAt||
+transaction.date;
 
-        if (
-          !Number.isFinite(amount) ||
-          amount < 10 ||
-          amount > 100000
-        ) {
+const formattedDate=
+date?
+new Date(date).toLocaleString():"";
 
-          showFormMessage(
-            "Enter a top-up amount between KES 10 and KES 100,000.",
-            "error"
-          );
+return `
+<div class="transaction">
 
-          return;
+<div class="transaction-left">
 
-        }
+<div class="transaction-icon">
+💳
+</div>
 
+<div>
 
-        prepareConfirmation(
-          "topup",
-          "Top Up",
-          "M-Pesa",
-          phone,
-          amount
-        );
+<div class="transaction-description">
+${escapeHtml(description)}
+</div>
 
-      };
+<div class="transaction-date">
+${escapeHtml(formattedDate)}
+</div>
 
+</div>
 
-    /* =========================================================
-       WITHDRAW REVIEW
-    ========================================================= */
+</div>
 
-    window.reviewWithdraw =
-      function() {
+<div class="transaction-amount">
+KES ${amount.toFixed(2)}
+</div>
 
-        const phone =
-          document.getElementById(
-            "withdrawPhone"
-          ).value.trim();
+</div>
+`;
 
+}).join("");
+}
 
-        const amount =
-          Number(
-            document.getElementById(
-              "withdrawAmount"
-            ).value
-          );
+/* ================= HELPERS ================= */
 
+function escapeHtml(value){
 
-        clearFormMessage();
+return String(value||"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+}
 
+function validKenyanPhone(phone){
 
-        if (
-          !validKenyanPhone(phone)
-        ) {
+return /^(?:07|01)\d{8}$/.test(phone);
+}
 
-          showFormMessage(
-            "Enter a valid Kenyan M-Pesa phone number.",
-            "error"
-          );
+function validAmount(amount){
 
-          return;
+return(
+Number.isFinite(amount)&&
+amount>=5&&
+amount<=100000
+);
+}
 
-        }
+function showInsufficientBalance(amount,service){
 
+showFormMessage(
+"⚠️ Insufficient TomBrian balance. Your available balance is KES "+
+currentBalance.toFixed(2)+
+". You cannot "+
+service+
+" KES "+
+Number(amount).toFixed(2)+
+" with your current balance.",
+"error"
+);
+}
 
-        if (
-          !Number.isFinite(amount) ||
-          amount < 10 ||
-          amount > 100000
-        ) {
+/* ================= BUY ================= */
 
-          showFormMessage(
-            "Enter a withdrawal amount between KES 10 and KES 100,000.",
-            "error"
-          );
+window.reviewAirtime=function(){
 
-          return;
+const network=
+document.getElementById("airtimeNetwork").value;
 
-        }
+const phone=
+document.getElementById("airtimePhone").value.trim();
 
+const amount=
+Number(
+document.getElementById("airtimeAmount").value
+);
 
-        if (
-          amount > currentBalance
-        ) {
+clearFormMessage();
 
-          showInsufficientBalance(
-            amount,
-            "withdraw"
-          );
+if(!validKenyanPhone(phone)){
 
-          return;
+showFormMessage(
+"Enter a valid Kenyan phone number, for example 0712345678.",
+"error"
+);
 
-        }
+return;
+}
 
+if(!validAmount(amount)){
 
-        prepareConfirmation(
-          "withdraw",
-          "Withdraw",
-          "M-Pesa",
-          phone,
-          amount
-        );
+showFormMessage(
+"Enter an amount between KES 5 and KES 100,000.",
+"error"
+);
 
-      };
+return;
+}
 
+if(amount>currentBalance){
 
-    /* =========================================================
-       PREPARE CONFIRMATION
-    ========================================================= */
+showInsufficientBalance(
+amount,
+"buy airtime"
+);
 
-    function prepareConfirmation(
-      action,
-      service,
-      network,
-      phone,
-      amount
-    ) {
+return;
+}
 
-      currentAction = {
-        action,
-        service,
-        network,
-        phone,
-        amount
-      };
+prepareConfirmation(
+"buy",
+"Buy Airtime",
+network,
+phone,
+amount
+);
+};
 
+/* ================= SELL ================= */
 
-      document.getElementById(
-        "confirmService"
-      ).textContent =
-        service;
+window.reviewSellAirtime=function(){
 
+const network=
+document.getElementById("sellNetwork").value;
 
-      document.getElementById(
-        "confirmNetwork"
-      ).textContent =
-        network;
+const phone=
+document.getElementById("sellPhone").value.trim();
 
+const amount=
+Number(
+document.getElementById("sellAmount").value
+);
 
-      document.getElementById(
-        "confirmPhone"
-      ).textContent =
-        phone;
+clearFormMessage();
 
+if(!validKenyanPhone(phone)){
 
-      document.getElementById(
-        "confirmAmount"
-      ).textContent =
-        "KES " +
-        amount.toFixed(2);
+showFormMessage(
+"Enter a valid Kenyan phone number, for example 0712345678.",
+"error"
+);
 
+return;
+}
 
-      document.getElementById(
-        "confirmation"
-      ).classList.add(
-        "show"
-      );
+if(
+!Number.isFinite(amount)||
+amount<10||
+amount>100000
+){
 
+showFormMessage(
+"Enter a sell amount between KES 10 and KES 100,000.",
+"error"
+);
 
-      hideForms();
+return;
+}
 
+if(amount>currentBalance){
 
-      document.getElementById(
-        "confirmationIntro"
-      ).textContent =
-        "Please confirm the details before continuing.";
+showInsufficientBalance(
+amount,
+"sell airtime"
+);
 
-    }
+return;
+}
 
+prepareConfirmation(
+"sell",
+"Sell Airtime",
+network,
+phone,
+amount
+);
+};
 
-    /* =========================================================
-       SUBMIT CURRENT ACTION
-    ========================================================= */
+/* ================= TOP UP ================= */
 
-    window.submitCurrentAction =
-      async function() {
+window.reviewTopup=function(){
 
-        if (!currentUser) {
+const phone=
+document.getElementById("topupPhone").value.trim();
 
-          showFormMessage(
-            "Your session has expired. Please log in again.",
-            "error"
-          );
+const amount=
+Number(
+document.getElementById("topupAmount").value
+);
 
-          return;
+clearFormMessage();
 
-        }
+if(!validKenyanPhone(phone)){
 
+showFormMessage(
+"Enter a valid Kenyan M-Pesa phone number.",
+"error"
+);
 
-        if (!currentAction) return;
+return;
+}
 
+if(
+!Number.isFinite(amount)||
+amount<10||
+amount>100000
+){
 
-        if (
-          (
-            currentAction.action === "buy" ||
-            currentAction.action === "sell" ||
-            currentAction.action === "withdraw"
-          ) &&
-          currentAction.amount >
-          currentBalance
-        ) {
+showFormMessage(
+"Enter a top-up amount between KES 10 and KES 100,000.",
+"error"
+);
 
-          document.getElementById(
-            "confirmation"
-          ).classList.remove(
-            "show"
-          );
+return;
+}
 
+prepareConfirmation(
+"topup",
+"Top Up",
+"M-Pesa",
+phone,
+amount
+);
+};
 
-          hideForms();
+/* ================= WITHDRAW ================= */
 
+window.reviewWithdraw=function(){
 
-          if (
-            currentAction.action === "buy"
-          ) {
+const phone=
+document.getElementById("withdrawPhone").value.trim();
 
-            document.getElementById(
-              "buyForm"
-            ).style.display =
-              "block";
+const amount=
+Number(
+document.getElementById("withdrawAmount").value
+);
 
-          }
+clearFormMessage();
 
-          else if (
-            currentAction.action === "sell"
-          ) {
+if(!validKenyanPhone(phone)){
 
-            document.getElementById(
-              "sellForm"
-            ).style.display =
-              "block";
+showFormMessage(
+"Enter a valid Kenyan M-Pesa phone number.",
+"error"
+);
 
-          }
+return;
+}
 
-          else if (
-            currentAction.action === "withdraw"
-          ) {
+if(
+!Number.isFinite(amount)||
+amount<10||
+amount>100000
+){
 
-            document.getElementById(
-              "withdrawForm"
-            ).style.display =
-              "block";
+showFormMessage(
+"Enter a withdrawal amount between KES 10 and KES 100,000.",
+"error"
+);
 
-          }
+return;
+}
 
+if(amount>currentBalance){
 
-          showInsufficientBalance(
-            currentAction.amount,
-            currentAction.action === "buy"
-              ? "buy airtime"
-              : currentAction.action === "sell"
-                ? "sell airtime"
-                : "withdraw"
-          );
+showInsufficientBalance(
+amount,
+"withdraw"
+);
 
+return;
+}
 
-          return;
+prepareConfirmation(
+"withdraw",
+"Withdraw",
+"M-Pesa",
+phone,
+amount
+);
+};
 
-        }
+/* ================= CONFIRMATION ================= */
 
+function prepareConfirmation(
+action,
+service,
+network,
+phone,
+amount
+){
 
-        const action =
-          currentAction.action;
+currentAction={
+action,
+service,
+network,
+phone,
+amount
+};
 
+document.getElementById("confirmService").textContent=service;
+document.getElementById("confirmNetwork").textContent=network;
+document.getElementById("confirmPhone").textContent=phone;
+document.getElementById("confirmAmount").textContent=
+"KES "+amount.toFixed(2);
 
-        console.log(
-          "TomBrian service request:",
-          {
-            user_id:
-              currentUser.id,
+document.getElementById("confirmation")
+.classList.add("show");
 
-            service:
-              currentAction.service,
+hideForms();
+}
 
-            network:
-              currentAction.network,
+/* ================= SUBMIT ================= */
 
-            phone:
-              currentAction.phone,
+window.submitCurrentAction=async function(){
 
-            amount:
-              currentAction.amount
-          }
-        );
+if(!currentUser){
 
+showFormMessage(
+"Your session has expired. Please log in again.",
+"error"
+);
 
-        let message =
-          "";
+return;
+}
 
+if(!currentAction)return;
 
-        if (
-          action === "buy"
-        ) {
+if(
+(
+currentAction.action==="buy"||
+currentAction.action==="sell"||
+currentAction.action==="withdraw"
+)&&
+currentAction.amount>currentBalance
+){
 
-          message =
-            "Your Buy Airtime request has been prepared. Live airtime processing will be connected before real airtime is sent.";
+document.getElementById(
+"confirmation"
+).classList.remove("show");
 
-        }
+hideForms();
 
+showInsufficientBalance(
+currentAction.amount,
+currentAction.action==="buy"
+?"buy airtime":
+currentAction.action==="sell"
+?"sell airtime":
+"withdraw"
+);
 
-        else if (
-          action === "sell"
-        ) {
+return;
+}
 
-          message =
-            "Your Sell Airtime request has been recorded for the next processing stage. Live airtime conversion will be connected before real transactions are enabled.";
+console.log(
+"TomBrian service request:",
+{
+user_id:currentUser.id,
+service:currentAction.service,
+network:currentAction.network,
+phone:currentAction.phone,
+amount:currentAction.amount
+}
+);
 
-        }
+let message="";
 
+if(currentAction.action==="buy")
+message=
+"Your Buy Airtime request has been prepared. Live airtime processing will be connected before real airtime is sent.";
 
-        else if (
-          action === "topup"
-        ) {
+else if(currentAction.action==="sell")
+message=
+"Your Sell Airtime request is ready for the next processing stage.";
 
-          message =
-            "Your Top Up request is ready. The M-Pesa STK payment connection will be added before real money is accepted.";
+else if(currentAction.action==="topup")
+message=
+"Your Top Up request is ready. The M-Pesa STK connection will be added before real money is accepted.";
 
-        }
+else
+message=
+"Your Withdrawal request is ready. The M-Pesa withdrawal connection will be added before real money is sent.";
 
+document.getElementById("confirmation")
+.classList.remove("show");
 
-        else if (
-          action === "withdraw"
-        ) {
+document.getElementById("resultAction")
+.style.display="block";
 
-          message =
-            "Your Withdrawal request is ready. The M-Pesa withdrawal connection will be added before real money is sent.";
+document.getElementById("resultText")
+.textContent=message;
+};
 
-        }
+/* ================= SERVICE MODAL ================= */
 
+window.openAction=function(action){
 
-        document.getElementById(
-          "confirmation"
-        ).classList.remove(
-          "show"
-        );
+currentAction=null;
 
+const overlay=
+document.getElementById("modalOverlay");
 
-        document.getElementById(
-          "resultAction"
-        ).style.display =
-          "block";
+const title=
+document.getElementById("modalTitle");
 
+clearFormMessage();
+hideForms();
 
-        document.getElementById(
-          "resultText"
-        ).textContent =
-          message;
+document.getElementById("confirmation")
+.classList.remove("show");
 
-      };
+document.getElementById("resultAction")
+.style.display="none";
 
+if(action==="buy"){
 
-    /* =========================================================
-       OPEN ACTION
-    ========================================================= */
+title.textContent="Buy Airtime";
 
-    window.openAction =
-      function(action) {
+document.getElementById("buyForm")
+.style.display="block";
 
-        currentAction =
-          null;
+}
 
+else if(action==="sell"){
 
-        const overlay =
-          document.getElementById(
-            "modalOverlay"
-          );
+title.textContent="Sell Airtime";
 
+document.getElementById("sellForm")
+.style.display="block";
 
-        const title =
-          document.getElementById(
-            "modalTitle"
-          );
+}
 
+else if(action==="topup"){
 
-        clearFormMessage();
+title.textContent="Top Up";
 
+document.getElementById("topupForm")
+.style.display="block";
 
-        hideForms();
+}
 
+else if(action==="withdraw"){
 
-        document.getElementById(
-          "confirmation"
-        ).classList.remove(
-          "show"
-        );
+title.textContent="Withdraw";
 
+document.getElementById("withdrawForm")
+.style.display="block";
 
-        document.getElementById(
-          "resultAction"
-        ).style.display =
-          "none";
+}
 
+overlay.classList.add("show");
+};
 
-        if (
-          action === "buy"
-        ) {
+function hideForms(){
 
-          title.textContent =
-            "Buy Airtime";
+[
+"buyForm",
+"sellForm",
+"topupForm",
+"withdrawForm"
+].forEach(id=>{
+document.getElementById(id)
+.style.display="none";
+});
+}
 
+window.backToCurrentForm=function(){
 
-          document.getElementById(
-            "buyForm"
-          ).style.display =
-            "block";
+if(!currentAction)return;
 
-        }
+document.getElementById("confirmation")
+.classList.remove("show");
 
+hideForms();
 
-        else if (
-          action === "sell"
-        ) {
+const map={
+buy:"buyForm",
+sell:"sellForm",
+topup:"topupForm",
+withdraw:"withdrawForm"
+};
 
-          title.textContent =
-            "Sell Airtime";
+document.getElementById(
+map[currentAction.action]
+).style.display="block";
 
+clearFormMessage();
+};
 
-          document.getElementById(
-            "sellForm"
-          ).style.display =
-            "block";
+window.closeModal=function(){
 
-        }
+document.getElementById("modalOverlay")
+.classList.remove("show");
 
+clearFormMessage();
+currentAction=null;
+};
 
-        else if (
-          action === "topup"
-        ) {
+function showFormMessage(message,type){
 
-          title.textContent =
-            "Top Up";
+const box=
+document.getElementById("formMessage");
 
+box.textContent=message;
+box.className="message show "+type;
+}
 
-          document.getElementById(
-            "topupForm"
-          ).style.display =
-            "block";
+function clearFormMessage(){
 
-        }
+const box=
+document.getElementById("formMessage");
 
+box.textContent="";
+box.className="message";
+}
 
-        else if (
-          action === "withdraw"
-        ) {
+window.showMessageBox=function(message){
+alert(message);
+};
 
-          title.textContent =
-            "Withdraw";
+/* ================= ACCOUNT ================= */
 
+window.openAccount=function(){
 
-          document.getElementById(
-            "withdrawForm"
-          ).style.display =
-            "block";
+if(!currentUser){
 
-        }
+showMessageBox(
+"Please wait while your account is loading."
+);
 
+return;
+}
 
-        overlay.classList.add(
-          "show"
-        );
+closeModal();
+closeAccountSubpage();
 
-      };
+updateAccountBalance();
 
+document.getElementById("accountPage")
+.classList.add("show");
 
-    /* =========================================================
-       HIDE ALL FORMS
-    ========================================================= */
+document.body.classList.add("no-scroll");
+};
 
-    function hideForms() {
+window.closeAccountPage=function(){
 
-      document.getElementById(
-        "buyForm"
-      ).style.display =
-        "none";
+document.getElementById("accountPage")
+.classList.remove("show");
 
+document.body.classList.remove("no-scroll");
+};
 
-      document.getElementById(
-        "sellForm"
-      ).style.display =
-        "none";
+/* ================= ACCOUNT SUBPAGES ================= */
 
+function hideAccountViews(){
 
-      document.getElementById(
-        "topupForm"
-      ).style.display =
-        "none";
+document.getElementById("accountMainView")
+.classList.remove("hide");
 
+document.getElementById("inviteView")
+.classList.remove("show");
 
-      document.getElementById(
-        "withdrawForm"
-      ).style.display =
-        "none";
+document.getElementById("settingsView")
+.classList.remove("show");
 
-    }
+document.getElementById("aboutView")
+.classList.remove("show");
+}
 
+function openSubPage(id){
 
-    /* =========================================================
-       BACK TO CURRENT FORM
-    ========================================================= */
+document.getElementById("accountMainView")
+.classList.add("hide");
 
-    window.backToCurrentForm =
-      function() {
+document.getElementById(id)
+.classList.add("show");
+}
 
-        if (!currentAction)
-          return;
+window.closeAccountSubpage=function(){
 
+hideAccountViews();
+};
 
-        document.getElementById(
-          "confirmation"
-        ).classList.remove(
-          "show"
-        );
+window.openInviteFriends=function(){
 
+generateReferralInfo();
 
-        hideForms();
+openSubPage("inviteView");
+};
 
+window.openSettings=function(){
 
-        if (
-          currentAction.action ===
-          "buy"
-        ) {
+loadSettings();
 
-          document.getElementById(
-            "buyForm"
-          ).style.display =
-            "block";
+openSubPage("settingsView");
+};
 
-        }
+window.openAbout=function(){
 
+openSubPage("aboutView");
+};
 
-        else if (
-          currentAction.action ===
-          "sell"
-        ) {
+/* ================= REFERRALS ================= */
 
-          document.getElementById(
-            "sellForm"
-          ).style.display =
-            "block";
+function getReferralCode(){
 
-        }
+return(
+currentUser?.user_metadata?.referral_code||
+currentUser?.user_metadata?.referralCode||
+currentUser?.user_metadata?.ref||
+(currentUser?.id?
+currentUser.id.substring(0,8).toUpperCase():
+"TBUSER")
+);
+}
 
+function generateReferralInfo(){
 
-        else if (
-          currentAction.action ===
-          "topup"
-        ) {
+if(!currentUser)return;
 
-          document.getElementById(
-            "topupForm"
-          ).style.display =
-            "block";
+const code=getReferralCode();
 
-        }
+const link=
+new URL(
+"signup.html",
+window.location.href
+);
 
+link.searchParams.set(
+"ref",
+code
+);
 
-        else if (
-          currentAction.action ===
-          "withdraw"
-        ) {
+document.getElementById("referralCode")
+.textContent=code;
 
-          document.getElementById(
-            "withdrawForm"
-          ).style.display =
-            "block";
+document.getElementById("referralLink")
+.value=link.href;
+}
 
-        }
+window.copyReferralLink=async function(){
 
+const input=
+document.getElementById("referralLink");
 
-        clearFormMessage();
+try{
 
-      };
+await navigator.clipboard.writeText(
+input.value
+);
 
+showMessageBox(
+"✓ Invite link copied."
+);
 
-    /* =========================================================
-       CLOSE SERVICE MODAL
-    ========================================================= */
+}catch(error){
 
-    window.closeModal =
-      function() {
+input.select();
+document.execCommand("copy");
 
-        document.getElementById(
-          "modalOverlay"
-        ).classList.remove(
-          "show"
-        );
+showMessageBox(
+"✓ Invite link copied."
+);
 
+}
+};
 
-        clearFormMessage();
+window.shareReferralLink=async function(){
 
+const link=
+document.getElementById("referralLink").value;
 
-        currentAction =
-          null;
+const code=
+document.getElementById("referralCode").textContent;
 
-      };
+if(navigator.share){
 
+try{
 
-    /* =========================================================
-       FORM MESSAGE
-    ========================================================= */
+await navigator.share({
 
-    function showFormMessage(
-      message,
-      type
-    ) {
+title:"Join TomBrian",
+text:
+"Join me on TomBrian using my referral link.",
+url:link
 
-      const box =
-        document.getElementById(
-          "formMessage"
-        );
+});
 
+}catch(error){}
 
-      box.textContent =
-        message;
+}else{
 
+await navigator.clipboard.writeText(link);
 
-      box.className =
-        "message show " +
-        type;
+showMessageBox(
+"✓ Invite link copied. You can now send it to your friends."
+);
 
-    }
+}
+};
 
+/* ================= SETTINGS ================= */
 
-    function clearFormMessage() {
+function loadSettings(){
 
-      const box =
-        document.getElementById(
-          "formMessage"
-        );
+const notifications=
+localStorage.getItem(
+"tombrian_notifications"
+);
 
+const transactions=
+localStorage.getItem(
+"tombrian_transaction_alerts"
+);
 
-      box.textContent =
-        "";
+document.getElementById(
+"notificationSetting"
+).checked=
+notifications!=="false";
 
+document.getElementById(
+"transactionSetting"
+).checked=
+transactions!=="false";
+}
 
-      box.className =
-        "message";
+window.saveNotificationSetting=function(){
 
-    }
+localStorage.setItem(
+"tombrian_notifications",
+document.getElementById(
+"notificationSetting"
+).checked
+);
 
+showMessageBox(
+"Notification setting updated."
+);
+};
 
-    /* =========================================================
-       GENERAL MESSAGE
-    ========================================================= */
+window.saveTransactionSetting=function(){
 
-    window.showMessageBox =
-      function(message) {
+localStorage.setItem(
+"tombrian_transaction_alerts",
+document.getElementById(
+"transactionSetting"
+).checked
+);
 
-        alert(
-          message
-        );
+showMessageBox(
+"Transaction alert setting updated."
+);
+};
 
-      };
+/* ================= EDIT PROFILE ================= */
 
+window.openEditProfile=function(){
 
-    /* =========================================================
-       HOME
-    ========================================================= */
+if(!currentUser)return;
 
-    window.goHome =
-      function() {
+document.getElementById("editFullName")
+.value=
+currentUser.user_metadata?.full_name||
+currentUser.user_metadata?.name||
+document.getElementById("accountProfileName")
+.textContent||
+"";
 
-        closeAccountPage();
+document.getElementById("editPhone")
+.value=
+currentProfilePhone||"";
 
+document.getElementById("editEmail")
+.value=
+currentUser.email||"";
 
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth"
-        });
+clearProfileMessage();
 
-      };
+document.getElementById(
+"editProfileModal"
+).classList.add("show");
+};
 
+window.closeEditProfile=function(){
 
-    /* =========================================================
-       TRANSACTIONS
-    ========================================================= */
+document.getElementById(
+"editProfileModal"
+).classList.remove("show");
 
-    window.showTransactions =
-      function() {
+clearProfileMessage();
+};
 
-        closeAccountPage();
+function showProfileMessage(message,type){
 
+const box=
+document.getElementById("profileMessage");
 
-        document.getElementById(
-          "transactionsList"
-        ).scrollIntoView({
-          behavior: "smooth"
-        });
+box.textContent=message;
+box.className="message show "+type;
+}
 
-      };
+function clearProfileMessage(){
 
+const box=
+document.getElementById("profileMessage");
 
-    /* =========================================================
-       COMMISSION
-    ========================================================= */
+box.textContent="";
+box.className="message";
+}
 
-    window.showCommission =
-      function() {
+window.saveProfile=async function(){
 
-        closeAccountPage();
+if(!currentUser)return;
 
+const name=
+document.getElementById("editFullName")
+.value.trim();
 
-        document.getElementById(
-          "commissionSection"
-        ).scrollIntoView({
-          behavior: "smooth"
-        });
+const phone=
+document.getElementById("editPhone")
+.value.trim();
 
-      };
+if(!name){
 
+showProfileMessage(
+"Please enter your full name.",
+"error"
+);
 
-    /* =========================================================
-       OPEN ACCOUNT
-    ========================================================= */
+return;
+}
 
-    window.openAccount =
-      function() {
+if(phone&&!validKenyanPhone(phone)){
 
-        if (!currentUser) {
+showProfileMessage(
+"Enter a valid Kenyan phone number, for example 0712345678.",
+"error"
+);
 
-          showMessageBox(
-            "Please wait while your account is loading."
-          );
+return;
+}
 
-          return;
+const button=
+document.getElementById(
+"saveProfileButton"
+);
 
-        }
+button.disabled=true;
+button.textContent="Saving...";
 
+try{
 
-        closeModal();
+const {error:authError}=
+await supabase.auth.updateUser({
 
+data:{
+full_name:name,
+name:name,
+phone:phone
+}
 
-        updateAccountBalance();
+});
 
+if(authError)throw authError;
 
-        document.getElementById(
-          "accountPage"
-        ).classList.add(
-          "show"
-        );
+let {error:profileError}=
+await supabase
+.from("profiles")
+.update({
+full_name:name,
+name:name,
+phone:phone
+})
+.eq(
+"user_id",
+currentUser.id
+);
 
+if(profileError){
 
-        document.body.classList.add(
-          "no-scroll"
-        );
+await supabase
+.from("profiles")
+.update({
+full_name:name,
+name:name
+})
+.eq(
+"user_id",
+currentUser.id
+);
+}
 
-      };
+const {data:userData}=
+await supabase.auth.getUser();
 
+if(userData?.user)
+currentUser=userData.user;
 
-    /* =========================================================
-       CLOSE ACCOUNT
-    ========================================================= */
+await loadProfile();
 
-    window.closeAccountPage =
-      function() {
+closeEditProfile();
 
-        document.getElementById(
-          "accountPage"
-        ).classList.remove(
-          "show"
-        );
+showMessageBox(
+"✓ Your profile has been updated successfully."
+);
 
+}catch(error){
 
-        document.body.classList.remove(
-          "no-scroll"
-        );
+console.error(
+"Profile update error:",
+error
+);
 
-      };
+showProfileMessage(
+"Unable to update your profile right now. Please try again.",
+"error"
+);
 
+}finally{
 
-    /* =========================================================
-       EDIT PROFILE
-    ========================================================= */
+button.disabled=false;
+button.textContent="Save Changes";
+}
+};
 
-    window.openEditProfile =
-      function() {
+/* ================= PASSWORD ================= */
 
-        if (!currentUser)
-          return;
+window.openChangePassword=function(){
 
+document.getElementById("newPassword")
+.value="";
 
-        const name =
-          currentUser.user_metadata?.full_name ||
-          currentUser.user_metadata?.name ||
-          document.getElementById(
-            "accountFullName"
-          ).textContent ||
-          "";
+document.getElementById("confirmPassword")
+.value="";
 
+clearPasswordMessage();
 
-        const phone =
-          currentUser.user_metadata?.phone ||
-          currentUser.phone ||
-          document.getElementById(
-            "accountPhone"
-          ).textContent ||
-          "";
+document.getElementById(
+"passwordModal"
+).classList.add("show");
+};
 
+window.closeChangePassword=function(){
 
-        document.getElementById(
-          "editFullName"
-        ).value =
-          name === "Not set"
-            ? ""
-            : name;
+document.getElementById(
+"passwordModal"
+).classList.remove("show");
 
+clearPasswordMessage();
+};
 
-        document.getElementById(
-          "editPhone"
-        ).value =
-          phone === "Not set"
-            ? ""
-            : phone;
+function showPasswordMessage(message,type){
 
+const box=
+document.getElementById("passwordMessage");
 
-        document.getElementById(
-          "editEmail"
-        ).value =
-          currentUser.email ||
-          "";
+box.textContent=message;
+box.className="message show "+type;
+}
 
+function clearPasswordMessage(){
 
-        clearProfileMessage();
+const box=
+document.getElementById("passwordMessage");
 
+box.textContent="";
+box.className="message";
+}
 
-        document.getElementById(
-          "editProfileModal"
-        ).classList.add(
-          "show"
-        );
+window.changePassword=async function(){
 
-      };
+const newPassword=
+document.getElementById("newPassword").value;
 
+const confirmPassword=
+document.getElementById("confirmPassword").value;
 
-    /* =========================================================
-       CLOSE EDIT PROFILE
-    ========================================================= */
+clearPasswordMessage();
 
-    window.closeEditProfile =
-      function() {
+if(newPassword.length<6){
 
-        document.getElementById(
-          "editProfileModal"
-        ).classList.remove(
-          "show"
-        );
+showPasswordMessage(
+"Your new password must contain at least 6 characters.",
+"error"
+);
 
+return;
+}
 
-        clearProfileMessage();
+if(newPassword!==confirmPassword){
 
-      };
+showPasswordMessage(
+"The passwords do not match.",
+"error"
+);
 
+return;
+}
 
-    /* =========================================================
-       PROFILE MESSAGE
-    ========================================================= */
+const button=
+document.getElementById(
+"changePasswordButton"
+);
 
-    function showProfileMessage(
-      message,
-      type
-    ) {
+button.disabled=true;
+button.textContent="Updating...";
 
-      const box =
-        document.getElementById(
-          "profileMessage"
-        );
+try{
 
+const {error}=
+await supabase.auth.updateUser({
+password:newPassword
+});
 
-      box.textContent =
-        message;
+if(error)throw error;
 
+closeChangePassword();
 
-      box.className =
-        "message show " +
-        type;
+showMessageBox(
+"✓ Your password has been changed successfully."
+);
 
-    }
+}catch(error){
 
+showPasswordMessage(
+error.message||
+"Unable to change your password. Please try again.",
+"error"
+);
 
-    function clearProfileMessage() {
+}finally{
 
-      const box =
-        document.getElementById(
-          "profileMessage"
-        );
+button.disabled=false;
+button.textContent="Update Password";
+}
+};
 
+/* ================= LOGOUT ================= */
 
-      box.textContent =
-        "";
+window.confirmLogout=function(){
 
+const confirmed=
+confirm(
+"Do you want to sign out of your TomBrian account?"
+);
 
-      box.className =
-        "message";
+if(confirmed)logout();
+};
 
-    }
+async function logout(){
 
+try{
+await supabase.auth.signOut();
+}catch(error){
+console.error("Logout error:",error);
+}
 
-    /* =========================================================
-       SAVE PROFILE
-    ========================================================= */
+window.location.href=
+new URL(
+"login.html",
+window.location.href
+).href;
+}
 
-    window.saveProfile =
-      async function() {
+/* ================= NAVIGATION ================= */
 
-        if (!currentUser) {
+window.goHome=function(){
 
-          showProfileMessage(
-            "Your session has expired. Please log in again.",
-            "error"
-          );
+closeAccountPage();
 
-          return;
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+};
 
-        }
+window.showTransactions=function(){
 
+closeAccountPage();
 
-        const name =
-          document.getElementById(
-            "editFullName"
-          ).value.trim();
+document.getElementById(
+"transactionsList"
+).scrollIntoView({
+behavior:"smooth"
+});
+};
 
+window.showCommission=function(){
 
-        const phone =
-          document.getElementById(
-            "editPhone"
-          ).value.trim();
+closeAccountPage();
 
+document.getElementById(
+"commissionSection"
+).scrollIntoView({
+behavior:"smooth"
+});
+};
 
-        if (!name) {
+/* ================= OUTSIDE CLICKS ================= */
 
-          showProfileMessage(
-            "Please enter your full name.",
-            "error"
-          );
+document.getElementById(
+"modalOverlay"
+).addEventListener(
+"click",
+function(event){
 
-          return;
+if(event.target===this)
+closeModal();
 
-        }
+}
+);
 
+document.getElementById(
+"editProfileModal"
+).addEventListener(
+"click",
+function(event){
 
-        if (
-          phone &&
-          !validKenyanPhone(phone)
-        ) {
+if(event.target===this)
+closeEditProfile();
 
-          showProfileMessage(
-            "Enter a valid Kenyan phone number, for example 0712345678.",
-            "error"
-          );
+}
+);
 
-          return;
+document.getElementById(
+"passwordModal"
+).addEventListener(
+"click",
+function(event){
 
-        }
+if(event.target===this)
+closeChangePassword();
 
+}
+);
 
-        const button =
-          document.getElementById(
-            "saveProfileButton"
-          );
+/* ================= AUTH ================= */
 
+supabase.auth.onAuthStateChange(
+(event,session)=>{
 
-        button.disabled =
-          true;
+if(event==="SIGNED_OUT"){
 
+window.location.href=
+new URL(
+"login.html",
+window.location.href
+).href;
 
-        button.textContent =
-          "Saving...";
+}
 
+});
 
-        try {
+/* ================= START ================= */
 
-          /*
-           * Save to Supabase Auth metadata.
-           */
+async function initializeDashboard(){
 
-          const {
-            error:
-              authError
-          } =
-            await supabase.auth.updateUser({
+try{
 
-              data: {
-                full_name:
-                  name,
+const user=await loadUser();
 
-                name:
-                  name,
+if(!user)return;
 
-                phone:
-                  phone
-              }
+await loadProfile();
+await loadBalance();
+await loadTransactions();
 
-            });
+connectionStatus.textContent=
+"✓ TomBrian account connected";
 
+connectionStatus.style.background=
+"#ecfdf5";
 
-          if (authError) {
+connectionStatus.style.color=
+"#166534";
 
-            throw authError;
+}catch(error){
 
-          }
+console.error(
+"Dashboard error:",
+error
+);
 
+connectionStatus.textContent=
+"Dashboard loaded with limited account data.";
 
-          /*
-           * Try saving to profiles table.
-           *
-           * First attempt includes phone.
-           */
+connectionStatus.style.background=
+"#fff7ed";
 
-          let {
-            error:
-              profileError
-          } =
-            await supabase
-              .from("profiles")
-              .update({
+connectionStatus.style.color=
+"#9a3412";
+}
 
-                full_name:
-                  name,
+}
 
-                name:
-                  name,
+initializeDashboard();
 
-                phone:
-                  phone
-
-              })
-              .eq(
-                "user_id",
-                currentUser.id
-              );
-
-
-          /*
-           * If the profiles table does not contain
-           * a phone column, retry with only the fields
-           * already known to exist.
-           */
-
-          if (
-            profileError
-          ) {
-
-            const retry =
-              await supabase
-                .from("profiles")
-                .update({
-
-                  full_name:
-                    name,
-
-                  name:
-                    name
-
-                })
-                .eq(
-                  "user_id",
-                  currentUser.id
-                );
-
-
-            profileError =
-              retry.error;
-
-          }
-
-
-          /*
-           * Refresh current user.
-           */
-
-          const {
-            data:
-              userData
-          } =
-            await supabase.auth.getUser();
-
-
-          if (
-            userData &&
-            userData.user
-          ) {
-
-            currentUser =
-              userData.user;
-
-          }
-
-
-          await loadProfile();
-
-
-          closeEditProfile();
-
-
-          showMessageBox(
-            "✓ Your profile has been updated successfully."
-          );
-
-        }
-
-        catch (error) {
-
-          console.error(
-            "Profile update error:",
-            error
-          );
-
-
-          showProfileMessage(
-            "Unable to update your profile right now. Please try again.",
-            "error"
-          );
-
-        }
-
-
-        finally {
-
-          button.disabled =
-            false;
-
-
-          button.textContent =
-            "Save Changes";
-
-        }
-
-      };
-
-
-    /* =========================================================
-       CHANGE PASSWORD OPEN
-    ========================================================= */
-
-    window.openChangePassword =
-      function() {
-
-        document.getElementById(
-          "newPassword"
-        ).value =
-          "";
-
-
-        document.getElementById(
-          "confirmPassword"
-        ).value =
-          "";
-
-
-        clearPasswordMessage();
-
-
-        document.getElementById(
-          "passwordModal"
-        ).classList.add(
-          "show"
-        );
-
-      };
-
-
-    /* =========================================================
-       CHANGE PASSWORD CLOSE
-    ========================================================= */
-
-    window.closeChangePassword =
-      function() {
-
-        document.getElementById(
-          "passwordModal"
-        ).classList.remove(
-          "show"
-        );
-
-
-        clearPasswordMessage();
-
-      };
-
-
-    /* =========================================================
-       PASSWORD MESSAGE
-    ========================================================= */
-
-    function showPasswordMessage(
-      message,
-      type
-    ) {
-
-      const box =
-        document.getElementById(
-          "passwordMessage"
-        );
-
-
-      box.textContent =
-        message;
-
-
-      box.className =
-        "message show " +
-        type;
-
-    }
-
-
-    function clearPasswordMessage() {
-
-      const box =
-        document.getElementById(
-          "passwordMessage"
-        );
-
-
-      box.textContent =
-        "";
-
-
-      box.className =
-        "message";
-
-    }
-
-
-    /* =========================================================
-       CHANGE PASSWORD
-    ========================================================= */
-
-    window.changePassword =
-      async function() {
-
-        if (!currentUser) {
-
-          showPasswordMessage(
-            "Your session has expired. Please log in again.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        const newPassword =
-          document.getElementById(
-            "newPassword"
-          ).value;
-
-
-        const confirmPassword =
-          document.getElementById(
-            "confirmPassword"
-          ).value;
-
-
-        clearPasswordMessage();
-
-
-        if (
-          newPassword.length < 6
-        ) {
-
-          showPasswordMessage(
-            "Your new password must contain at least 6 characters.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        if (
-          newPassword !==
-          confirmPassword
-        ) {
-
-          showPasswordMessage(
-            "The passwords do not match.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        const button =
-          document.getElementById(
-            "changePasswordButton"
-          );
-
-
-        button.disabled =
-          true;
-
-
-        button.textContent =
-          "Updating...";
-
-
-        try {
-
-          const {
-            error
-          } =
-            await supabase.auth.updateUser({
-
-              password:
-                newPassword
-
-            });
-
-
-          if (error) {
-
-            throw error;
-
-          }
-
-
-          closeChangePassword();
-
-
-          showMessageBox(
-            "✓ Your password has been changed successfully."
-          );
-
-        }
-
-        catch (error) {
-
-          console.error(
-            "Password update error:",
-            error
-          );
-
-
-          showPasswordMessage(
-            error.message ||
-            "Unable to change your password. Please try again.",
-            "error"
-          );
-
-        }
-
-
-        finally {
-
-          button.disabled =
-            false;
-
-
-          button.textContent =
-            "Update Password";
-
-        }
-
-      };
-
-
-    /* =========================================================
-       CONFIRM LOGOUT
-    ========================================================= */
-
-    window.confirmLogout =
-      function() {
-
-        const confirmed =
-          confirm(
-            "Do you want to sign out of your TomBrian account?"
-          );
-
-
-        if (!confirmed)
-          return;
-
-
-        logout();
-
-      };
-
-
-    /* =========================================================
-       LOGOUT
-    ========================================================= */
-
-    async function logout() {
-
-      try {
-
-        await supabase.auth.signOut();
-
-      }
-
-      catch (error) {
-
-        console.error(
-          "Logout error:",
-          error
-        );
-
-      }
-
-
-      window.location.href =
-        new URL(
-          "login.html",
-          window.location.href
-        ).href;
-
-    }
-
-
-    /* =========================================================
-       CLOSE SERVICE MODAL OUTSIDE
-    ========================================================= */
-
-    document
-      .getElementById(
-        "modalOverlay"
-      )
-      .addEventListener(
-        "click",
-        function(event) {
-
-          if (
-            event.target ===
-            this
-          ) {
-
-            closeModal();
-
-          }
-
-        }
-      );
-
-
-    /* =========================================================
-       CLOSE ACCOUNT MODALS OUTSIDE
-    ========================================================= */
-
-    document
-      .getElementById(
-        "editProfileModal"
-      )
-      .addEventListener(
-        "click",
-        function(event) {
-
-          if (
-            event.target ===
-            this
-          ) {
-
-            closeEditProfile();
-
-          }
-
-        }
-      );
-
-
-    document
-      .getElementById(
-        "passwordModal"
-      )
-      .addEventListener(
-        "click",
-        function(event) {
-
-          if (
-            event.target ===
-            this
-          ) {
-
-            closeChangePassword();
-
-          }
-
-        }
-      );
-
-
-    /* =========================================================
-       INITIALIZE DASHBOARD
-    ========================================================= */
-
-    async function initializeDashboard() {
-
-      try {
-
-        const user =
-          await loadUser();
-
-
-        if (!user)
-          return;
-
-
-        await loadProfile();
-
-
-        await loadBalance();
-
-
-        await loadTransactions();
-
-
-        connectionStatus.textContent =
-          "✓ TomBrian account connected";
-
-
-        connectionStatus.style.background =
-          "#ecfdf5";
-
-
-        connectionStatus.style.color =
-          "#166534";
-
-      }
-
-
-      catch (error) {
-
-        console.error(
-          "Dashboard error:",
-          error
-        );
-
-
-        connectionStatus.textContent =
-          "Dashboard loaded with limited account data.";
-
-
-        connectionStatus.style.background =
-          "#fff7ed";
-
-
-        connectionStatus.style.color =
-          "#9a3412";
-
-      }
-
-    }
-
-
-    /* =========================================================
-       AUTH STATE
-    ========================================================= */
-
-    supabase.auth.onAuthStateChange(
-      (
-        event,
-        session
-      ) => {
-
-        if (
-          event ===
-          "SIGNED_OUT"
-        ) {
-
-          window.location.href =
-            new URL(
-              "login.html",
-              window.location.href
-            ).href;
-
-        }
-
-      }
-    );
-
-
-    /* =========================================================
-       START
-    ========================================================= */
-
-    initializeDashboard();
-
-  </script>
+</script>
 
 </body>
 </html>
