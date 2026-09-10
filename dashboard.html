@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,10 +19,6 @@
       color: #172033;
       min-height: 100vh;
     }
-
-    /* =========================
-       HEADER
-    ========================= */
 
     header {
       background: #111827;
@@ -76,10 +73,6 @@
       font-weight: bold;
     }
 
-    /* =========================
-       MAIN
-    ========================= */
-
     main {
       max-width: 1100px;
       margin: auto;
@@ -110,10 +103,6 @@
       font-size: 14px;
     }
 
-    /* =========================
-       BALANCE
-    ========================= */
-
     .balance-card {
       background: #111827;
       color: white;
@@ -140,19 +129,11 @@
       font-size: 13px;
     }
 
-    /* =========================
-       SECTIONS
-    ========================= */
-
     .section-title {
       font-size: 18px;
       font-weight: bold;
       margin: 25px 0 14px;
     }
-
-    /* =========================
-       QUICK ACTIONS
-    ========================= */
 
     .actions {
       display: grid;
@@ -168,11 +149,17 @@
       text-align: center;
       cursor: pointer;
       transition: 0.2s;
+      user-select: none;
     }
 
     .action:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 18px rgba(0,0,0,0.07);
+      border-color: #16a34a;
+    }
+
+    .action:active {
+      transform: scale(0.98);
     }
 
     .action-icon {
@@ -184,10 +171,6 @@
       font-size: 14px;
       font-weight: bold;
     }
-
-    /* =========================
-       COMMISSION
-    ========================= */
 
     .commission-card {
       background: white;
@@ -207,10 +190,6 @@
       font-size: 13px;
       margin-top: 5px;
     }
-
-    /* =========================
-       TRANSACTIONS
-    ========================= */
 
     .transactions {
       background: white;
@@ -270,10 +249,6 @@
       font-size: 14px;
     }
 
-    /* =========================
-       DEVELOPMENT NOTICE
-    ========================= */
-
     .notice {
       margin-top: 22px;
       padding: 15px;
@@ -284,10 +259,6 @@
       font-size: 13px;
       line-height: 1.5;
     }
-
-    /* =========================
-       BOTTOM NAV
-    ========================= */
 
     .bottom-nav {
       position: fixed;
@@ -320,10 +291,6 @@
       font-weight: bold;
     }
 
-    /* =========================
-       MODAL
-    ========================= */
-
     .modal-overlay {
       display: none;
       position: fixed;
@@ -333,6 +300,7 @@
       align-items: center;
       justify-content: center;
       padding: 18px;
+      overflow-y: auto;
     }
 
     .modal-overlay.show {
@@ -342,6 +310,8 @@
     .modal {
       width: 100%;
       max-width: 450px;
+      max-height: 90vh;
+      overflow-y: auto;
       background: white;
       border-radius: 18px;
       padding: 24px;
@@ -464,10 +434,34 @@
       justify-content: space-between;
       padding: 7px 0;
       font-size: 14px;
+      gap: 15px;
     }
 
     .confirm-row strong {
       color: #111827;
+      text-align: right;
+    }
+
+    .info-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e40af;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .warning-box {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 16px;
     }
 
     @media (max-width: 700px) {
@@ -483,10 +477,6 @@
 </head>
 
 <body>
-
-  <!-- =========================
-       HEADER
-  ========================= -->
 
   <header>
     <div class="brand">
@@ -506,10 +496,6 @@
   </header>
 
 
-  <!-- =========================
-       MAIN
-  ========================= -->
-
   <main>
 
     <div class="connection" id="connectionStatus">
@@ -522,8 +508,6 @@
     </div>
 
 
-    <!-- BALANCE -->
-
     <div class="balance-card">
       <div class="balance-label">Available Balance</div>
       <div class="balance" id="balanceAmount">KES 0.00</div>
@@ -532,8 +516,6 @@
       </div>
     </div>
 
-
-    <!-- QUICK ACTIONS -->
 
     <div class="section-title">Quick Actions</div>
 
@@ -562,20 +544,20 @@
     </div>
 
 
-    <!-- COMMISSION -->
-
     <div class="section-title">My Commission</div>
 
     <div class="commission-card">
       <div>Available Commission</div>
+
       <div class="commission-amount" id="commissionAmount">
         KES 0.00
       </div>
-      <p>Your commission earnings will appear here.</p>
+
+      <p>
+        Your commission earnings will appear here.
+      </p>
     </div>
 
-
-    <!-- TRANSACTIONS -->
 
     <div class="section-title">Recent Transactions</div>
 
@@ -587,18 +569,16 @@
 
 
     <div class="notice">
-      <strong>TomBrian Development Notice:</strong><br>
-      Your account dashboard is now connected to Supabase.
-      Airtime purchasing and payment processing will be connected
-      to the appropriate service in the next stage.
+      <strong>TomBrian:</strong><br>
+      Your dashboard is connected to your TomBrian account.
+      Service requests can now be entered and reviewed.
+      Live airtime, M-Pesa and withdrawal processing will be
+      connected to the appropriate service before real transactions
+      are enabled.
     </div>
 
   </main>
 
-
-  <!-- =========================
-       BOTTOM NAVIGATION
-  ========================= -->
 
   <div class="bottom-nav">
 
@@ -607,12 +587,12 @@
       Home
     </div>
 
-    <div class="nav-item" onclick="showMessageBox('Transactions page coming next.')">
+    <div class="nav-item" onclick="showTransactions()">
       <div class="nav-icon">📊</div>
       Transactions
     </div>
 
-    <div class="nav-item" onclick="showMessageBox('Commission page coming next.')">
+    <div class="nav-item" onclick="showCommission()">
       <div class="nav-icon">🏆</div>
       Commission
     </div>
@@ -626,7 +606,7 @@
 
 
   <!-- =========================
-       BUY AIRTIME MODAL
+       MODAL
   ========================= -->
 
   <div class="modal-overlay" id="modalOverlay">
@@ -634,19 +614,26 @@
     <div class="modal">
 
       <div class="modal-header">
-        <h2 id="modalTitle">Buy Airtime</h2>
-        <div class="close" onclick="closeModal()">×</div>
+        <h2 id="modalTitle">TomBrian</h2>
+
+        <div class="close" onclick="closeModal()">
+          ×
+        </div>
       </div>
 
       <div id="formMessage" class="message"></div>
 
 
-      <!-- BUY AIRTIME FORM -->
+      <!-- =========================
+           BUY AIRTIME
+      ========================= -->
 
       <div id="buyForm">
 
         <div class="form-group">
-          <label for="airtimeNetwork">Network</label>
+          <label for="airtimeNetwork">
+            Network
+          </label>
 
           <select id="airtimeNetwork">
             <option value="Safaricom">Safaricom</option>
@@ -656,7 +643,9 @@
         </div>
 
         <div class="form-group">
-          <label for="airtimePhone">Recipient Phone Number</label>
+          <label for="airtimePhone">
+            Recipient Phone Number
+          </label>
 
           <input
             type="tel"
@@ -667,7 +656,9 @@
         </div>
 
         <div class="form-group">
-          <label for="airtimeAmount">Amount (KES)</label>
+          <label for="airtimeAmount">
+            Amount (KES)
+          </label>
 
           <input
             type="number"
@@ -678,22 +669,194 @@
           >
         </div>
 
-        <button class="primary-btn" onclick="reviewAirtime()">
+        <button
+          class="primary-btn"
+          onclick="reviewAirtime()"
+        >
           Continue
         </button>
 
       </div>
 
 
-      <!-- CONFIRMATION -->
+      <!-- =========================
+           SELL AIRTIME
+      ========================= -->
+
+      <div id="sellForm" style="display:none;">
+
+        <div class="info-box">
+          Enter the airtime details you want to sell.
+          The request will be reviewed before live airtime
+          processing is enabled.
+        </div>
+
+        <div class="form-group">
+          <label for="sellNetwork">
+            Network
+          </label>
+
+          <select id="sellNetwork">
+            <option value="Safaricom">Safaricom</option>
+            <option value="Airtel">Airtel</option>
+            <option value="Telkom">Telkom</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="sellPhone">
+            Your Airtime Phone Number
+          </label>
+
+          <input
+            type="tel"
+            id="sellPhone"
+            placeholder="07XXXXXXXX"
+            maxlength="13"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="sellAmount">
+            Airtime Amount (KES)
+          </label>
+
+          <input
+            type="number"
+            id="sellAmount"
+            placeholder="Enter amount"
+            min="10"
+            step="1"
+          >
+        </div>
+
+        <button
+          class="primary-btn"
+          onclick="reviewSellAirtime()"
+        >
+          Continue
+        </button>
+
+      </div>
+
+
+      <!-- =========================
+           TOP UP
+      ========================= -->
+
+      <div id="topupForm" style="display:none;">
+
+        <div class="info-box">
+          Enter the amount you want to add to your TomBrian
+          balance. The live M-Pesa STK payment connection will
+          be enabled before real money is processed.
+        </div>
+
+        <div class="form-group">
+          <label for="topupPhone">
+            M-Pesa Phone Number
+          </label>
+
+          <input
+            type="tel"
+            id="topupPhone"
+            placeholder="07XXXXXXXX"
+            maxlength="13"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="topupAmount">
+            Amount (KES)
+          </label>
+
+          <input
+            type="number"
+            id="topupAmount"
+            placeholder="Enter amount"
+            min="10"
+            step="1"
+          >
+        </div>
+
+        <button
+          class="primary-btn"
+          onclick="reviewTopup()"
+        >
+          Continue
+        </button>
+
+      </div>
+
+
+      <!-- =========================
+           WITHDRAW
+      ========================= -->
+
+      <div id="withdrawForm" style="display:none;">
+
+        <div class="warning-box">
+          Withdrawals will only be processed after the
+          M-Pesa withdrawal service is connected and your
+          account has sufficient available funds.
+        </div>
+
+        <div class="form-group">
+          <label for="withdrawPhone">
+            M-Pesa Phone Number
+          </label>
+
+          <input
+            type="tel"
+            id="withdrawPhone"
+            placeholder="07XXXXXXXX"
+            maxlength="13"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="withdrawAmount">
+            Amount (KES)
+          </label>
+
+          <input
+            type="number"
+            id="withdrawAmount"
+            placeholder="Enter amount"
+            min="10"
+            step="1"
+          >
+        </div>
+
+        <button
+          class="primary-btn"
+          onclick="reviewWithdraw()"
+        >
+          Continue
+        </button>
+
+      </div>
+
+
+      <!-- =========================
+           CONFIRMATION
+      ========================= -->
 
       <div id="confirmation" class="confirmation">
 
-        <p style="font-size:14px;color:#6b7280;">
-          Please confirm the airtime purchase details.
+        <p
+          id="confirmationIntro"
+          style="font-size:14px;color:#6b7280;"
+        >
+          Please confirm the details.
         </p>
 
         <div class="confirm-box">
+
+          <div class="confirm-row">
+            <span>Service</span>
+            <strong id="confirmService">-</strong>
+          </div>
 
           <div class="confirm-row">
             <span>Network</span>
@@ -707,35 +870,54 @@
 
           <div class="confirm-row">
             <span>Amount</span>
-            <strong id="confirmAmount">KES 0.00</strong>
+            <strong id="confirmAmount">
+              KES 0.00
+            </strong>
           </div>
 
         </div>
 
-        <button class="primary-btn" onclick="submitAirtimePurchase()">
-          Confirm Purchase
+        <button
+          class="primary-btn"
+          onclick="submitCurrentAction()"
+        >
+          Confirm Request
         </button>
 
-        <button class="secondary-btn" onclick="backToAirtimeForm()">
+        <button
+          class="secondary-btn"
+          onclick="backToCurrentForm()"
+        >
           Go Back
         </button>
 
       </div>
 
 
-      <!-- OTHER ACTIONS -->
+      <!-- =========================
+           RESULT
+      ========================= -->
 
-      <div id="otherAction" style="display:none;">
+      <div
+        id="resultAction"
+        style="display:none;"
+      >
 
-        <p id="otherActionText"
-           style="color:#6b7280;font-size:14px;line-height:1.5;margin-bottom:15px;">
-        </p>
+        <div
+          class="info-box"
+          id="resultText"
+        >
+        </div>
 
-        <button class="secondary-btn" onclick="closeModal()">
-          Close
+        <button
+          class="primary-btn"
+          onclick="closeModal()"
+        >
+          Done
         </button>
 
       </div>
+
 
     </div>
 
@@ -766,6 +948,7 @@
 
     let currentUser = null;
     let currentBalance = 0;
+    let currentAction = null;
 
 
     /* =========================================================
@@ -805,7 +988,10 @@
       if (error || !data.user) {
 
         window.location.href =
-          new URL("login.html", window.location.href).href;
+          new URL(
+            "login.html",
+            window.location.href
+          ).href;
 
         return null;
       }
@@ -877,7 +1063,10 @@
 
       if (error) {
 
-        console.log("Balance error:", error);
+        console.log(
+          "Balance error:",
+          error
+        );
 
         currentBalance = 0;
 
@@ -1045,7 +1234,7 @@
 
 
     /* =========================================================
-       HTML ESCAPE
+       ESCAPE HTML
     ========================================================= */
 
     function escapeHtml(value) {
@@ -1061,10 +1250,36 @@
 
 
     /* =========================================================
+       PHONE VALIDATION
+    ========================================================= */
+
+    function validKenyanPhone(phone) {
+
+      return /^(?:07|01)\d{8}$/.test(phone);
+
+    }
+
+
+    /* =========================================================
+       AMOUNT VALIDATION
+    ========================================================= */
+
+    function validAmount(amount) {
+
+      return (
+        Number.isFinite(amount) &&
+        amount >= 5 &&
+        amount <= 100000
+      );
+
+    }
+
+
+    /* =========================================================
        BUY AIRTIME REVIEW
     ========================================================= */
 
-    window.reviewAirtime = function () {
+    window.reviewAirtime = function() {
 
       const network =
         document.getElementById(
@@ -1087,13 +1302,7 @@
       clearFormMessage();
 
 
-      /* PHONE VALIDATION */
-
-      const phoneRegex =
-        /^(?:07|01)\d{8}$/;
-
-
-      if (!phoneRegex.test(phone)) {
+      if (!validKenyanPhone(phone)) {
 
         showFormMessage(
           "Enter a valid Kenyan phone number, for example 0712345678.",
@@ -1104,34 +1313,16 @@
       }
 
 
-      /* AMOUNT VALIDATION */
-
-      if (
-        !Number.isFinite(amount) ||
-        amount < 5
-      ) {
+      if (!validAmount(amount)) {
 
         showFormMessage(
-          "Minimum airtime amount is KES 5.",
+          "Enter an amount between KES 5 and KES 100,000.",
           "error"
         );
 
         return;
       }
 
-
-      if (amount > 100000) {
-
-        showFormMessage(
-          "Please enter an amount of KES 100,000 or less.",
-          "error"
-        );
-
-        return;
-      }
-
-
-      /* BALANCE CHECK */
 
       if (amount > currentBalance) {
 
@@ -1144,7 +1335,234 @@
       }
 
 
-      /* DISPLAY CONFIRMATION */
+      prepareConfirmation(
+        "buy",
+        "Buy Airtime",
+        network,
+        phone,
+        amount
+      );
+
+    };
+
+
+    /* =========================================================
+       SELL AIRTIME REVIEW
+    ========================================================= */
+
+    window.reviewSellAirtime = function() {
+
+      const network =
+        document.getElementById(
+          "sellNetwork"
+        ).value;
+
+      const phone =
+        document.getElementById(
+          "sellPhone"
+        ).value.trim();
+
+      const amount =
+        Number(
+          document.getElementById(
+            "sellAmount"
+          ).value
+        );
+
+
+      clearFormMessage();
+
+
+      if (!validKenyanPhone(phone)) {
+
+        showFormMessage(
+          "Enter a valid Kenyan phone number, for example 0712345678.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      if (
+        !Number.isFinite(amount) ||
+        amount < 10 ||
+        amount > 100000
+      ) {
+
+        showFormMessage(
+          "Enter a sell amount between KES 10 and KES 100,000.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      prepareConfirmation(
+        "sell",
+        "Sell Airtime",
+        network,
+        phone,
+        amount
+      );
+
+    };
+
+
+    /* =========================================================
+       TOP UP REVIEW
+    ========================================================= */
+
+    window.reviewTopup = function() {
+
+      const phone =
+        document.getElementById(
+          "topupPhone"
+        ).value.trim();
+
+      const amount =
+        Number(
+          document.getElementById(
+            "topupAmount"
+          ).value
+        );
+
+
+      clearFormMessage();
+
+
+      if (!validKenyanPhone(phone)) {
+
+        showFormMessage(
+          "Enter a valid Kenyan M-Pesa phone number.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      if (
+        !Number.isFinite(amount) ||
+        amount < 10 ||
+        amount > 100000
+      ) {
+
+        showFormMessage(
+          "Enter a top-up amount between KES 10 and KES 100,000.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      prepareConfirmation(
+        "topup",
+        "Top Up",
+        "M-Pesa",
+        phone,
+        amount
+      );
+
+    };
+
+
+    /* =========================================================
+       WITHDRAW REVIEW
+    ========================================================= */
+
+    window.reviewWithdraw = function() {
+
+      const phone =
+        document.getElementById(
+          "withdrawPhone"
+        ).value.trim();
+
+      const amount =
+        Number(
+          document.getElementById(
+            "withdrawAmount"
+          ).value
+        );
+
+
+      clearFormMessage();
+
+
+      if (!validKenyanPhone(phone)) {
+
+        showFormMessage(
+          "Enter a valid Kenyan M-Pesa phone number.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      if (
+        !Number.isFinite(amount) ||
+        amount < 10 ||
+        amount > 100000
+      ) {
+
+        showFormMessage(
+          "Enter a withdrawal amount between KES 10 and KES 100,000.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      if (amount > currentBalance) {
+
+        showFormMessage(
+          "Insufficient available balance for this withdrawal.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      prepareConfirmation(
+        "withdraw",
+        "Withdraw",
+        "M-Pesa",
+        phone,
+        amount
+      );
+
+    };
+
+
+    /* =========================================================
+       PREPARE CONFIRMATION
+    ========================================================= */
+
+    function prepareConfirmation(
+      action,
+      service,
+      network,
+      phone,
+      amount
+    ) {
+
+      currentAction = {
+        action,
+        service,
+        network,
+        phone,
+        amount
+      };
+
+
+      document.getElementById(
+        "confirmService"
+      ).textContent = service;
 
       document.getElementById(
         "confirmNetwork"
@@ -1161,21 +1579,25 @@
 
 
       document.getElementById(
-        "buyForm"
-      ).style.display = "none";
-
-      document.getElementById(
         "confirmation"
       ).classList.add("show");
 
-    };
+
+      hideForms();
+
+      document.getElementById(
+        "confirmationIntro"
+      ).textContent =
+        "Please confirm the details before continuing.";
+
+    }
 
 
     /* =========================================================
-       SUBMIT AIRTIME PURCHASE
+       SUBMIT CURRENT ACTION
     ========================================================= */
 
-    window.submitAirtimePurchase = async function () {
+    window.submitCurrentAction = async function() {
 
       if (!currentUser) {
 
@@ -1188,66 +1610,82 @@
       }
 
 
-      const network =
-        document.getElementById(
-          "airtimeNetwork"
-        ).value;
+      if (!currentAction) return;
 
-      const phone =
-        document.getElementById(
-          "airtimePhone"
-        ).value.trim();
 
-      const amount =
-        Number(
-          document.getElementById(
-            "airtimeAmount"
-          ).value
-        );
+      const action =
+        currentAction.action;
 
 
       /*
        * IMPORTANT:
-       * We are NOT sending airtime yet.
        *
-       * The actual airtime provider/API will be
-       * connected in the next stage.
+       * These requests are currently UI-level requests.
+       * We do NOT pretend that real money or airtime
+       * has moved.
+       *
+       * Real M-Pesa and airtime provider APIs will be
+       * connected separately.
        */
-
-      showFormMessage(
-        "Airtime purchase interface is ready. The live airtime service will be connected next.",
-        "success"
-      );
 
 
       console.log(
-        "Airtime purchase request:",
+        "TomBrian service request:",
         {
           user_id: currentUser.id,
-          network,
-          phone,
-          amount
+          service: currentAction.service,
+          network: currentAction.network,
+          phone: currentAction.phone,
+          amount: currentAction.amount
         }
       );
 
-    };
+
+      let message = "";
 
 
-    /* =========================================================
-       BACK TO FORM
-    ========================================================= */
+      if (action === "buy") {
 
-    window.backToAirtimeForm = function () {
+        message =
+          "Your Buy Airtime request has been prepared. Live airtime processing will be connected before real airtime is sent.";
+
+      }
+
+      else if (action === "sell") {
+
+        message =
+          "Your Sell Airtime request has been recorded for the next processing stage. Live airtime conversion will be connected before real transactions are enabled.";
+
+      }
+
+      else if (action === "topup") {
+
+        message =
+          "Your Top Up request is ready. The M-Pesa STK payment connection will be added before real money is accepted.";
+
+      }
+
+      else if (action === "withdraw") {
+
+        message =
+          "Your Withdrawal request is ready. The M-Pesa withdrawal connection will be added before real money is sent.";
+
+      }
+
 
       document.getElementById(
         "confirmation"
       ).classList.remove("show");
 
+
       document.getElementById(
-        "buyForm"
+        "resultAction"
       ).style.display = "block";
 
-      clearFormMessage();
+
+      document.getElementById(
+        "resultText"
+      ).textContent = message;
 
     };
 
@@ -1257,6 +1695,8 @@
     ========================================================= */
 
     window.openAction = function(action) {
+
+      currentAction = null;
 
       const overlay =
         document.getElementById(
@@ -1268,29 +1708,20 @@
           "modalTitle"
         );
 
-      const buyForm =
-        document.getElementById(
-          "buyForm"
-        );
-
-      const confirmation =
-        document.getElementById(
-          "confirmation"
-        );
-
-      const otherAction =
-        document.getElementById(
-          "otherAction"
-        );
-
 
       clearFormMessage();
 
-      confirmation.classList.remove("show");
+      hideForms();
 
-      buyForm.style.display = "none";
 
-      otherAction.style.display = "none";
+      document.getElementById(
+        "confirmation"
+      ).classList.remove("show");
+
+
+      document.getElementById(
+        "resultAction"
+      ).style.display = "none";
 
 
       if (action === "buy") {
@@ -1298,24 +1729,46 @@
         title.textContent =
           "Buy Airtime";
 
-        buyForm.style.display =
+        document.getElementById(
+          "buyForm"
+        ).style.display =
           "block";
 
       }
 
-      else {
+      else if (action === "sell") {
 
         title.textContent =
-          action.charAt(0).toUpperCase() +
-          action.slice(1);
-
-        otherAction.style.display =
-          "block";
+          "Sell Airtime";
 
         document.getElementById(
-          "otherActionText"
-        ).textContent =
-          getActionMessage(action);
+          "sellForm"
+        ).style.display =
+          "block";
+
+      }
+
+      else if (action === "topup") {
+
+        title.textContent =
+          "Top Up";
+
+        document.getElementById(
+          "topupForm"
+        ).style.display =
+          "block";
+
+      }
+
+      else if (action === "withdraw") {
+
+        title.textContent =
+          "Withdraw";
+
+        document.getElementById(
+          "withdrawForm"
+        ).style.display =
+          "block";
 
       }
 
@@ -1326,32 +1779,91 @@
 
 
     /* =========================================================
-       OTHER ACTION MESSAGE
+       HIDE ALL FORMS
     ========================================================= */
 
-    function getActionMessage(action) {
+    function hideForms() {
 
-      if (action === "sell") {
+      document.getElementById(
+        "buyForm"
+      ).style.display = "none";
 
-        return "Sell Airtime will allow you to sell airtime through your TomBrian account. We will build this flow next.";
+      document.getElementById(
+        "sellForm"
+      ).style.display = "none";
 
-      }
+      document.getElementById(
+        "topupForm"
+      ).style.display = "none";
 
-      if (action === "topup") {
-
-        return "Top Up will allow you to add money to your TomBrian balance. The M-Pesa payment connection will be added in the next stage.";
-
-      }
-
-      if (action === "withdraw") {
-
-        return "Withdraw will allow you to request money from your TomBrian earnings or balance. We will build the withdrawal flow next.";
-
-      }
-
-      return "This service is coming soon.";
+      document.getElementById(
+        "withdrawForm"
+      ).style.display = "none";
 
     }
+
+
+    /* =========================================================
+       BACK TO CURRENT FORM
+    ========================================================= */
+
+    window.backToCurrentForm = function() {
+
+      if (!currentAction) return;
+
+
+      document.getElementById(
+        "confirmation"
+      ).classList.remove("show");
+
+
+      hideForms();
+
+
+      if (
+        currentAction.action === "buy"
+      ) {
+
+        document.getElementById(
+          "buyForm"
+        ).style.display = "block";
+
+      }
+
+      else if (
+        currentAction.action === "sell"
+      ) {
+
+        document.getElementById(
+          "sellForm"
+        ).style.display = "block";
+
+      }
+
+      else if (
+        currentAction.action === "topup"
+      ) {
+
+        document.getElementById(
+          "topupForm"
+        ).style.display = "block";
+
+      }
+
+      else if (
+        currentAction.action === "withdraw"
+      ) {
+
+        document.getElementById(
+          "withdrawForm"
+        ).style.display = "block";
+
+      }
+
+
+      clearFormMessage();
+
+    };
 
 
     /* =========================================================
@@ -1365,6 +1877,8 @@
       ).classList.remove("show");
 
       clearFormMessage();
+
+      currentAction = null;
 
     };
 
@@ -1383,7 +1897,8 @@
           "formMessage"
         );
 
-      box.textContent = message;
+      box.textContent =
+        message;
 
       box.className =
         "message show " + type;
@@ -1398,7 +1913,8 @@
           "formMessage"
         );
 
-      box.textContent = "";
+      box.textContent =
+        "";
 
       box.className =
         "message";
@@ -1426,6 +1942,36 @@
 
       window.scrollTo({
         top: 0,
+        behavior: "smooth"
+      });
+
+    };
+
+
+    /* =========================================================
+       TRANSACTIONS
+    ========================================================= */
+
+    window.showTransactions = function() {
+
+      document.getElementById(
+        "transactionsList"
+      ).scrollIntoView({
+        behavior: "smooth"
+      });
+
+    };
+
+
+    /* =========================================================
+       COMMISSION
+    ========================================================= */
+
+    window.showCommission = function() {
+
+      document.querySelector(
+        ".commission-card"
+      ).scrollIntoView({
         behavior: "smooth"
       });
 
@@ -1468,7 +2014,7 @@
 
 
     /* =========================================================
-       CLOSE MODAL WHEN CLICKING OUTSIDE
+       CLOSE MODAL OUTSIDE
     ========================================================= */
 
     document
@@ -1478,8 +2024,7 @@
         function(event) {
 
           if (
-            event.target ===
-            this
+            event.target === this
           ) {
 
             closeModal();
@@ -1575,3 +2120,4 @@
 
 </body>
 </html>
+```
