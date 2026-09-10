@@ -19,6 +19,10 @@
       min-height: 100vh;
     }
 
+    body.no-scroll {
+      overflow: hidden;
+    }
+
     header {
       background: #111827;
       color: white;
@@ -70,6 +74,8 @@
       align-items: center;
       justify-content: center;
       font-weight: bold;
+      cursor: pointer;
+      user-select: none;
     }
 
     main {
@@ -290,6 +296,10 @@
       font-weight: bold;
     }
 
+    /* =========================================================
+       SERVICE MODAL
+    ========================================================= */
+
     .modal-overlay {
       display: none;
       position: fixed;
@@ -360,6 +370,11 @@
       border-color: #16a34a;
     }
 
+    .form-group input[readonly] {
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+
     .primary-btn {
       width: 100%;
       border: none;
@@ -387,6 +402,23 @@
       font-size: 14px;
       cursor: pointer;
       margin-top: 10px;
+    }
+
+    .danger-btn {
+      width: 100%;
+      border: none;
+      background: #dc2626;
+      color: white;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .danger-btn:hover {
+      background: #b91c1c;
     }
 
     .message {
@@ -464,6 +496,262 @@
       margin-bottom: 16px;
     }
 
+    /* =========================================================
+       ACCOUNT PAGE
+    ========================================================= */
+
+    .account-page {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #f5f7fb;
+      z-index: 200;
+      overflow-y: auto;
+      padding-bottom: 30px;
+    }
+
+    .account-page.show {
+      display: block;
+    }
+
+    .account-header {
+      background: #111827;
+      color: white;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    .account-back {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #374151;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .account-header-title {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .account-content {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 25px 18px 40px;
+    }
+
+    .profile-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+      margin-bottom: 18px;
+    }
+
+    .large-profile-circle {
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      background: #16a34a;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+      font-size: 31px;
+      font-weight: bold;
+    }
+
+    .profile-card h2 {
+      font-size: 22px;
+      margin-bottom: 5px;
+    }
+
+    .profile-card p {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .account-balance-card {
+      background: #111827;
+      color: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .account-balance-label {
+      color: #cbd5e1;
+      font-size: 13px;
+    }
+
+    .account-balance-value {
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 6px;
+    }
+
+    .account-section {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .account-section-title {
+      padding: 17px 18px;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .account-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      padding: 16px 18px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .account-row:last-child {
+      border-bottom: none;
+    }
+
+    .account-row-label {
+      color: #6b7280;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .account-row-value {
+      font-size: 14px;
+      font-weight: bold;
+      word-break: break-word;
+    }
+
+    .account-row-icon {
+      font-size: 20px;
+      margin-right: 5px;
+    }
+
+    .account-action {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 17px 18px;
+      background: white;
+      border: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      color: #172033;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .account-action:last-child {
+      border-bottom: none;
+    }
+
+    .account-action:hover {
+      background: #f9fafb;
+    }
+
+    .account-action-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .account-action-arrow {
+      margin-left: auto;
+      color: #9ca3af;
+      font-size: 20px;
+    }
+
+    .account-footer {
+      text-align: center;
+      color: #9ca3af;
+      font-size: 12px;
+      margin-top: 25px;
+    }
+
+    /* =========================================================
+       ACCOUNT MODALS
+    ========================================================= */
+
+    .account-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      overflow-y: auto;
+    }
+
+    .account-modal-overlay.show {
+      display: flex;
+    }
+
+    .account-modal {
+      width: 100%;
+      max-width: 450px;
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .account-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .account-modal-header h2 {
+      font-size: 21px;
+    }
+
+    .account-modal-close {
+      font-size: 25px;
+      color: #6b7280;
+      cursor: pointer;
+    }
+
+    .account-note {
+      color: #6b7280;
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: -8px;
+      margin-bottom: 15px;
+    }
+
     @media (max-width: 700px) {
       .actions {
         grid-template-columns: repeat(2, 1fr);
@@ -472,11 +760,34 @@
       .welcome h1 {
         font-size: 23px;
       }
+
+      .account-row {
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .brand {
+        font-size: 18px;
+      }
+
+      .balance {
+        font-size: 29px;
+      }
+
+      .account-content {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
     }
   </style>
 </head>
 
 <body>
+
+  <!-- =========================================================
+       MAIN DASHBOARD HEADER
+  ========================================================= -->
 
   <header>
 
@@ -494,7 +805,11 @@
         🔔
       </div>
 
-      <div class="profile-circle" id="profileInitial">
+      <div
+        class="profile-circle"
+        id="profileInitial"
+        onclick="openAccount()"
+      >
         U
       </div>
 
@@ -502,6 +817,10 @@
 
   </header>
 
+
+  <!-- =========================================================
+       MAIN DASHBOARD
+  ========================================================= -->
 
   <main>
 
@@ -658,6 +977,10 @@
   </main>
 
 
+  <!-- =========================================================
+       BOTTOM NAVIGATION
+  ========================================================= -->
+
   <div class="bottom-nav">
 
     <div
@@ -698,9 +1021,9 @@
   </div>
 
 
-  <!-- =========================
-       MODAL
-  ========================= -->
+  <!-- =========================================================
+       SERVICE MODAL
+  ========================================================= -->
 
   <div
     class="modal-overlay"
@@ -731,9 +1054,7 @@
       ></div>
 
 
-      <!-- =========================
-           BUY AIRTIME
-      ========================= -->
+      <!-- BUY AIRTIME -->
 
       <div
         id="buyForm"
@@ -808,9 +1129,7 @@
       </div>
 
 
-      <!-- =========================
-           SELL AIRTIME
-      ========================= -->
+      <!-- SELL AIRTIME -->
 
       <div
         id="sellForm"
@@ -894,9 +1213,7 @@
       </div>
 
 
-      <!-- =========================
-           TOP UP
-      ========================= -->
+      <!-- TOP UP -->
 
       <div
         id="topupForm"
@@ -956,9 +1273,7 @@
       </div>
 
 
-      <!-- =========================
-           WITHDRAW
-      ========================= -->
+      <!-- WITHDRAW -->
 
       <div
         id="withdrawForm"
@@ -1017,9 +1332,7 @@
       </div>
 
 
-      <!-- =========================
-           CONFIRMATION
-      ========================= -->
+      <!-- CONFIRMATION -->
 
       <div
         id="confirmation"
@@ -1108,9 +1421,7 @@
       </div>
 
 
-      <!-- =========================
-           RESULT
-      ========================= -->
+      <!-- RESULT -->
 
       <div
         id="resultAction"
@@ -1131,6 +1442,461 @@
         </button>
 
       </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       ACCOUNT PAGE
+  ========================================================= -->
+
+  <div
+    class="account-page"
+    id="accountPage"
+  >
+
+    <div class="account-header">
+
+      <div
+        class="account-back"
+        onclick="closeAccountPage()"
+      >
+        ←
+      </div>
+
+      <div class="account-header-title">
+        My Account
+      </div>
+
+    </div>
+
+
+    <div class="account-content">
+
+      <!-- PROFILE -->
+
+      <div class="profile-card">
+
+        <div
+          class="large-profile-circle"
+          id="accountProfileInitial"
+        >
+          U
+        </div>
+
+        <h2 id="accountProfileName">
+          Customer
+        </h2>
+
+        <p id="accountProfileEmail">
+          Loading...
+        </p>
+
+      </div>
+
+
+      <!-- BALANCE -->
+
+      <div class="account-balance-card">
+
+        <div class="account-balance-label">
+          Available Balance
+        </div>
+
+        <div
+          class="account-balance-value"
+          id="accountBalance"
+        >
+          KES 0.00
+        </div>
+
+      </div>
+
+
+      <!-- PERSONAL INFORMATION -->
+
+      <div class="account-section">
+
+        <div class="account-section-title">
+          Personal Information
+        </div>
+
+
+        <div class="account-row">
+
+          <div>
+
+            <div class="account-row-label">
+              Full Name
+            </div>
+
+            <div
+              class="account-row-value"
+              id="accountFullName"
+            >
+              Not set
+            </div>
+
+          </div>
+
+          <div class="account-row-icon">
+            👤
+          </div>
+
+        </div>
+
+
+        <div class="account-row">
+
+          <div>
+
+            <div class="account-row-label">
+              Phone Number
+            </div>
+
+            <div
+              class="account-row-value"
+              id="accountPhone"
+            >
+              Not set
+            </div>
+
+          </div>
+
+          <div class="account-row-icon">
+            📱
+          </div>
+
+        </div>
+
+
+        <div class="account-row">
+
+          <div>
+
+            <div class="account-row-label">
+              Email
+            </div>
+
+            <div
+              class="account-row-value"
+              id="accountEmail"
+            >
+              Not set
+            </div>
+
+          </div>
+
+          <div class="account-row-icon">
+            ✉️
+          </div>
+
+        </div>
+
+
+        <div class="account-row">
+
+          <div>
+
+            <div class="account-row-label">
+              TomBrian Account ID
+            </div>
+
+            <div
+              class="account-row-value"
+              id="accountId"
+            >
+              Loading...
+            </div>
+
+          </div>
+
+          <div class="account-row-icon">
+            🆔
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ACCOUNT ACTIONS -->
+
+      <div class="account-section">
+
+        <div class="account-section-title">
+          Account Settings
+        </div>
+
+
+        <button
+          class="account-action"
+          onclick="openEditProfile()"
+        >
+
+          <div class="account-action-icon">
+            ✏️
+          </div>
+
+          <span>
+            Edit Profile
+          </span>
+
+          <span class="account-action-arrow">
+            ›
+          </span>
+
+        </button>
+
+
+        <button
+          class="account-action"
+          onclick="openChangePassword()"
+        >
+
+          <div class="account-action-icon">
+            🔒
+          </div>
+
+          <span>
+            Change Password
+          </span>
+
+          <span class="account-action-arrow">
+            ›
+          </span>
+
+        </button>
+
+
+        <button
+          class="account-action"
+          onclick="confirmLogout()"
+        >
+
+          <div
+            class="account-action-icon"
+            style="background:#fef2f2;"
+          >
+            🚪
+          </div>
+
+          <span style="color:#dc2626;">
+            Sign Out
+          </span>
+
+          <span class="account-action-arrow">
+            ›
+          </span>
+
+        </button>
+
+      </div>
+
+
+      <div class="account-footer">
+        TomBrian • Dream • Work • Achieve
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       EDIT PROFILE MODAL
+  ========================================================= -->
+
+  <div
+    class="account-modal-overlay"
+    id="editProfileModal"
+  >
+
+    <div class="account-modal">
+
+      <div class="account-modal-header">
+
+        <h2>
+          Edit Profile
+        </h2>
+
+        <div
+          class="account-modal-close"
+          onclick="closeEditProfile()"
+        >
+          ×
+        </div>
+
+      </div>
+
+
+      <div
+        id="profileMessage"
+        class="message"
+      ></div>
+
+
+      <div class="form-group">
+
+        <label for="editFullName">
+          Full Name
+        </label>
+
+        <input
+          type="text"
+          id="editFullName"
+          placeholder="Enter your full name"
+          maxlength="100"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="editPhone">
+          Phone Number
+        </label>
+
+        <input
+          type="tel"
+          id="editPhone"
+          placeholder="07XXXXXXXX"
+          maxlength="13"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="editEmail">
+          Email
+        </label>
+
+        <input
+          type="email"
+          id="editEmail"
+          readonly
+        >
+
+      </div>
+
+
+      <div class="account-note">
+        Your email is currently displayed as read-only to avoid
+        accidentally changing the email used for your TomBrian login.
+      </div>
+
+
+      <button
+        class="primary-btn"
+        id="saveProfileButton"
+        onclick="saveProfile()"
+      >
+        Save Changes
+      </button>
+
+
+      <button
+        class="secondary-btn"
+        onclick="closeEditProfile()"
+      >
+        Cancel
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       CHANGE PASSWORD MODAL
+  ========================================================= -->
+
+  <div
+    class="account-modal-overlay"
+    id="passwordModal"
+  >
+
+    <div class="account-modal">
+
+      <div class="account-modal-header">
+
+        <h2>
+          Change Password
+        </h2>
+
+        <div
+          class="account-modal-close"
+          onclick="closeChangePassword()"
+        >
+          ×
+        </div>
+
+      </div>
+
+
+      <div
+        id="passwordMessage"
+        class="message"
+      ></div>
+
+
+      <div class="form-group">
+
+        <label for="newPassword">
+          New Password
+        </label>
+
+        <input
+          type="password"
+          id="newPassword"
+          placeholder="Enter new password"
+          minlength="6"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="confirmPassword">
+          Confirm New Password
+        </label>
+
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Confirm new password"
+          minlength="6"
+        >
+
+      </div>
+
+
+      <div class="account-note">
+        Your new password must contain at least 6 characters.
+      </div>
+
+
+      <button
+        class="primary-btn"
+        id="changePasswordButton"
+        onclick="changePassword()"
+      >
+        Update Password
+      </button>
+
+
+      <button
+        class="secondary-btn"
+        onclick="closeChangePassword()"
+      >
+        Cancel
+      </button>
 
     </div>
 
@@ -1253,6 +2019,12 @@
         "Customer";
 
 
+      let phone =
+        currentUser.user_metadata?.phone ||
+        currentUser.phone ||
+        "";
+
+
       const {
         data,
         error
@@ -1277,6 +2049,11 @@
           data.name ||
           name;
 
+
+        phone =
+          data.phone ||
+          phone;
+
       }
 
 
@@ -1292,6 +2069,89 @@
         name
           .charAt(0)
           .toUpperCase();
+
+
+      /* ACCOUNT PAGE */
+
+      const accountName =
+        document.getElementById(
+          "accountProfileName"
+        );
+
+      const accountEmail =
+        document.getElementById(
+          "accountProfileEmail"
+        );
+
+      const accountInitial =
+        document.getElementById(
+          "accountProfileInitial"
+        );
+
+      const accountFullName =
+        document.getElementById(
+          "accountFullName"
+        );
+
+      const accountPhone =
+        document.getElementById(
+          "accountPhone"
+        );
+
+      const accountEmailValue =
+        document.getElementById(
+          "accountEmail"
+        );
+
+      const accountId =
+        document.getElementById(
+          "accountId"
+        );
+
+
+      if (accountName)
+        accountName.textContent =
+          name;
+
+
+      if (accountEmail)
+        accountEmail.textContent =
+          currentUser.email ||
+          "No email set";
+
+
+      if (accountInitial)
+        accountInitial.textContent =
+          name
+            .charAt(0)
+            .toUpperCase();
+
+
+      if (accountFullName)
+        accountFullName.textContent =
+          name || "Not set";
+
+
+      if (accountPhone)
+        accountPhone.textContent =
+          phone || "Not set";
+
+
+      if (accountEmailValue)
+        accountEmailValue.textContent =
+          currentUser.email ||
+          "Not set";
+
+
+      if (accountId)
+        accountId.textContent =
+          currentUser.id;
+
+
+      return {
+        name,
+        phone
+      };
 
     }
 
@@ -1335,6 +2195,9 @@
           "KES 0.00";
 
 
+        updateAccountBalance();
+
+
         return;
 
       }
@@ -1348,6 +2211,9 @@
 
         balanceAmount.textContent =
           "KES 0.00";
+
+
+        updateAccountBalance();
 
 
         return;
@@ -1372,6 +2238,34 @@
       balanceAmount.textContent =
         "KES " +
         currentBalance.toFixed(2);
+
+
+      updateAccountBalance();
+
+    }
+
+
+    /* =========================================================
+       ACCOUNT BALANCE
+    ========================================================= */
+
+    function updateAccountBalance() {
+
+      const accountBalance =
+        document.getElementById(
+          "accountBalance"
+        );
+
+
+      if (accountBalance) {
+
+        accountBalance.textContent =
+          "KES " +
+          Number(
+            currentBalance || 0
+          ).toFixed(2);
+
+      }
 
     }
 
@@ -1770,10 +2664,6 @@
         }
 
 
-        /*
-         * BALANCE CHECK ADDED
-         */
-
         if (
           amount > currentBalance
         ) {
@@ -1918,10 +2808,6 @@
         }
 
 
-        /*
-         * BALANCE CHECK ADDED
-         */
-
         if (
           amount > currentBalance
         ) {
@@ -2033,13 +2919,6 @@
         if (!currentAction) return;
 
 
-        /*
-         * CHECK BALANCE AGAIN BEFORE CONFIRMING
-         *
-         * This protects against the balance changing
-         * after the user first entered the amount.
-         */
-
         if (
           (
             currentAction.action === "buy" ||
@@ -2111,12 +2990,6 @@
 
         const action =
           currentAction.action;
-
-
-        /*
-         * These requests are currently UI-level requests.
-         * Real money or airtime is not moved here.
-         */
 
 
         console.log(
@@ -2429,7 +3302,7 @@
 
 
     /* =========================================================
-       CLOSE MODAL
+       CLOSE SERVICE MODAL
     ========================================================= */
 
     window.closeModal =
@@ -2516,6 +3389,9 @@
     window.goHome =
       function() {
 
+        closeAccountPage();
+
+
         window.scrollTo({
           top: 0,
           behavior: "smooth"
@@ -2530,6 +3406,9 @@
 
     window.showTransactions =
       function() {
+
+        closeAccountPage();
+
 
         document.getElementById(
           "transactionsList"
@@ -2547,6 +3426,9 @@
     window.showCommission =
       function() {
 
+        closeAccountPage();
+
+
         document.getElementById(
           "commissionSection"
         ).scrollIntoView({
@@ -2557,15 +3439,665 @@
 
 
     /* =========================================================
-       ACCOUNT
+       OPEN ACCOUNT
     ========================================================= */
 
     window.openAccount =
       function() {
 
+        if (!currentUser) {
+
+          showMessageBox(
+            "Please wait while your account is loading."
+          );
+
+          return;
+
+        }
+
+
+        closeModal();
+
+
+        updateAccountBalance();
+
+
+        document.getElementById(
+          "accountPage"
+        ).classList.add(
+          "show"
+        );
+
+
+        document.body.classList.add(
+          "no-scroll"
+        );
+
+      };
+
+
+    /* =========================================================
+       CLOSE ACCOUNT
+    ========================================================= */
+
+    window.closeAccountPage =
+      function() {
+
+        document.getElementById(
+          "accountPage"
+        ).classList.remove(
+          "show"
+        );
+
+
+        document.body.classList.remove(
+          "no-scroll"
+        );
+
+      };
+
+
+    /* =========================================================
+       EDIT PROFILE
+    ========================================================= */
+
+    window.openEditProfile =
+      function() {
+
+        if (!currentUser)
+          return;
+
+
+        const name =
+          currentUser.user_metadata?.full_name ||
+          currentUser.user_metadata?.name ||
+          document.getElementById(
+            "accountFullName"
+          ).textContent ||
+          "";
+
+
+        const phone =
+          currentUser.user_metadata?.phone ||
+          currentUser.phone ||
+          document.getElementById(
+            "accountPhone"
+          ).textContent ||
+          "";
+
+
+        document.getElementById(
+          "editFullName"
+        ).value =
+          name === "Not set"
+            ? ""
+            : name;
+
+
+        document.getElementById(
+          "editPhone"
+        ).value =
+          phone === "Not set"
+            ? ""
+            : phone;
+
+
+        document.getElementById(
+          "editEmail"
+        ).value =
+          currentUser.email ||
+          "";
+
+
+        clearProfileMessage();
+
+
+        document.getElementById(
+          "editProfileModal"
+        ).classList.add(
+          "show"
+        );
+
+      };
+
+
+    /* =========================================================
+       CLOSE EDIT PROFILE
+    ========================================================= */
+
+    window.closeEditProfile =
+      function() {
+
+        document.getElementById(
+          "editProfileModal"
+        ).classList.remove(
+          "show"
+        );
+
+
+        clearProfileMessage();
+
+      };
+
+
+    /* =========================================================
+       PROFILE MESSAGE
+    ========================================================= */
+
+    function showProfileMessage(
+      message,
+      type
+    ) {
+
+      const box =
+        document.getElementById(
+          "profileMessage"
+        );
+
+
+      box.textContent =
+        message;
+
+
+      box.className =
+        "message show " +
+        type;
+
+    }
+
+
+    function clearProfileMessage() {
+
+      const box =
+        document.getElementById(
+          "profileMessage"
+        );
+
+
+      box.textContent =
+        "";
+
+
+      box.className =
+        "message";
+
+    }
+
+
+    /* =========================================================
+       SAVE PROFILE
+    ========================================================= */
+
+    window.saveProfile =
+      async function() {
+
+        if (!currentUser) {
+
+          showProfileMessage(
+            "Your session has expired. Please log in again.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        const name =
+          document.getElementById(
+            "editFullName"
+          ).value.trim();
+
+
+        const phone =
+          document.getElementById(
+            "editPhone"
+          ).value.trim();
+
+
+        if (!name) {
+
+          showProfileMessage(
+            "Please enter your full name.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (
+          phone &&
+          !validKenyanPhone(phone)
+        ) {
+
+          showProfileMessage(
+            "Enter a valid Kenyan phone number, for example 0712345678.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        const button =
+          document.getElementById(
+            "saveProfileButton"
+          );
+
+
+        button.disabled =
+          true;
+
+
+        button.textContent =
+          "Saving...";
+
+
+        try {
+
+          /*
+           * Save to Supabase Auth metadata.
+           */
+
+          const {
+            error:
+              authError
+          } =
+            await supabase.auth.updateUser({
+
+              data: {
+                full_name:
+                  name,
+
+                name:
+                  name,
+
+                phone:
+                  phone
+              }
+
+            });
+
+
+          if (authError) {
+
+            throw authError;
+
+          }
+
+
+          /*
+           * Try saving to profiles table.
+           *
+           * First attempt includes phone.
+           */
+
+          let {
+            error:
+              profileError
+          } =
+            await supabase
+              .from("profiles")
+              .update({
+
+                full_name:
+                  name,
+
+                name:
+                  name,
+
+                phone:
+                  phone
+
+              })
+              .eq(
+                "user_id",
+                currentUser.id
+              );
+
+
+          /*
+           * If the profiles table does not contain
+           * a phone column, retry with only the fields
+           * already known to exist.
+           */
+
+          if (
+            profileError
+          ) {
+
+            const retry =
+              await supabase
+                .from("profiles")
+                .update({
+
+                  full_name:
+                    name,
+
+                  name:
+                    name
+
+                })
+                .eq(
+                  "user_id",
+                  currentUser.id
+                );
+
+
+            profileError =
+              retry.error;
+
+          }
+
+
+          /*
+           * Refresh current user.
+           */
+
+          const {
+            data:
+              userData
+          } =
+            await supabase.auth.getUser();
+
+
+          if (
+            userData &&
+            userData.user
+          ) {
+
+            currentUser =
+              userData.user;
+
+          }
+
+
+          await loadProfile();
+
+
+          closeEditProfile();
+
+
+          showMessageBox(
+            "✓ Your profile has been updated successfully."
+          );
+
+        }
+
+        catch (error) {
+
+          console.error(
+            "Profile update error:",
+            error
+          );
+
+
+          showProfileMessage(
+            "Unable to update your profile right now. Please try again.",
+            "error"
+          );
+
+        }
+
+
+        finally {
+
+          button.disabled =
+            false;
+
+
+          button.textContent =
+            "Save Changes";
+
+        }
+
+      };
+
+
+    /* =========================================================
+       CHANGE PASSWORD OPEN
+    ========================================================= */
+
+    window.openChangePassword =
+      function() {
+
+        document.getElementById(
+          "newPassword"
+        ).value =
+          "";
+
+
+        document.getElementById(
+          "confirmPassword"
+        ).value =
+          "";
+
+
+        clearPasswordMessage();
+
+
+        document.getElementById(
+          "passwordModal"
+        ).classList.add(
+          "show"
+        );
+
+      };
+
+
+    /* =========================================================
+       CHANGE PASSWORD CLOSE
+    ========================================================= */
+
+    window.closeChangePassword =
+      function() {
+
+        document.getElementById(
+          "passwordModal"
+        ).classList.remove(
+          "show"
+        );
+
+
+        clearPasswordMessage();
+
+      };
+
+
+    /* =========================================================
+       PASSWORD MESSAGE
+    ========================================================= */
+
+    function showPasswordMessage(
+      message,
+      type
+    ) {
+
+      const box =
+        document.getElementById(
+          "passwordMessage"
+        );
+
+
+      box.textContent =
+        message;
+
+
+      box.className =
+        "message show " +
+        type;
+
+    }
+
+
+    function clearPasswordMessage() {
+
+      const box =
+        document.getElementById(
+          "passwordMessage"
+        );
+
+
+      box.textContent =
+        "";
+
+
+      box.className =
+        "message";
+
+    }
+
+
+    /* =========================================================
+       CHANGE PASSWORD
+    ========================================================= */
+
+    window.changePassword =
+      async function() {
+
+        if (!currentUser) {
+
+          showPasswordMessage(
+            "Your session has expired. Please log in again.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        const newPassword =
+          document.getElementById(
+            "newPassword"
+          ).value;
+
+
+        const confirmPassword =
+          document.getElementById(
+            "confirmPassword"
+          ).value;
+
+
+        clearPasswordMessage();
+
+
+        if (
+          newPassword.length < 6
+        ) {
+
+          showPasswordMessage(
+            "Your new password must contain at least 6 characters.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (
+          newPassword !==
+          confirmPassword
+        ) {
+
+          showPasswordMessage(
+            "The passwords do not match.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        const button =
+          document.getElementById(
+            "changePasswordButton"
+          );
+
+
+        button.disabled =
+          true;
+
+
+        button.textContent =
+          "Updating...";
+
+
+        try {
+
+          const {
+            error
+          } =
+            await supabase.auth.updateUser({
+
+              password:
+                newPassword
+
+            });
+
+
+          if (error) {
+
+            throw error;
+
+          }
+
+
+          closeChangePassword();
+
+
+          showMessageBox(
+            "✓ Your password has been changed successfully."
+          );
+
+        }
+
+        catch (error) {
+
+          console.error(
+            "Password update error:",
+            error
+          );
+
+
+          showPasswordMessage(
+            error.message ||
+            "Unable to change your password. Please try again.",
+            "error"
+          );
+
+        }
+
+
+        finally {
+
+          button.disabled =
+            false;
+
+
+          button.textContent =
+            "Update Password";
+
+        }
+
+      };
+
+
+    /* =========================================================
+       CONFIRM LOGOUT
+    ========================================================= */
+
+    window.confirmLogout =
+      function() {
+
         const confirmed =
           confirm(
-            "Do you want to log out of your TomBrian account?"
+            "Do you want to sign out of your TomBrian account?"
           );
 
 
@@ -2584,7 +4116,20 @@
 
     async function logout() {
 
-      await supabase.auth.signOut();
+      try {
+
+        await supabase.auth.signOut();
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Logout error:",
+          error
+        );
+
+      }
 
 
       window.location.href =
@@ -2597,7 +4142,7 @@
 
 
     /* =========================================================
-       CLOSE MODAL OUTSIDE
+       CLOSE SERVICE MODAL OUTSIDE
     ========================================================= */
 
     document
@@ -2614,6 +4159,52 @@
           ) {
 
             closeModal();
+
+          }
+
+        }
+      );
+
+
+    /* =========================================================
+       CLOSE ACCOUNT MODALS OUTSIDE
+    ========================================================= */
+
+    document
+      .getElementById(
+        "editProfileModal"
+      )
+      .addEventListener(
+        "click",
+        function(event) {
+
+          if (
+            event.target ===
+            this
+          ) {
+
+            closeEditProfile();
+
+          }
+
+        }
+      );
+
+
+    document
+      .getElementById(
+        "passwordModal"
+      )
+      .addEventListener(
+        "click",
+        function(event) {
+
+          if (
+            event.target ===
+            this
+          ) {
+
+            closeChangePassword();
 
           }
 
