@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -47,10 +48,6 @@
     .hidden {
       display: none !important;
     }
-
-    /* =========================
-       HEADER
-    ========================= */
 
     header {
       position: sticky;
@@ -123,10 +120,6 @@
       font-weight: 800;
     }
 
-    /* =========================
-       MAIN
-    ========================= */
-
     main {
       max-width: 1100px;
       margin: 0 auto;
@@ -162,10 +155,6 @@
       color: var(--muted);
       font-size: 14px;
     }
-
-    /* =========================
-       BALANCE
-    ========================= */
 
     .balance-card {
       background: linear-gradient(135deg, #0f172a, #1e293b);
@@ -206,19 +195,11 @@
       font-size: 13px;
     }
 
-    /* =========================
-       SECTIONS
-    ========================= */
-
     .section-title {
       font-size: 20px;
       font-weight: 800;
       margin-bottom: 14px;
     }
-
-    /* =========================
-       QUICK ACTIONS
-    ========================= */
 
     .actions-grid {
       display: grid;
@@ -266,10 +247,6 @@
       font-size: 11px;
     }
 
-    /* =========================
-       COMMISSION
-    ========================= */
-
     .commission-card {
       background: white;
       border: 1px solid var(--border);
@@ -306,10 +283,6 @@
       justify-content: center;
       font-size: 23px;
     }
-
-    /* =========================
-       TRANSACTIONS
-    ========================= */
 
     .transactions-card {
       background: white;
@@ -381,10 +354,6 @@
       margin-top: 20px;
     }
 
-    /* =========================
-       BOTTOM NAV
-    ========================= */
-
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -428,10 +397,6 @@
       font-weight: 800;
     }
 
-    /* =========================
-       FULL PAGE ACCOUNT
-    ========================= */
-
     .page {
       display: none;
       min-height: calc(100vh - 68px);
@@ -463,10 +428,6 @@
     .page-header h2 {
       font-size: 23px;
     }
-
-    /* =========================
-       ACCOUNT
-    ========================= */
 
     .profile-card {
       background: linear-gradient(135deg, #0f172a, #1e293b);
@@ -604,10 +565,6 @@
       padding: 10px 0 30px;
     }
 
-    /* =========================
-       INVITE
-    ========================= */
-
     .invite-hero {
       background: linear-gradient(135deg, #17233d, #0d111c);
       color: white;
@@ -702,10 +659,6 @@
       color: var(--danger);
     }
 
-    /* =========================
-       SETTINGS
-    ========================= */
-
     .setting-row {
       display: flex;
       align-items: center;
@@ -777,10 +730,6 @@
       transform: translateX(21px);
     }
 
-    /* =========================
-       ABOUT
-    ========================= */
-
     .about-card {
       background: white;
       border: 1px solid var(--border);
@@ -848,10 +797,6 @@
       font-size: 12px;
       line-height: 1.5;
     }
-
-    /* =========================
-       MODAL
-    ========================= */
 
     .modal-overlay {
       position: fixed;
@@ -935,10 +880,6 @@
       margin-top: 20px;
     }
 
-    /* =========================
-       MESSAGE
-    ========================= */
-
     .message-box {
       position: fixed;
       top: 80px;
@@ -962,10 +903,6 @@
     .message-box.error {
       background: var(--danger);
     }
-
-    /* =========================
-       RESPONSIVE
-    ========================= */
 
     @media (max-width: 700px) {
       .actions-grid {
@@ -1019,13 +956,10 @@
       }
     }
   </style>
+
 </head>
 
 <body>
-
-  <!-- =========================
-       HEADER
-  ========================== -->
 
   <header>
     <div class="brand">
@@ -1033,933 +967,1053 @@
       <span>TomBrian</span>
     </div>
 
-    <div class="header-actions">
-      <button class="icon-button" onclick="showMessageBox('Notifications are coming soon.')">
-        🔔
-      </button>
+```
+<div class="header-actions">
+  <button
+    class="icon-button"
+    onclick="showMessageBox('Notifications are coming soon.')"
+  >
+    🔔
+  </button>
 
-      <button class="profile-circle" id="headerProfileCircle" onclick="openAccount()">
-        T
-      </button>
-    </div>
+  <button
+    class="profile-circle"
+    id="headerProfileCircle"
+    onclick="openAccount()"
+  >
+    T
+  </button>
+</div>
+```
+
   </header>
 
-
-  <!-- =========================
-       DASHBOARD
-  ========================== -->
+  <!-- DASHBOARD -->
 
   <main id="dashboardPage">
 
-    <div class="connection">
-      <span class="connection-dot"></span>
-      <span id="connectionText">Connected</span>
-    </div>
+```
+<div class="connection">
+  <span class="connection-dot"></span>
+  <span id="connectionText">Connected</span>
+</div>
 
-    <section class="welcome">
-      <h1>Welcome, <span id="customerName">Customer</span> 👋</h1>
-      <p id="customerEmail">Loading account...</p>
-    </section>
+<section class="welcome">
+  <h1>
+    Welcome,
+    <span id="customerName">Customer</span>
+    👋
+  </h1>
 
-    <section class="balance-card">
-      <div class="balance-label">Available Balance</div>
-      <div class="balance-value">
-        KES <span id="balanceValue">0.00</span>
-      </div>
-      <div class="balance-currency">TomBrian Account Balance</div>
-    </section>
+  <p id="customerEmail">
+    Loading account...
+  </p>
+</section>
 
-    <div class="section-title">Quick Actions</div>
+<section class="balance-card">
+  <div class="balance-label">
+    Available Balance
+  </div>
 
-    <section class="actions-grid">
+  <div class="balance-value">
+    KES <span id="balanceValue">0.00</span>
+  </div>
 
-      <button class="action-card" onclick="openService('buy')">
-        <div class="action-icon">📱</div>
-        <h3>Buy Airtime</h3>
-        <p>Purchase airtime</p>
-      </button>
+  <div class="balance-currency">
+    TomBrian Account Balance
+  </div>
+</section>
 
-      <button class="action-card" onclick="openService('sell')">
-        <div class="action-icon">💰</div>
-        <h3>Sell Airtime</h3>
-        <p>Sell your airtime</p>
-      </button>
+<div class="section-title">
+  Quick Actions
+</div>
 
-      <button class="action-card" onclick="openService('topup')">
-        <div class="action-icon">➕</div>
-        <h3>Top Up</h3>
-        <p>Add money</p>
-      </button>
+<section class="actions-grid">
 
-      <button class="action-card" onclick="openService('withdraw')">
-        <div class="action-icon">🏦</div>
-        <h3>Withdraw</h3>
-        <p>Withdraw funds</p>
-      </button>
+  <button class="action-card" onclick="openService('buy')">
+    <div class="action-icon">📱</div>
+    <h3>Buy Airtime</h3>
+    <p>Purchase airtime</p>
+  </button>
 
-    </section>
+  <button class="action-card" onclick="openService('sell')">
+    <div class="action-icon">💰</div>
+    <h3>Sell Airtime</h3>
+    <p>Sell your airtime</p>
+  </button>
 
-    <div class="section-title">Commission</div>
+  <button class="action-card" onclick="openService('topup')">
+    <div class="action-icon">➕</div>
+    <h3>Top Up</h3>
+    <p>Add money</p>
+  </button>
 
-    <section class="commission-card">
-      <div class="commission-row">
-        <div>
-          <div class="commission-label">Available Commission</div>
-          <div class="commission-value">
-            KES <span id="commissionValue">0.00</span>
-          </div>
-        </div>
+  <button class="action-card" onclick="openService('withdraw')">
+    <div class="action-icon">🏦</div>
+    <h3>Withdraw</h3>
+    <p>Withdraw funds</p>
+  </button>
 
-        <div class="commission-icon">🎁</div>
-      </div>
-    </section>
+</section>
 
-    <div class="section-title">Recent Transactions</div>
+<div class="section-title">
+  Commission
+</div>
 
-    <section class="transactions-card" id="transactionsList">
-      <div class="empty-state">
-        No transactions yet.
-      </div>
-    </section>
+<section class="commission-card">
 
-    <div class="notice">
-      <strong>TomBrian Services</strong><br>
-      Live airtime, M-Pesa top-up, withdrawal and transaction processing
-      will be connected to the production services as they are enabled.
-    </div>
+  <div class="commission-row">
 
-  </main>
-
-
-  <!-- =========================
-       ACCOUNT PAGE
-  ========================== -->
-
-  <section class="page" id="accountPage">
-
-    <div class="page-header">
-      <button class="back-button" onclick="closeAccount()">←</button>
-      <h2>Account</h2>
-    </div>
-
-    <div class="profile-card">
-
-      <div class="profile-initial" id="accountProfileInitial">
-        T
+    <div>
+      <div class="commission-label">
+        Available Commission
       </div>
 
-      <div class="profile-info">
-        <h2 id="accountProfileName">Customer</h2>
-        <p id="accountProfileEmail">No email set</p>
-      </div>
-
-    </div>
-
-    <div class="account-balance">
-      <div class="account-balance-label">Available Balance</div>
-      <div class="account-balance-value">
-        KES <span id="accountBalanceValue">0.00</span>
+      <div class="commission-value">
+        KES <span id="commissionValue">0.00</span>
       </div>
     </div>
 
-
-    <!-- PROFILE -->
-
-    <div class="account-section">
-
-      <div class="account-section-title">
-        Profile
-      </div>
-
-      <button class="account-item" onclick="openEditProfile()">
-
-        <div class="account-item-icon">
-          👤
-        </div>
-
-        <div class="account-item-content">
-          <div class="account-item-title">
-            My Profile
-          </div>
-
-          <div class="account-item-subtitle">
-            View and update your personal information
-          </div>
-        </div>
-
-        <div class="chevron">›</div>
-
-      </button>
-
-    </div>
-
-
-    <!-- INVITE -->
-
-    <div class="account-section">
-
-      <div class="account-section-title">
-        Referrals
-      </div>
-
-      <button class="account-item" onclick="openInvitePage()">
-
-        <div class="account-item-icon">
-          👥
-        </div>
-
-        <div class="account-item-content">
-          <div class="account-item-title">
-            Invite Friends
-          </div>
-
-          <div class="account-item-subtitle">
-            Share your TomBrian invite link and grow your network
-          </div>
-        </div>
-
-        <div class="chevron">›</div>
-
-      </button>
-
-    </div>
-
-
-    <!-- SETTINGS -->
-
-    <div class="account-section">
-
-      <div class="account-section-title">
-        Preferences
-      </div>
-
-      <button class="account-item" onclick="openSettingsPage()">
-
-        <div class="account-item-icon">
-          ⚙️
-        </div>
-
-        <div class="account-item-content">
-          <div class="account-item-title">
-            Settings
-          </div>
-
-          <div class="account-item-subtitle">
-            Manage your account and notification preferences
-          </div>
-        </div>
-
-        <div class="chevron">›</div>
-
-      </button>
-
-    </div>
-
-
-    <!-- ABOUT -->
-
-    <div class="account-section">
-
-      <div class="account-section-title">
-        TomBrian
-      </div>
-
-      <button class="account-item" onclick="openAboutPage()">
-
-        <div class="account-item-icon">
-          ℹ️
-        </div>
-
-        <div class="account-item-content">
-          <div class="account-item-title">
-            About TomBrian
-          </div>
-
-          <div class="account-item-subtitle">
-            Learn more about TomBrian
-          </div>
-        </div>
-
-        <div class="chevron">›</div>
-
-      </button>
-
-    </div>
-
-
-    <!-- SECURITY -->
-
-    <div class="account-section">
-
-      <div class="account-section-title">
-        Security
-      </div>
-
-      <button class="account-item" onclick="openPasswordModal()">
-
-        <div class="account-item-icon">
-          🔐
-        </div>
-
-        <div class="account-item-content">
-          <div class="account-item-title">
-            Change Password
-          </div>
-
-          <div class="account-item-subtitle">
-            Update your account password
-          </div>
-        </div>
-
-        <div class="chevron">›</div>
-
-      </button>
-
-
-      <button class="account-item logout-item" onclick="signOut()">
-
-        <div class="account-item-icon">
-          🚪
-        </div>
-
-        <div class="account-item-content">
-          <div class="account-item-title">
-            Sign Out
-          </div>
-
-          <div class="account-item-subtitle">
-            Sign out of your TomBrian account
-          </div>
-        </div>
-
-        <div class="chevron">›</div>
-
-      </button>
-
-    </div>
-
-    <div class="account-footer">
-      TomBrian • Dream • Work • Achieve
-    </div>
-
-  </section>
-
-
-  <!-- =========================
-       INVITE PAGE
-  ========================== -->
-
-  <section class="page" id="invitePage">
-
-    <div class="page-header">
-      <button class="back-button" onclick="backToAccount()">←</button>
-      <h2>Invite Friends</h2>
-    </div>
-
-
-    <div class="invite-hero">
-
-      <div class="invite-hero-icon">
-        👥
-      </div>
-
-      <h3>Invite people to TomBrian</h3>
-
-      <p>
-        Every TomBrian customer has a personal invite link.
-        Share yours with friends and family.
-      </p>
-
-    </div>
-
-
-    <div class="invite-card">
-
-      <div class="field-label">
-        Your referral code
-      </div>
-
-      <div class="referral-code" id="referralCode">
-        Loading...
-      </div>
-
-      <div class="field-label">
-        Your invite link
-      </div>
-
-      <input
-        class="referral-link-box"
-        id="referralLink"
-        type="text"
-        readonly
-        value=""
-      >
-
-      <div class="button-row">
-
-        <button
-          class="secondary-button"
-          onclick="copyReferralLink()"
-        >
-          📋 Copy Invite Link
-        </button>
-
-        <button
-          class="primary-button"
-          onclick="shareReferralLink()"
-        >
-          📤 Share With Friends
-        </button>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- =========================
-       SETTINGS PAGE
-  ========================== -->
-
-  <section class="page" id="settingsPage">
-
-    <div class="page-header">
-      <button class="back-button" onclick="backToAccount()">←</button>
-      <h2>Settings</h2>
-    </div>
-
-
-    <div class="account-section">
-
-      <div class="account-section-title">
-        Notifications
-      </div>
-
-      <div class="setting-row">
-
-        <div class="setting-info">
-
-          <div class="setting-title">
-            Notifications
-          </div>
-
-          <div class="setting-description">
-            Receive general TomBrian notifications
-          </div>
-
-        </div>
-
-        <label class="switch">
-          <input
-            type="checkbox"
-            id="notificationsToggle"
-            onchange="saveSetting('tombrian_notifications', this.checked)"
-          >
-          <span class="slider"></span>
-        </label>
-
-      </div>
-
-
-      <div class="setting-row">
-
-        <div class="setting-info">
-
-          <div class="setting-title">
-            Transaction Alerts
-          </div>
-
-          <div class="setting-description">
-            Receive alerts about account transactions
-          </div>
-
-        </div>
-
-        <label class="switch">
-
-          <input
-            type="checkbox"
-            id="transactionAlertsToggle"
-            onchange="saveSetting('tombrian_transaction_alerts', this.checked)"
-          >
-
-          <span class="slider"></span>
-
-        </label>
-
-      </div>
-
-    </div>
-
-
-    <div class="account-section">
-
-      <div class="account-section-title">
-        Account
-      </div>
-
-      <button class="account-item" onclick="openEditProfile()">
-
-        <div class="account-item-icon">
-          👤
-        </div>
-
-        <div class="account-item-content">
-
-          <div class="account-item-title">
-            Edit Profile
-          </div>
-
-          <div class="account-item-subtitle">
-            Update your name and phone number
-          </div>
-
-        </div>
-
-        <div class="chevron">›</div>
-
-      </button>
-
-
-      <button class="account-item" onclick="openPasswordModal()">
-
-        <div class="account-item-icon">
-          🔐
-        </div>
-
-        <div class="account-item-content">
-
-          <div class="account-item-title">
-            Change Password
-          </div>
-
-          <div class="account-item-subtitle">
-            Update your password
-          </div>
-
-        </div>
-
-        <div class="chevron">›</div>
-
-      </button>
-
-    </div>
-
-  </section>
-
-
-  <!-- =========================
-       ABOUT PAGE
-  ========================== -->
-
-  <section class="page" id="aboutPage">
-
-    <div class="page-header">
-      <button class="back-button" onclick="backToAccount()">←</button>
-      <h2>About TomBrian</h2>
-    </div>
-
-
-    <div class="about-card">
-
-      <div class="about-logo">
-        TB
-      </div>
-
-      <h2>TomBrian</h2>
-
-      <div class="tagline">
-        Dream • Work • Achieve
-      </div>
-
-      <p>
-        TomBrian is a digital platform designed to make everyday
-        account, airtime, money and referral services simple and
-        accessible.
-      </p>
-
-    </div>
-
-
-    <div class="about-info">
-
-      <div class="about-row">
-
-        <strong>Version</strong>
-
-        <span>
-          TomBrian Web 1.0
-        </span>
-
-      </div>
-
-
-      <div class="about-row">
-
-        <strong>Our Goal</strong>
-
-        <span>
-          To provide convenient and reliable digital services
-          for TomBrian customers.
-        </span>
-
-      </div>
-
-
-      <div class="about-row">
-
-        <strong>Services</strong>
-
-        <span>
-          Airtime services, account management, referrals,
-          top-ups and withdrawals.
-        </span>
-
-      </div>
-
-
-      <div class="about-row">
-
-        <strong>Support</strong>
-
-        <span>
-          TomBrian customer support will be available through
-          the supported TomBrian communication channels.
-        </span>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- =========================
-       BOTTOM NAV
-  ========================== -->
-
-  <div class="bottom-nav">
-
-    <div class="nav-inner">
-
-      <button
-        class="nav-button active"
-        id="navHome"
-        onclick="showHome()"
-      >
-        <span>⌂</span>
-        <span>Home</span>
-      </button>
-
-      <button
-        class="nav-button"
-        id="navTransactions"
-        onclick="showTransactions()"
-      >
-        <span>▤</span>
-        <span>Transactions</span>
-      </button>
-
-      <button
-        class="nav-button"
-        id="navCommission"
-        onclick="showCommission()"
-      >
-        <span>◉</span>
-        <span>Commission</span>
-      </button>
-
-      <button
-        class="nav-button"
-        id="navAccount"
-        onclick="openAccount()"
-      >
-        <span>👤</span>
-        <span>Account</span>
-      </button>
-
+    <div class="commission-icon">
+      🎁
     </div>
 
   </div>
 
+</section>
 
-  <!-- =========================
-       SERVICE MODAL
-  ========================== -->
+<div class="section-title">
+  Recent Transactions
+</div>
+
+<section
+  class="transactions-card"
+  id="transactionsList"
+>
+  <div class="empty-state">
+    No transactions yet.
+  </div>
+</section>
+
+<div class="notice">
+  <strong>TomBrian Services</strong><br>
+  Live airtime, M-Pesa top-up, withdrawal and transaction processing
+  will be connected to the production services as they are enabled.
+</div>
+```
+
+  </main>
+
+  <!-- ACCOUNT PAGE -->
+
+  <section class="page" id="accountPage">
+
+```
+<div class="page-header">
+  <button class="back-button" onclick="closeAccount()">
+    ←
+  </button>
+
+  <h2>Account</h2>
+</div>
+
+<div class="profile-card">
+
+  <div
+    class="profile-initial"
+    id="accountProfileInitial"
+  >
+    T
+  </div>
+
+  <div class="profile-info">
+
+    <h2 id="accountProfileName">
+      Customer
+    </h2>
+
+    <p id="accountProfileEmail">
+      No email set
+    </p>
+
+  </div>
+
+</div>
+
+<div class="account-balance">
+
+  <div class="account-balance-label">
+    Available Balance
+  </div>
+
+  <div class="account-balance-value">
+    KES <span id="accountBalanceValue">0.00</span>
+  </div>
+
+</div>
+
+
+<div class="account-section">
+
+  <div class="account-section-title">
+    Profile
+  </div>
+
+  <button
+    class="account-item"
+    onclick="openEditProfile()"
+  >
+
+    <div class="account-item-icon">
+      👤
+    </div>
+
+    <div class="account-item-content">
+
+      <div class="account-item-title">
+        My Profile
+      </div>
+
+      <div class="account-item-subtitle">
+        View and update your personal information
+      </div>
+
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+
+  </button>
+
+</div>
+
+
+<div class="account-section">
+
+  <div class="account-section-title">
+    Referrals
+  </div>
+
+  <button
+    class="account-item"
+    onclick="openInvitePage()"
+  >
+
+    <div class="account-item-icon">
+      👥
+    </div>
+
+    <div class="account-item-content">
+
+      <div class="account-item-title">
+        Invite Friends
+      </div>
+
+      <div class="account-item-subtitle">
+        Share your TomBrian invite link and grow your network
+      </div>
+
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+
+  </button>
+
+</div>
+
+
+<div class="account-section">
+
+  <div class="account-section-title">
+    Preferences
+  </div>
+
+  <button
+    class="account-item"
+    onclick="openSettingsPage()"
+  >
+
+    <div class="account-item-icon">
+      ⚙️
+    </div>
+
+    <div class="account-item-content">
+
+      <div class="account-item-title">
+        Settings
+      </div>
+
+      <div class="account-item-subtitle">
+        Manage your account and notification preferences
+      </div>
+
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+
+  </button>
+
+</div>
+
+
+<div class="account-section">
+
+  <div class="account-section-title">
+    TomBrian
+  </div>
+
+  <button
+    class="account-item"
+    onclick="openAboutPage()"
+  >
+
+    <div class="account-item-icon">
+      ℹ️
+    </div>
+
+    <div class="account-item-content">
+
+      <div class="account-item-title">
+        About TomBrian
+      </div>
+
+      <div class="account-item-subtitle">
+        Learn more about TomBrian
+      </div>
+
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+
+  </button>
+
+</div>
+
+
+<div class="account-section">
+
+  <div class="account-section-title">
+    Security
+  </div>
+
+  <button
+    class="account-item"
+    onclick="openPasswordModal()"
+  >
+
+    <div class="account-item-icon">
+      🔐
+    </div>
+
+    <div class="account-item-content">
+
+      <div class="account-item-title">
+        Change Password
+      </div>
+
+      <div class="account-item-subtitle">
+        Update your account password
+      </div>
+
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+
+  </button>
+
+
+  <button
+    class="account-item logout-item"
+    onclick="signOut()"
+  >
+
+    <div class="account-item-icon">
+      🚪
+    </div>
+
+    <div class="account-item-content">
+
+      <div class="account-item-title">
+        Sign Out
+      </div>
+
+      <div class="account-item-subtitle">
+        Sign out of your TomBrian account
+      </div>
+
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+
+  </button>
+
+</div>
+
+<div class="account-footer">
+  TomBrian • Dream • Work • Achieve
+</div>
+```
+
+  </section>
+
+  <!-- INVITE PAGE -->
+
+  <section class="page" id="invitePage">
+
+```
+<div class="page-header">
+
+  <button
+    class="back-button"
+    onclick="backToAccount()"
+  >
+    ←
+  </button>
+
+  <h2>
+    Invite Friends
+  </h2>
+
+</div>
+
+<div class="invite-hero">
+
+  <div class="invite-hero-icon">
+    👥
+  </div>
+
+  <h3>
+    Invite people to TomBrian
+  </h3>
+
+  <p>
+    Every TomBrian customer has a personal invite link.
+    Share yours with friends and family.
+  </p>
+
+</div>
+
+<div class="invite-card">
+
+  <div class="field-label">
+    Your referral code
+  </div>
+
+  <div
+    class="referral-code"
+    id="referralCode"
+  >
+    Loading...
+  </div>
+
+  <div class="field-label">
+    Your invite link
+  </div>
+
+  <input
+    class="referral-link-box"
+    id="referralLink"
+    type="text"
+    readonly
+    value=""
+  >
+
+  <div class="button-row">
+
+    <button
+      class="secondary-button"
+      onclick="copyReferralLink()"
+    >
+      📋 Copy Invite Link
+    </button>
+
+    <button
+      class="primary-button"
+      onclick="shareReferralLink()"
+    >
+      📤 Share With Friends
+    </button>
+
+  </div>
+
+</div>
+```
+
+  </section>
+
+  <!-- SETTINGS PAGE -->
+
+  <section class="page" id="settingsPage">
+
+```
+<div class="page-header">
+
+  <button
+    class="back-button"
+    onclick="backToAccount()"
+  >
+    ←
+  </button>
+
+  <h2>
+    Settings
+  </h2>
+
+</div>
+
+<div class="account-section">
+
+  <div class="account-section-title">
+    Notifications
+  </div>
+
+  <div class="setting-row">
+
+    <div class="setting-info">
+
+      <div class="setting-title">
+        Notifications
+      </div>
+
+      <div class="setting-description">
+        Receive general TomBrian notifications
+      </div>
+
+    </div>
+
+    <label class="switch">
+
+      <input
+        type="checkbox"
+        id="notificationsToggle"
+        onchange="saveSetting('tombrian_notifications', this.checked)"
+      >
+
+      <span class="slider"></span>
+
+    </label>
+
+  </div>
+
+
+  <div class="setting-row">
+
+    <div class="setting-info">
+
+      <div class="setting-title">
+        Transaction Alerts
+      </div>
+
+      <div class="setting-description">
+        Receive alerts about account transactions
+      </div>
+
+    </div>
+
+    <label class="switch">
+
+      <input
+        type="checkbox"
+        id="transactionAlertsToggle"
+        onchange="saveSetting('tombrian_transaction_alerts', this.checked)"
+      >
+
+      <span class="slider"></span>
+
+    </label>
+
+  </div>
+
+</div>
+
+
+<div class="account-section">
+
+  <div class="account-section-title">
+    Account
+  </div>
+
+  <button
+    class="account-item"
+    onclick="openEditProfile()"
+  >
+
+    <div class="account-item-icon">
+      👤
+    </div>
+
+    <div class="account-item-content">
+
+      <div class="account-item-title">
+        Edit Profile
+      </div>
+
+      <div class="account-item-subtitle">
+        Update your name and phone number
+      </div>
+
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+
+  </button>
+
+
+  <button
+    class="account-item"
+    onclick="openPasswordModal()"
+  >
+
+    <div class="account-item-icon">
+      🔐
+    </div>
+
+    <div class="account-item-content">
+
+      <div class="account-item-title">
+        Change Password
+      </div>
+
+      <div class="account-item-subtitle">
+        Update your password
+      </div>
+
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+
+  </button>
+
+</div>
+```
+
+  </section>
+
+  <!-- ABOUT PAGE -->
+
+  <section class="page" id="aboutPage">
+
+```
+<div class="page-header">
+
+  <button
+    class="back-button"
+    onclick="backToAccount()"
+  >
+    ←
+  </button>
+
+  <h2>
+    About TomBrian
+  </h2>
+
+</div>
+
+<div class="about-card">
+
+  <div class="about-logo">
+    TB
+  </div>
+
+  <h2>
+    TomBrian
+  </h2>
+
+  <div class="tagline">
+    Dream • Work • Achieve
+  </div>
+
+  <p>
+    TomBrian is a digital platform designed to make everyday
+    account, airtime, money and referral services simple and
+    accessible.
+  </p>
+
+</div>
+
+<div class="about-info">
+
+  <div class="about-row">
+
+    <strong>
+      Version
+    </strong>
+
+    <span>
+      TomBrian Web 1.0
+    </span>
+
+  </div>
+
+  <div class="about-row">
+
+    <strong>
+      Our Goal
+    </strong>
+
+    <span>
+      To provide convenient and reliable digital services
+      for TomBrian customers.
+    </span>
+
+  </div>
+
+  <div class="about-row">
+
+    <strong>
+      Services
+    </strong>
+
+    <span>
+      Airtime services, account management, referrals,
+      top-ups and withdrawals.
+    </span>
+
+  </div>
+
+  <div class="about-row">
+
+    <strong>
+      Support
+    </strong>
+
+    <span>
+      TomBrian customer support will be available through
+      the supported TomBrian communication channels.
+    </span>
+
+  </div>
+
+</div>
+```
+
+  </section>
+
+  <!-- BOTTOM NAV -->
+
+  <div class="bottom-nav">
+
+```
+<div class="nav-inner">
+
+  <button
+    class="nav-button active"
+    id="navHome"
+    onclick="showHome()"
+  >
+    <span>⌂</span>
+    <span>Home</span>
+  </button>
+
+  <button
+    class="nav-button"
+    id="navTransactions"
+    onclick="showTransactions()"
+  >
+    <span>▤</span>
+    <span>Transactions</span>
+  </button>
+
+  <button
+    class="nav-button"
+    id="navCommission"
+    onclick="showCommission()"
+  >
+    <span>◉</span>
+    <span>Commission</span>
+  </button>
+
+  <button
+    class="nav-button"
+    id="navAccount"
+    onclick="openAccount()"
+  >
+    <span>👤</span>
+    <span>Account</span>
+  </button>
+
+</div>
+```
+
+  </div>
+
+  <!-- SERVICE MODAL -->
 
   <div
     class="modal-overlay hidden"
     id="serviceModal"
   >
 
-    <div class="modal">
+```
+<div class="modal">
 
-      <div class="modal-header">
+  <div class="modal-header">
 
-        <h2 id="serviceTitle">
-          Service
-        </h2>
+    <h2 id="serviceTitle">
+      Service
+    </h2>
 
-        <button
-          class="close-button"
-          onclick="closeService()"
-        >
-          ×
-        </button>
+    <button
+      class="close-button"
+      onclick="closeService()"
+    >
+      ×
+    </button>
 
-      </div>
+  </div>
 
+  <div>
 
-      <div id="serviceFormArea">
+    <div class="form-group">
 
-        <div class="form-group">
+      <label for="servicePhone">
+        Phone Number
+      </label>
 
-          <label for="servicePhone">
-            Phone Number
-          </label>
+      <input
+        class="form-input"
+        id="servicePhone"
+        type="tel"
+        placeholder="07XXXXXXXX"
+      >
 
-          <input
-            class="form-input"
-            id="servicePhone"
-            type="tel"
-            placeholder="07XXXXXXXX"
-          >
+    </div>
 
-        </div>
+    <div class="form-group">
 
+      <label for="serviceAmount">
+        Amount (KES)
+      </label>
 
-        <div class="form-group">
+      <input
+        class="form-input"
+        id="serviceAmount"
+        type="number"
+        min="1"
+        placeholder="Enter amount"
+      >
 
-          <label for="serviceAmount">
-            Amount (KES)
-          </label>
+    </div>
 
-          <input
-            class="form-input"
-            id="serviceAmount"
-            type="number"
-            min="1"
-            placeholder="Enter amount"
-          >
+    <div class="modal-actions">
 
-        </div>
+      <button
+        class="secondary-button"
+        onclick="closeService()"
+      >
+        Cancel
+      </button>
 
-
-        <div class="modal-actions">
-
-          <button
-            class="secondary-button"
-            onclick="closeService()"
-          >
-            Cancel
-          </button>
-
-          <button
-            class="primary-button"
-            onclick="submitService()"
-          >
-            Continue
-          </button>
-
-        </div>
-
-      </div>
+      <button
+        class="primary-button"
+        onclick="submitService()"
+      >
+        Continue
+      </button>
 
     </div>
 
   </div>
 
+</div>
+```
 
-  <!-- =========================
-       EDIT PROFILE MODAL
-  ========================== -->
+  </div>
+
+  <!-- EDIT PROFILE MODAL -->
 
   <div
     class="modal-overlay hidden"
     id="editProfileModal"
   >
 
-    <div class="modal">
+```
+<div class="modal">
 
-      <div class="modal-header">
+  <div class="modal-header">
 
-        <h2>Edit Profile</h2>
+    <h2>
+      Edit Profile
+    </h2>
 
-        <button
-          class="close-button"
-          onclick="closeEditProfile()"
-        >
-          ×
-        </button>
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="editFullName">
-          Full Name
-        </label>
-
-        <input
-          class="form-input"
-          id="editFullName"
-          type="text"
-          placeholder="Your full name"
-        >
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="editPhone">
-          Phone Number
-        </label>
-
-        <input
-          class="form-input"
-          id="editPhone"
-          type="tel"
-          placeholder="07XXXXXXXX"
-        >
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="editEmail">
-          Email
-        </label>
-
-        <input
-          class="form-input"
-          id="editEmail"
-          type="email"
-          readonly
-        >
-
-      </div>
-
-
-      <div class="modal-actions">
-
-        <button
-          class="secondary-button"
-          onclick="closeEditProfile()"
-        >
-          Cancel
-        </button>
-
-        <button
-          class="primary-button"
-          onclick="saveProfile()"
-        >
-          Save Changes
-        </button>
-
-      </div>
-
-    </div>
+    <button
+      class="close-button"
+      onclick="closeEditProfile()"
+    >
+      ×
+    </button>
 
   </div>
 
+  <div class="form-group">
 
-  <!-- =========================
-       PASSWORD MODAL
-  ========================== -->
+    <label for="editFullName">
+      Full Name
+    </label>
+
+    <input
+      class="form-input"
+      id="editFullName"
+      type="text"
+      placeholder="Your full name"
+    >
+
+  </div>
+
+  <div class="form-group">
+
+    <label for="editPhone">
+      Phone Number
+    </label>
+
+    <input
+      class="form-input"
+      id="editPhone"
+      type="tel"
+      placeholder="07XXXXXXXX"
+    >
+
+  </div>
+
+  <div class="form-group">
+
+    <label for="editEmail">
+      Email
+    </label>
+
+    <input
+      class="form-input"
+      id="editEmail"
+      type="email"
+      readonly
+    >
+
+  </div>
+
+  <div class="modal-actions">
+
+    <button
+      class="secondary-button"
+      onclick="closeEditProfile()"
+    >
+      Cancel
+    </button>
+
+    <button
+      class="primary-button"
+      onclick="saveProfile()"
+    >
+      Save Changes
+    </button>
+
+  </div>
+
+</div>
+```
+
+  </div>
+
+  <!-- PASSWORD MODAL -->
 
   <div
     class="modal-overlay hidden"
     id="passwordModal"
   >
 
-    <div class="modal">
+```
+<div class="modal">
 
-      <div class="modal-header">
+  <div class="modal-header">
 
-        <h2>Change Password</h2>
+    <h2>
+      Change Password
+    </h2>
 
-        <button
-          class="close-button"
-          onclick="closePasswordModal()"
-        >
-          ×
-        </button>
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="newPassword">
-          New Password
-        </label>
-
-        <input
-          class="form-input"
-          id="newPassword"
-          type="password"
-          placeholder="At least 6 characters"
-        >
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="confirmPassword">
-          Confirm Password
-        </label>
-
-        <input
-          class="form-input"
-          id="confirmPassword"
-          type="password"
-          placeholder="Repeat password"
-        >
-
-      </div>
-
-
-      <div class="modal-actions">
-
-        <button
-          class="secondary-button"
-          onclick="closePasswordModal()"
-        >
-          Cancel
-        </button>
-
-        <button
-          class="primary-button"
-          onclick="changePassword()"
-        >
-          Update Password
-        </button>
-
-      </div>
-
-    </div>
+    <button
+      class="close-button"
+      onclick="closePasswordModal()"
+    >
+      ×
+    </button>
 
   </div>
 
+  <div class="form-group">
 
-  <!-- =========================
-       MESSAGE
-  ========================== -->
+    <label for="newPassword">
+      New Password
+    </label>
+
+    <input
+      class="form-input"
+      id="newPassword"
+      type="password"
+      placeholder="At least 6 characters"
+    >
+
+  </div>
+
+  <div class="form-group">
+
+    <label for="confirmPassword">
+      Confirm Password
+    </label>
+
+    <input
+      class="form-input"
+      id="confirmPassword"
+      type="password"
+      placeholder="Repeat password"
+    >
+
+  </div>
+
+  <div class="modal-actions">
+
+    <button
+      class="secondary-button"
+      onclick="closePasswordModal()"
+    >
+      Cancel
+    </button>
+
+    <button
+      class="primary-button"
+      onclick="changePassword()"
+    >
+      Update Password
+    </button>
+
+  </div>
+
+</div>
+```
+
+  </div>
+
+  <!-- MESSAGE -->
 
   <div
     class="message-box hidden"
     id="messageBox"
   ></div>
 
-
-  <!-- =========================
-       SUPABASE + JAVASCRIPT
-  ========================== -->
+  <!-- SUPABASE + JAVASCRIPT -->
 
   <script type="module">
 
@@ -1990,46 +2044,28 @@
     ========================================================= */
 
     let currentUser = null;
-
     let currentProfile = null;
-
     let currentProfilePhone = "";
-
     let currentBalance = 0;
-
     let currentCommission = 0;
-
-    /*
-      IMPORTANT:
-      The App stores the permanent customer referral code
-      in profiles.referral_code.
-
-      We keep this separate from the Supabase user ID.
-      This prevents the website from displaying a different
-      referral code from the App.
-    */
     let currentReferralCode = "";
-
-
     let currentAction = null;
 
 
     /* =========================================================
-       ELEMENT HELPERS
+       ELEMENT HELPER
     ========================================================= */
 
-    const $ = (id) =>
-      document.getElementById(id);
+    function $(id) {
+      return document.getElementById(id);
+    }
 
 
     /* =========================================================
        MESSAGE
     ========================================================= */
 
-    window.showMessageBox = function(
-      message,
-      type = ""
-    ) {
+    window.showMessageBox = function(message, type = "") {
 
       const box = $("messageBox");
 
@@ -2043,42 +2079,38 @@
 
       box.classList.remove("hidden");
 
-      clearTimeout(
-        window.__messageTimer
-      );
+      clearTimeout(window.__messageTimer);
 
       window.__messageTimer =
-        setTimeout(
-          () => {
-            box.classList.add("hidden");
-          },
-          3500
-        );
+        setTimeout(function() {
+          box.classList.add("hidden");
+        }, 3500);
     };
 
 
     /* =========================================================
-       AUTH
+       AUTH SESSION
     ========================================================= */
 
     async function getCurrentSession() {
 
-      const {
-        data,
-        error
-      } =
+      const result =
         await supabase.auth.getSession();
 
-      if (error) {
+      if (result.error) {
         console.error(
           "Session error:",
-          error
+          result.error
         );
       }
 
-      return data?.session || null;
+      return result.data?.session || null;
     }
 
+
+    /* =========================================================
+       INITIALIZE
+    ========================================================= */
 
     async function initialize() {
 
@@ -2098,15 +2130,42 @@
         currentUser =
           session.user;
 
+
+        /*
+         * IMPORTANT:
+         * Load the profile first.
+         *
+         * Balance, commission and transactions
+         * are loaded separately so they cannot
+         * block the Account page.
+         */
+
         await loadProfile();
 
-        await loadBalance();
 
-        await loadTransactions();
-
-        loadSettings();
+        /*
+         * Generate the referral information
+         * after the profile has been loaded.
+         */
 
         generateReferralInfo();
+
+
+        /*
+         * These are intentionally NOT awaited.
+         * If one database table is unavailable,
+         * the Account page still works.
+         */
+
+        loadBalance();
+        loadCommission();
+        loadTransactions();
+        loadSettings();
+
+
+        $("connectionText").textContent =
+          "Connected";
+
 
       } catch (error) {
 
@@ -2116,22 +2175,21 @@
         );
 
         showMessageBox(
-          "Could not load your dashboard.",
+          "Could not load your account.",
           "error"
         );
       }
     }
 
 
-    supabase.auth.onAuthStateChange(
-      async (
-        event,
-        session
-      ) => {
+    /* =========================================================
+       AUTH STATE
+    ========================================================= */
 
-        if (
-          event === "SIGNED_OUT"
-        ) {
+    supabase.auth.onAuthStateChange(
+      function(event, session) {
+
+        if (event === "SIGNED_OUT") {
 
           window.location.href =
             "login.html";
@@ -2147,13 +2205,21 @@
           currentUser =
             session.user;
 
-          await loadProfile();
+          /*
+           * Do not block the auth callback.
+           */
 
-          await loadBalance();
+          setTimeout(async function() {
 
-          await loadTransactions();
+            await loadProfile();
 
-          generateReferralInfo();
+            generateReferralInfo();
+
+            loadBalance();
+            loadCommission();
+            loadTransactions();
+
+          }, 0);
         }
       }
     );
@@ -2181,12 +2247,12 @@
 
 
       /*
-        First get referral code from Auth metadata if present.
-        This is only a starting value.
-
-        The profiles table is checked next because the App
-        uses profiles.referral_code as the permanent code.
-      */
+       * Auth metadata is only a fallback.
+       *
+       * The permanent referral code is read
+       * from profiles.referral_code, exactly
+       * like the TomBrian App.
+       */
 
       let referralCode =
         currentUser.user_metadata?.referral_code ||
@@ -2197,10 +2263,7 @@
 
       try {
 
-        const {
-          data,
-          error
-        } =
+        const result =
           await supabase
             .from("profiles")
             .select("*")
@@ -2209,43 +2272,49 @@
 
 
         if (
-          !error &&
-          data
+          !result.error &&
+          result.data
         ) {
 
           currentProfile =
-            data;
+            result.data;
 
 
           name =
-            data.full_name ||
-            data.name ||
+            result.data.full_name ||
+            result.data.name ||
             name;
 
 
           phone =
-            data.phone ||
+            result.data.phone ||
             phone;
 
 
           /*
-            THIS IS THE IMPORTANT FIX.
-
-            The App's ReferralService reads:
-              profiles.referral_code
-
-            So the website now does exactly the same.
-          */
+           * IMPORTANT:
+           *
+           * This is the same permanent referral
+           * code used by the App.
+           */
 
           referralCode =
-            data.referral_code ||
-            data.referralCode ||
+            result.data.referral_code ||
+            result.data.referralCode ||
             referralCode;
+        }
+
+        else if (result.error) {
+
+          console.warn(
+            "Profile query:",
+            result.error
+          );
         }
 
       } catch (error) {
 
-        console.error(
+        console.warn(
           "Profile query error:",
           error
         );
@@ -2253,90 +2322,140 @@
 
 
       currentProfilePhone =
-        phone;
+        String(phone || "").trim();
 
-
-      /*
-        Store the exact existing referral code.
-
-        Do NOT create a new code from user.id here.
-      */
 
       currentReferralCode =
         String(
           referralCode || ""
-        ).trim().toUpperCase();
+        )
+        .trim()
+        .toUpperCase();
 
 
-      $("customerName").textContent =
-        name;
+      /*
+       * Update dashboard name.
+       */
+
+      const customerName =
+        $("customerName");
+
+      if (customerName) {
+        customerName.textContent =
+          name;
+      }
 
 
-      $("customerEmail").textContent =
-        currentUser.email || "";
+      /*
+       * Update dashboard email.
+       */
+
+      const customerEmail =
+        $("customerEmail");
+
+      if (customerEmail) {
+        customerEmail.textContent =
+          currentUser.email ||
+          "Signed in";
+      }
 
 
-      $("accountProfileName").textContent =
-        name;
+      /*
+       * Update Account name.
+       */
+
+      const accountName =
+        $("accountProfileName");
+
+      if (accountName) {
+        accountName.textContent =
+          name;
+      }
 
 
-      $("accountProfileEmail").textContent =
-        currentUser.email ||
-        "No email set";
+      /*
+       * Update Account email.
+       */
+
+      const accountEmail =
+        $("accountProfileEmail");
+
+      if (accountEmail) {
+        accountEmail.textContent =
+          currentUser.email ||
+          "No email set";
+      }
 
 
-      $("accountPhone")?.textContent =
-        phone || "Not set";
-
-
-      $("accountEmail")?.textContent =
-        currentUser.email ||
-        "Not set";
-
-
-      $("accountId")?.textContent =
-        currentUser.id;
-
+      /*
+       * Calculate initial.
+       */
 
       const initial =
-        name
+        String(name || "T")
           .trim()
           .charAt(0)
-          .toUpperCase() ||
-        "T";
+          .toUpperCase() || "T";
 
 
-      $("profileInitial")?.textContent =
-        initial;
+      /*
+       * Account initial.
+       */
+
+      const accountInitial =
+        $("accountProfileInitial");
+
+      if (accountInitial) {
+        accountInitial.textContent =
+          initial;
+      }
 
 
-      $("accountProfileInitial").textContent =
-        initial;
+      /*
+       * Header initial.
+       */
+
+      const headerInitial =
+        $("headerProfileCircle");
+
+      if (headerInitial) {
+        headerInitial.textContent =
+          initial;
+      }
 
 
-      $("headerProfileCircle").textContent =
-        initial;
+      /*
+       * Update service phone.
+       */
+
+      const servicePhone =
+        $("servicePhone");
+
+      if (
+        servicePhone &&
+        currentProfilePhone
+      ) {
+        servicePhone.value =
+          currentProfilePhone;
+      }
     }
 
 
     /* =========================================================
-       REFERRAL CODE
+       REFERRAL
     ========================================================= */
 
     function getReferralCode() {
 
       /*
-        IMPORTANT:
-        Never fall back to currentUser.id.
+       * NEVER generate a referral code from
+       * the Supabase user ID.
+       *
+       * The website must use the same permanent
+       * profiles.referral_code as the App.
+       */
 
-        The App's permanent referral code is:
-          profiles.referral_code
-      */
-
-      return (
-        currentReferralCode ||
-        ""
-      );
+      return currentReferralCode || "";
     }
 
 
@@ -2346,10 +2465,8 @@
         const code =
           getReferralCode();
 
-
         const codeElement =
           $("referralCode");
-
 
         const linkElement =
           $("referralLink");
@@ -2371,16 +2488,16 @@
 
 
         /*
-          EXACT WEBSITE INVITE FORMAT:
-
-          https://tombrian.co.ke/signup.html?ref=ABC123
-        */
+         * NORMAL WEB REFERRAL LINK
+         *
+         * Example:
+         * https://tombrian.co.ke/signup.html?ref=ABC123
+         */
 
         const link =
           new URL(
             "https://tombrian.co.ke/signup.html"
           );
-
 
         link.searchParams.set(
           "ref",
@@ -2413,7 +2530,6 @@
         const input =
           $("referralLink");
 
-
         const link =
           input?.value || "";
 
@@ -2442,34 +2558,31 @@
 
         } catch (error) {
 
-          /*
-            Clipboard fallback
-          */
+          if (input) {
 
-          input.select();
-
-          input.setSelectionRange(
-            0,
-            99999
-          );
-
-          try {
-
-            document.execCommand(
-              "copy"
+            input.focus();
+            input.select();
+            input.setSelectionRange(
+              0,
+              99999
             );
 
-            showMessageBox(
-              "Invite link copied.",
-              "success"
-            );
+            try {
 
-          } catch (copyError) {
+              document.execCommand("copy");
 
-            showMessageBox(
-              "Please copy the link manually.",
-              "error"
-            );
+              showMessageBox(
+                "Invite link copied.",
+                "success"
+              );
+
+            } catch (copyError) {
+
+              showMessageBox(
+                "Please copy the link manually.",
+                "error"
+              );
+            }
           }
         }
       };
@@ -2482,10 +2595,11 @@
     window.shareReferralLink =
       async function() {
 
-        const link =
-          $("referralLink")?.value ||
-          "";
+        const input =
+          $("referralLink");
 
+        const link =
+          input?.value || "";
 
         const code =
           getReferralCode();
@@ -2517,9 +2631,7 @@
 
         try {
 
-          if (
-            navigator.share
-          ) {
+          if (navigator.share) {
 
             await navigator.share(
               shareData
@@ -2530,25 +2642,18 @@
 
         } catch (error) {
 
-          /*
-            User cancelling Share should not be
-            treated as an application error.
-          */
-
           if (
             error?.name ===
             "AbortError"
           ) {
-
             return;
           }
         }
 
 
         /*
-          Fallback:
-          Open WhatsApp with the invite link.
-        */
+         * WhatsApp fallback.
+         */
 
         const message =
           encodeURIComponent(
@@ -2557,13 +2662,8 @@
           );
 
 
-        const whatsappUrl =
-          "https://wa.me/?text=" +
-          message;
-
-
         window.open(
-          whatsappUrl,
+          "https://wa.me/?text=" + message,
           "_blank"
         );
       };
@@ -2578,21 +2678,9 @@
       if (!currentUser) return;
 
 
-      currentBalance = 0;
-
-
-      /*
-        Try common balance table structures.
-        If the table is not yet connected, the dashboard
-        safely remains at KES 0.00.
-      */
-
       try {
 
-        const {
-          data,
-          error
-        } =
+        const result =
           await supabase
             .from("profiles")
             .select("balance")
@@ -2601,15 +2689,13 @@
 
 
         if (
-          !error &&
-          data &&
-          data.balance != null
+          !result.error &&
+          result.data &&
+          result.data.balance != null
         ) {
 
           currentBalance =
-            Number(
-              data.balance
-            ) || 0;
+            Number(result.data.balance) || 0;
         }
 
       } catch (error) {
@@ -2633,12 +2719,22 @@
         ).toFixed(2);
 
 
-      $("balanceValue").textContent =
-        value;
+      const balance =
+        $("balanceValue");
+
+      if (balance) {
+        balance.textContent =
+          value;
+      }
 
 
-      $("accountBalanceValue").textContent =
-        value;
+      const accountBalance =
+        $("accountBalanceValue");
+
+      if (accountBalance) {
+        accountBalance.textContent =
+          value;
+      }
     }
 
 
@@ -2651,15 +2747,9 @@
       if (!currentUser) return;
 
 
-      currentCommission = 0;
-
-
       try {
 
-        const {
-          data,
-          error
-        } =
+        const result =
           await supabase
             .from("profiles")
             .select("commission")
@@ -2668,14 +2758,14 @@
 
 
         if (
-          !error &&
-          data &&
-          data.commission != null
+          !result.error &&
+          result.data &&
+          result.data.commission != null
         ) {
 
           currentCommission =
             Number(
-              data.commission
+              result.data.commission
             ) || 0;
         }
 
@@ -2688,8 +2778,14 @@
       }
 
 
-      $("commissionValue").textContent =
-        currentCommission.toFixed(2);
+      const commission =
+        $("commissionValue");
+
+      if (commission) {
+
+        commission.textContent =
+          currentCommission.toFixed(2);
+      }
     }
 
 
@@ -2702,14 +2798,11 @@
       const list =
         $("transactionsList");
 
-
       if (!list) return;
 
 
       list.innerHTML =
-        `<div class="empty-state">
-          No transactions yet.
-        </div>`;
+        '<div class="empty-state">No transactions yet.</div>';
 
 
       if (!currentUser) return;
@@ -2717,10 +2810,7 @@
 
       try {
 
-        const {
-          data,
-          error
-        } =
+        const result =
           await supabase
             .from("transactions")
             .select("*")
@@ -2734,22 +2824,25 @@
             .limit(10);
 
 
-        if (error) {
+        if (result.error) {
 
           console.warn(
             "Transactions:",
-            error
+            result.error
           );
 
           return;
         }
 
 
+        const data =
+          result.data;
+
+
         if (
           !data ||
           data.length === 0
         ) {
-
           return;
         }
 
@@ -2757,67 +2850,64 @@
         list.innerHTML = "";
 
 
-        data.forEach(
-          transaction => {
+        data.forEach(function(transaction) {
 
-            const row =
-              document.createElement(
-                "div"
-              );
+          const row =
+            document.createElement("div");
 
-
-            row.className =
-              "transaction";
+          row.className =
+            "transaction";
 
 
-            const type =
-              transaction.transaction_type ||
-              transaction.type ||
-              "Transaction";
+          const type =
+            transaction.transaction_type ||
+            transaction.type ||
+            "Transaction";
 
 
-            const amount =
-              Number(
-                transaction.amount || 0
-              ).toFixed(2);
+          const amount =
+            Number(
+              transaction.amount || 0
+            ).toFixed(2);
 
 
-            const date =
-              formatDate(
-                transaction.created_at
-              );
-
-
-            row.innerHTML = `
-              <div class="transaction-left">
-
-                <div class="transaction-icon">
-                  🧾
-                </div>
-
-                <div>
-                  <div class="transaction-name">
-                    ${escapeHtml(type)}
-                  </div>
-
-                  <div class="transaction-date">
-                    ${escapeHtml(date)}
-                  </div>
-                </div>
-
-              </div>
-
-              <div class="transaction-amount">
-                KES ${amount}
-              </div>
-            `;
-
-
-            list.appendChild(
-              row
+          const date =
+            formatDate(
+              transaction.created_at
             );
-          }
-        );
+
+
+          row.innerHTML = `
+            <div class="transaction-left">
+
+              <div class="transaction-icon">
+                🧾
+              </div>
+
+              <div>
+
+                <div class="transaction-name">
+                  ${escapeHtml(type)}
+                </div>
+
+                <div class="transaction-date">
+                  ${escapeHtml(date)}
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="transaction-amount">
+              KES ${amount}
+            </div>
+          `;
+
+
+          list.appendChild(row);
+
+        });
+
 
       } catch (error) {
 
@@ -2838,50 +2928,30 @@
 
       try {
 
-        return new Date(
-          value
-        ).toLocaleString(
-          "en-KE",
-          {
-            dateStyle: "medium",
-            timeStyle: "short"
-          }
-        );
+        return new Date(value)
+          .toLocaleString(
+            "en-KE",
+            {
+              dateStyle: "medium",
+              timeStyle: "short"
+            }
+          );
 
-      } catch {
+      } catch (error) {
 
-        return String(
-          value
-        );
+        return String(value);
       }
     }
 
 
     function escapeHtml(value) {
 
-      return String(
-        value ?? ""
-      )
-        .replaceAll(
-          "&",
-          "&amp;"
-        )
-        .replaceAll(
-          "<",
-          "&lt;"
-        )
-        .replaceAll(
-          ">",
-          "&gt;"
-        )
-        .replaceAll(
-          '"',
-          "&quot;"
-        )
-        .replaceAll(
-          "'",
-          "&#039;"
-        );
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
 
@@ -2893,36 +2963,32 @@
       function() {
 
         $("dashboardPage")
-          .classList.add(
-            "hidden"
-          );
+          .classList.add("hidden");
 
 
         document
-          .querySelectorAll(
-            ".page"
-          )
-          .forEach(
-            page =>
-              page.classList.remove(
-                "active"
-              )
-          );
+          .querySelectorAll(".page")
+          .forEach(function(page) {
+
+            page.classList.remove("active");
+
+          });
 
 
         $("accountPage")
-          .classList.add(
-            "active"
-          );
+          .classList.add("active");
 
 
-        setActiveNav(
-          "navAccount"
-        );
+        setActiveNav("navAccount");
 
 
+        /*
+         * Refresh account information.
+         */
+
+        loadProfile();
+        loadBalance();
         loadCommission();
-
         generateReferralInfo();
       };
 
@@ -2931,32 +2997,23 @@
       function() {
 
         $("accountPage")
-          .classList.remove(
-            "active"
-          );
+          .classList.remove("active");
 
 
         $("dashboardPage")
-          .classList.remove(
-            "hidden"
-          );
+          .classList.remove("hidden");
 
 
         document
-          .querySelectorAll(
-            ".page"
-          )
-          .forEach(
-            page =>
-              page.classList.remove(
-                "active"
-              )
-          );
+          .querySelectorAll(".page")
+          .forEach(function(page) {
+
+            page.classList.remove("active");
+
+          });
 
 
-        setActiveNav(
-          "navHome"
-        );
+        setActiveNav("navHome");
       };
 
 
@@ -2964,32 +3021,25 @@
       function() {
 
         document
-          .querySelectorAll(
-            ".page"
-          )
-          .forEach(
-            page =>
-              page.classList.remove(
-                "active"
-              )
-          );
+          .querySelectorAll(".page")
+          .forEach(function(page) {
+
+            page.classList.remove("active");
+
+          });
 
 
         $("accountPage")
-          .classList.add(
-            "active"
-          );
+          .classList.add("active");
 
 
         $("dashboardPage")
-          .classList.add(
-            "hidden"
-          );
+          .classList.add("hidden");
 
 
-        setActiveNav(
-          "navAccount"
-        );
+        setActiveNav("navAccount");
+
+        generateReferralInfo();
       };
 
 
@@ -3001,112 +3051,89 @@
       function() {
 
         $("dashboardPage")
-          .classList.add(
-            "hidden"
-          );
+          .classList.add("hidden");
 
 
         document
-          .querySelectorAll(
-            ".page"
-          )
-          .forEach(
-            page =>
-              page.classList.remove(
-                "active"
-              )
-          );
+          .querySelectorAll(".page")
+          .forEach(function(page) {
+
+            page.classList.remove("active");
+
+          });
 
 
         $("invitePage")
-          .classList.add(
-            "active"
-          );
+          .classList.add("active");
 
 
-        setActiveNav(
-          "navAccount"
-        );
+        setActiveNav("navAccount");
 
+
+        /*
+         * Make sure latest profile referral code
+         * is shown.
+         */
 
         generateReferralInfo();
       };
 
 
     /* =========================================================
-       SETTINGS PAGE
+       SETTINGS
     ========================================================= */
 
     window.openSettingsPage =
       function() {
 
         $("dashboardPage")
-          .classList.add(
-            "hidden"
-          );
+          .classList.add("hidden");
 
 
         document
-          .querySelectorAll(
-            ".page"
-          )
-          .forEach(
-            page =>
-              page.classList.remove(
-                "active"
-              )
-          );
+          .querySelectorAll(".page")
+          .forEach(function(page) {
+
+            page.classList.remove("active");
+
+          });
 
 
         $("settingsPage")
-          .classList.add(
-            "active"
-          );
+          .classList.add("active");
 
 
-        setActiveNav(
-          "navAccount"
-        );
-
+        setActiveNav("navAccount");
 
         loadSettings();
       };
 
 
     /* =========================================================
-       ABOUT PAGE
+       ABOUT
     ========================================================= */
 
     window.openAboutPage =
       function() {
 
         $("dashboardPage")
-          .classList.add(
-            "hidden"
-          );
+          .classList.add("hidden");
 
 
         document
-          .querySelectorAll(
-            ".page"
-          )
-          .forEach(
-            page =>
-              page.classList.remove(
-                "active"
-              )
-          );
+          .querySelectorAll(".page")
+          .forEach(function(page) {
+
+            page.classList.remove("active");
+
+          });
 
 
         $("aboutPage")
-          .classList.add(
-            "active"
-          );
+          .classList.add("active");
 
 
-        setActiveNav(
-          "navAccount"
-        );
+        setActiveNav("navAccount");
       };
 
 
@@ -3118,32 +3145,23 @@
       function() {
 
         document
-          .querySelectorAll(
-            ".page"
-          )
-          .forEach(
-            page =>
-              page.classList.remove(
-                "active"
-              )
-          );
+          .querySelectorAll(".page")
+          .forEach(function(page) {
+
+            page.classList.remove("active");
+
+          });
 
 
         $("dashboardPage")
-          .classList.remove(
-            "hidden"
-          );
+          .classList.remove("hidden");
 
 
-        setActiveNav(
-          "navHome"
-        );
+        setActiveNav("navHome");
 
 
         loadBalance();
-
         loadTransactions();
-
         loadCommission();
       };
 
@@ -3160,7 +3178,6 @@
         setActiveNav(
           "navTransactions"
         );
-
 
         showMessageBox(
           "Transaction history is shown on the dashboard."
@@ -3181,7 +3198,6 @@
           "navCommission"
         );
 
-
         loadCommission();
 
         showMessageBox(
@@ -3191,25 +3207,23 @@
       };
 
 
-    function setActiveNav(
-      id
-    ) {
+    function setActiveNav(id) {
 
       document
-        .querySelectorAll(
-          ".nav-button"
-        )
-        .forEach(
-          button =>
-            button.classList.remove(
-              "active"
-            )
-        );
+        .querySelectorAll(".nav-button")
+        .forEach(function(button) {
+
+          button.classList.remove("active");
+
+        });
 
 
-      $(id)?.classList.add(
-        "active"
-      );
+      const button =
+        $(id);
+
+      if (button) {
+        button.classList.add("active");
+      }
     }
 
 
@@ -3255,9 +3269,7 @@
 
 
         $("serviceModal")
-          .classList.remove(
-            "hidden"
-          );
+          .classList.remove("hidden");
       };
 
 
@@ -3265,9 +3277,7 @@
       function() {
 
         $("serviceModal")
-          .classList.add(
-            "hidden"
-          );
+          .classList.add("hidden");
 
 
         currentAction =
@@ -3286,8 +3296,7 @@
 
         const amount =
           Number(
-            $("serviceAmount")
-              .value
+            $("serviceAmount").value
           );
 
 
@@ -3332,10 +3341,14 @@
     window.openEditProfile =
       function() {
 
+        const nameElement =
+          $("accountProfileName");
+
+
         const name =
-          $("accountProfileName")
-            ?.textContent ||
-          "Customer";
+          nameElement
+            ? nameElement.textContent
+            : "Customer";
 
 
         $("editFullName").value =
@@ -3355,9 +3368,7 @@
 
 
         $("editProfileModal")
-          .classList.remove(
-            "hidden"
-          );
+          .classList.remove("hidden");
       };
 
 
@@ -3365,9 +3376,7 @@
       function() {
 
         $("editProfileModal")
-          .classList.add(
-            "hidden"
-          );
+          .classList.add("hidden");
       };
 
 
@@ -3414,13 +3423,10 @@
         try {
 
           /*
-            Update Supabase Auth metadata.
-          */
+           * Update Auth metadata.
+           */
 
-          const {
-            error:
-              authError
-          } =
+          const authResult =
             await supabase.auth.updateUser({
 
               data: {
@@ -3434,22 +3440,20 @@
             });
 
 
-          if (authError) {
-            throw authError;
+          if (authResult.error) {
+            throw authResult.error;
           }
 
 
           /*
-            Update the profile record.
+           * Update profiles.
+           *
+           * IMPORTANT:
+           * referral_code is deliberately
+           * not changed.
+           */
 
-            We deliberately do not modify
-            referral_code here.
-          */
-
-          const {
-            error:
-              profileError
-          } =
+          const profileResult =
             await supabase
               .from("profiles")
               .update({
@@ -3459,6 +3463,7 @@
 
                 phone:
                   phone
+
               })
               .eq(
                 "id",
@@ -3466,10 +3471,11 @@
               );
 
 
-          if (profileError) {
+          if (profileResult.error) {
+
             console.warn(
               "Profile update:",
-              profileError
+              profileResult.error
             );
           }
 
@@ -3481,6 +3487,9 @@
           await loadProfile();
 
 
+          generateReferralInfo();
+
+
           closeEditProfile();
 
 
@@ -3488,6 +3497,7 @@
             "Profile updated successfully.",
             "success"
           );
+
 
         } catch (error) {
 
@@ -3521,9 +3531,7 @@
 
 
         $("passwordModal")
-          .classList.remove(
-            "hidden"
-          );
+          .classList.remove("hidden");
       };
 
 
@@ -3531,9 +3539,7 @@
       function() {
 
         $("passwordModal")
-          .classList.add(
-            "hidden"
-          );
+          .classList.add("hidden");
       };
 
 
@@ -3550,9 +3556,7 @@
             .value;
 
 
-        if (
-          password.length < 6
-        ) {
+        if (password.length < 6) {
 
           showMessageBox(
             "Password must be at least 6 characters.",
@@ -3563,10 +3567,7 @@
         }
 
 
-        if (
-          password !==
-          confirm
-        ) {
+        if (password !== confirm) {
 
           showMessageBox(
             "Passwords do not match.",
@@ -3579,9 +3580,7 @@
 
         try {
 
-          const {
-            error
-          } =
+          const result =
             await supabase.auth.updateUser({
 
               password:
@@ -3589,8 +3588,8 @@
             });
 
 
-          if (error) {
-            throw error;
+          if (result.error) {
+            throw result.error;
           }
 
 
@@ -3601,6 +3600,7 @@
             "Password updated successfully.",
             "success"
           );
+
 
         } catch (error) {
 
@@ -3637,20 +3637,31 @@
         );
 
 
-      $("notificationsToggle").checked =
-        notifications !== "false";
+      const notificationsToggle =
+        $("notificationsToggle");
 
 
-      $("transactionAlertsToggle").checked =
-        transactionAlerts !== "false";
+      const transactionAlertsToggle =
+        $("transactionAlertsToggle");
+
+
+      if (notificationsToggle) {
+
+        notificationsToggle.checked =
+          notifications !== "false";
+      }
+
+
+      if (transactionAlertsToggle) {
+
+        transactionAlertsToggle.checked =
+          transactionAlerts !== "false";
+      }
     }
 
 
     window.saveSetting =
-      function(
-        key,
-        value
-      ) {
+      function(key, value) {
 
         localStorage.setItem(
           key,
@@ -3676,10 +3687,18 @@
 
         try {
 
-          await supabase.auth.signOut();
+          const result =
+            await supabase.auth.signOut();
+
+
+          if (result.error) {
+            throw result.error;
+          }
+
 
           window.location.href =
             "login.html";
+
 
         } catch (error) {
 
@@ -3698,7 +3717,7 @@
 
 
     /* =========================================================
-       INITIAL LOAD
+       START
     ========================================================= */
 
     initialize();
