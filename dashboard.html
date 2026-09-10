@@ -988,12 +988,21 @@
 <body>
 
   <header>
+
     <div class="brand">
-      <div class="logo">TB</div>
-      <span>TomBrian</span>
+
+      <div class="logo">
+        TB
+      </div>
+
+      <span>
+        TomBrian
+      </span>
+
     </div>
 
     <div class="header-actions">
+
       <button
         class="icon-button"
         onclick="showMessageBox('Notifications are coming soon.')"
@@ -1008,72 +1017,148 @@
       >
         T
       </button>
+
     </div>
 
   </header>
+
 
   <!-- DASHBOARD -->
 
   <main id="dashboardPage">
 
     <div class="connection">
+
       <span class="connection-dot"></span>
-      <span id="connectionText">Connected</span>
+
+      <span id="connectionText">
+        Connected
+      </span>
+
     </div>
 
+
     <section class="welcome">
+
       <h1>
         Welcome,
-        <span id="customerName">Customer</span>
+        <span id="customerName">
+          Customer
+        </span>
         👋
       </h1>
+
     </section>
 
+
     <section class="balance-card">
+
       <div class="balance-label">
         Available Balance
       </div>
 
       <div class="balance-value">
-        KES <span id="balanceValue">0.00</span>
+        KES
+        <span id="balanceValue">
+          0.00
+        </span>
       </div>
 
       <div class="balance-currency">
         TomBrian Account Balance
       </div>
+
     </section>
+
 
     <div class="section-title">
       Quick Actions
     </div>
 
+
     <section class="actions-grid">
 
-      <button class="action-card" onclick="openService('buy')">
-        <div class="action-icon">📱</div>
-        <h3>Buy Airtime</h3>
-        <p>Purchase airtime</p>
+      <button
+        class="action-card"
+        onclick="openService('buy')"
+      >
+
+        <div class="action-icon">
+          📱
+        </div>
+
+        <h3>
+          Buy Airtime
+        </h3>
+
+        <p>
+          Purchase airtime
+        </p>
+
       </button>
 
-      <button class="action-card" onclick="openService('sell')">
-        <div class="action-icon">💰</div>
-        <h3>Sell Airtime</h3>
-        <p>Sell your airtime</p>
+
+      <button
+        class="action-card"
+        onclick="openService('sell')"
+      >
+
+        <div class="action-icon">
+          💰
+        </div>
+
+        <h3>
+          Sell Airtime
+        </h3>
+
+        <p>
+          Sell your airtime
+        </p>
+
       </button>
 
-      <button class="action-card" onclick="openService('topup')">
-        <div class="action-icon">➕</div>
-        <h3>Top Up</h3>
-        <p>Add money</p>
+
+      <button
+        class="action-card"
+        onclick="openService('topup')"
+      >
+
+        <div class="action-icon">
+          ➕
+        </div>
+
+        <h3>
+          Top Up
+        </h3>
+
+        <p>
+          Add money
+        </p>
+
       </button>
 
-      <button class="action-card" onclick="openService('withdraw')">
-        <div class="action-icon">🏦</div>
-        <h3>Withdraw</h3>
-        <p>Withdraw funds</p>
+
+      <button
+        class="action-card"
+        onclick="openService('withdraw')"
+      >
+
+        <div class="action-icon">
+          🏦
+        </div>
+
+        <h3>
+          Withdraw
+        </h3>
+
+        <p>
+          Withdraw funds
+        </p>
+
       </button>
 
     </section>
+
 
     <!-- AGENT -->
 
@@ -1084,22 +1169,31 @@
       🤝 Agent
     </button>
 
+
     <div class="section-title">
       Commission
     </div>
+
 
     <section class="commission-card">
 
       <div class="commission-row">
 
         <div>
+
           <div class="commission-label">
             Available Commission
           </div>
 
           <div class="commission-value">
-            KES <span id="commissionValue">0.00</span>
+
+            KES
+            <span id="commissionValue">
+              0.00
+            </span>
+
           </div>
+
         </div>
 
         <div class="commission-icon">
@@ -1110,38 +1204,62 @@
 
     </section>
 
+
     <div class="section-title">
       Recent Transactions
     </div>
+
 
     <section
       class="transactions-card"
       id="transactionsList"
     >
+
       <div class="empty-state">
         No transactions yet.
       </div>
+
     </section>
 
+
     <div class="notice">
-      <strong>TomBrian Services</strong><br>
+
+      <strong>
+        TomBrian Services
+      </strong>
+
+      <br>
+
       Live airtime, M-Pesa top-up, withdrawal and transaction processing
       will be connected to the production services as they are enabled.
+
     </div>
 
   </main>
 
+
   <!-- ACCOUNT PAGE -->
 
-  <section class="page" id="accountPage">
+  <section
+    class="page"
+    id="accountPage"
+  >
 
     <div class="page-header">
-      <button class="back-button" onclick="closeAccount()">
+
+      <button
+        class="back-button"
+        onclick="closeAccount()"
+      >
         ←
       </button>
 
-      <h2>Account</h2>
+      <h2>
+        Account
+      </h2>
+
     </div>
+
 
     <div class="profile-card">
 
@@ -1166,6 +1284,7 @@
 
     </div>
 
+
     <div class="account-balance">
 
       <div class="account-balance-label">
@@ -1173,16 +1292,23 @@
       </div>
 
       <div class="account-balance-value">
-        KES <span id="accountBalanceValue">0.00</span>
+
+        KES
+        <span id="accountBalanceValue">
+          0.00
+        </span>
+
       </div>
 
     </div>
+
 
     <div class="account-section">
 
       <div class="account-section-title">
         Profile
       </div>
+
 
       <button
         class="account-item"
@@ -1213,11 +1339,13 @@
 
     </div>
 
+
     <div class="account-section">
 
       <div class="account-section-title">
         Referrals
       </div>
+
 
       <button
         class="account-item"
@@ -1248,11 +1376,13 @@
 
     </div>
 
+
     <div class="account-section">
 
       <div class="account-section-title">
         Preferences
       </div>
+
 
       <button
         class="account-item"
@@ -1283,11 +1413,13 @@
 
     </div>
 
+
     <div class="account-section">
 
       <div class="account-section-title">
         TomBrian
       </div>
+
 
       <button
         class="account-item"
@@ -1318,11 +1450,13 @@
 
     </div>
 
+
     <div class="account-section">
 
       <div class="account-section-title">
         Security
       </div>
+
 
       <button
         class="account-item"
@@ -1350,6 +1484,7 @@
         </div>
 
       </button>
+
 
       <button
         class="account-item logout-item"
@@ -1380,15 +1515,20 @@
 
     </div>
 
+
     <div class="account-footer">
       TomBrian • Dream • Work • Achieve
     </div>
 
   </section>
 
+
   <!-- INVITE PAGE -->
 
-  <section class="page" id="invitePage">
+  <section
+    class="page"
+    id="invitePage"
+  >
 
     <div class="page-header">
 
@@ -1404,6 +1544,7 @@
       </h2>
 
     </div>
+
 
     <div class="invite-hero">
 
@@ -1421,6 +1562,7 @@
       </p>
 
     </div>
+
 
     <div class="invite-card">
 
@@ -1469,9 +1611,13 @@
 
   </section>
 
+
   <!-- SETTINGS PAGE -->
 
-  <section class="page" id="settingsPage">
+  <section
+    class="page"
+    id="settingsPage"
+  >
 
     <div class="page-header">
 
@@ -1488,11 +1634,13 @@
 
     </div>
 
+
     <div class="account-section">
 
       <div class="account-section-title">
         Notifications
       </div>
+
 
       <div class="setting-row">
 
@@ -1508,6 +1656,7 @@
 
         </div>
 
+
         <label class="switch">
 
           <input
@@ -1522,6 +1671,7 @@
 
       </div>
 
+
       <div class="setting-row">
 
         <div class="setting-info">
@@ -1535,6 +1685,7 @@
           </div>
 
         </div>
+
 
         <label class="switch">
 
@@ -1552,11 +1703,13 @@
 
     </div>
 
+
     <div class="account-section">
 
       <div class="account-section-title">
         Account
       </div>
+
 
       <button
         class="account-item"
@@ -1584,6 +1737,7 @@
         </div>
 
       </button>
+
 
       <button
         class="account-item"
@@ -1616,9 +1770,13 @@
 
   </section>
 
+
   <!-- ABOUT PAGE -->
 
-  <section class="page" id="aboutPage">
+  <section
+    class="page"
+    id="aboutPage"
+  >
 
     <div class="page-header">
 
@@ -1634,6 +1792,7 @@
       </h2>
 
     </div>
+
 
     <div class="about-card">
 
@@ -1657,6 +1816,7 @@
 
     </div>
 
+
     <div class="about-info">
 
       <div class="about-row">
@@ -1671,6 +1831,7 @@
 
       </div>
 
+
       <div class="about-row">
 
         <strong>
@@ -1684,6 +1845,7 @@
 
       </div>
 
+
       <div class="about-row">
 
         <strong>
@@ -1696,6 +1858,7 @@
         </span>
 
       </div>
+
 
       <div class="about-row">
 
@@ -1714,6 +1877,7 @@
 
   </section>
 
+
   <!-- BOTTOM NAV -->
 
   <div class="bottom-nav">
@@ -1725,40 +1889,72 @@
         id="navHome"
         onclick="showHome()"
       >
-        <span>⌂</span>
-        <span>Home</span>
+
+        <span>
+          ⌂
+        </span>
+
+        <span>
+          Home
+        </span>
+
       </button>
+
 
       <button
         class="nav-button"
         id="navTransactions"
         onclick="showTransactions()"
       >
-        <span>▤</span>
-        <span>Transactions</span>
+
+        <span>
+          ▤
+        </span>
+
+        <span>
+          Transactions
+        </span>
+
       </button>
+
 
       <button
         class="nav-button"
         id="navCommission"
         onclick="showCommission()"
       >
-        <span>◉</span>
-        <span>Commission</span>
+
+        <span>
+          ◉
+        </span>
+
+        <span>
+          Commission
+        </span>
+
       </button>
+
 
       <button
         class="nav-button"
         id="navAccount"
         onclick="openAccount()"
       >
-        <span>👤</span>
-        <span>Account</span>
+
+        <span>
+          👤
+        </span>
+
+        <span>
+          Account
+        </span>
+
       </button>
 
     </div>
 
   </div>
+
 
   <!-- SERVICE MODAL -->
 
@@ -1784,6 +1980,7 @@
 
       </div>
 
+
       <div>
 
         <div class="form-group">
@@ -1801,6 +1998,7 @@
 
         </div>
 
+
         <div class="form-group">
 
           <label for="serviceAmount">
@@ -1816,6 +2014,7 @@
           >
 
         </div>
+
 
         <div class="modal-actions">
 
@@ -1841,6 +2040,7 @@
 
   </div>
 
+
   <!-- AGENT APPLICATION MODAL -->
 
   <div
@@ -1865,6 +2065,7 @@
 
       </div>
 
+
       <div class="form-group">
 
         <label for="agentFullName">
@@ -1879,6 +2080,7 @@
         >
 
       </div>
+
 
       <div class="form-group">
 
@@ -1895,6 +2097,7 @@
 
       </div>
 
+
       <div class="form-group">
 
         <label for="agentReason">
@@ -1904,10 +2107,12 @@
         <textarea
           class="form-textarea"
           id="agentReason"
+          maxlength="300"
           placeholder="Why would you like to become a TomBrian agent?"
         ></textarea>
 
       </div>
+
 
       <div class="modal-actions">
 
@@ -1920,6 +2125,7 @@
 
         <button
           class="primary-button"
+          id="agentSubmitButton"
           onclick="submitAgentApplication()"
         >
           Submit Application
@@ -1930,6 +2136,7 @@
     </div>
 
   </div>
+
 
   <!-- EDIT PROFILE MODAL -->
 
@@ -1955,6 +2162,7 @@
 
       </div>
 
+
       <div class="form-group">
 
         <label for="editFullName">
@@ -1969,6 +2177,7 @@
         >
 
       </div>
+
 
       <div class="form-group">
 
@@ -1985,6 +2194,7 @@
 
       </div>
 
+
       <div class="form-group">
 
         <label for="editEmail">
@@ -1999,6 +2209,7 @@
         >
 
       </div>
+
 
       <div class="modal-actions">
 
@@ -2021,6 +2232,7 @@
     </div>
 
   </div>
+
 
   <!-- PASSWORD MODAL -->
 
@@ -2046,6 +2258,7 @@
 
       </div>
 
+
       <div class="form-group">
 
         <label for="newPassword">
@@ -2061,6 +2274,7 @@
 
       </div>
 
+
       <div class="form-group">
 
         <label for="confirmPassword">
@@ -2075,6 +2289,7 @@
         >
 
       </div>
+
 
       <div class="modal-actions">
 
@@ -2098,12 +2313,14 @@
 
   </div>
 
+
   <!-- MESSAGE -->
 
   <div
     class="message-box hidden"
     id="messageBox"
   ></div>
+
 
   <!-- SUPABASE + JAVASCRIPT -->
 
@@ -2112,6 +2329,7 @@
     import {
       createClient
     } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
 
     /* =========================================================
        SUPABASE
@@ -2129,6 +2347,7 @@
         SUPABASE_PUBLISHABLE_KEY
       );
 
+
     /* =========================================================
        STATE
     ========================================================= */
@@ -2141,6 +2360,7 @@
     let currentReferralCode = "";
     let currentAction = null;
 
+
     /* =========================================================
        ELEMENT HELPER
     ========================================================= */
@@ -2149,31 +2369,47 @@
       return document.getElementById(id);
     }
 
+
     /* =========================================================
        MESSAGE
     ========================================================= */
 
-    window.showMessageBox = function(message, type = "") {
+    window.showMessageBox =
+      function(message, type = "") {
 
-      const box = $("messageBox");
+        const box =
+          $("messageBox");
 
-      if (!box) return;
+        if (!box) return;
 
-      box.textContent = message;
+        box.textContent =
+          message;
 
-      box.className =
-        "message-box" +
-        (type ? " " + type : "");
+        box.className =
+          "message-box" +
+          (type ? " " + type : "");
 
-      box.classList.remove("hidden");
+        box.classList.remove(
+          "hidden"
+        );
 
-      clearTimeout(window.__messageTimer);
+        clearTimeout(
+          window.__messageTimer
+        );
 
-      window.__messageTimer =
-        setTimeout(function() {
-          box.classList.add("hidden");
-        }, 3500);
-    };
+        window.__messageTimer =
+          setTimeout(
+            function() {
+
+              box.classList.add(
+                "hidden"
+              );
+
+            },
+            3500
+          );
+      };
+
 
     /* =========================================================
        AUTH SESSION
@@ -2185,6 +2421,7 @@
         await supabase.auth.getSession();
 
       if (result.error) {
+
         console.error(
           "Session error:",
           result.error
@@ -2193,6 +2430,7 @@
 
       return result.data?.session || null;
     }
+
 
     /* =========================================================
        INITIALIZE
@@ -2242,6 +2480,7 @@
       }
     }
 
+
     /* =========================================================
        AUTH STATE
     ========================================================= */
@@ -2265,20 +2504,24 @@
           currentUser =
             session.user;
 
-          setTimeout(async function() {
+          setTimeout(
+            async function() {
 
-            await loadProfile();
+              await loadProfile();
 
-            generateReferralInfo();
+              generateReferralInfo();
 
-            loadBalance();
-            loadCommission();
-            loadTransactions();
+              loadBalance();
+              loadCommission();
+              loadTransactions();
 
-          }, 0);
+            },
+            0
+          );
         }
       }
     );
+
 
     /* =========================================================
        PROFILE
@@ -2304,14 +2547,19 @@
         currentUser.user_metadata?.ref ||
         "";
 
+
       try {
 
         const result =
           await supabase
             .from("profiles")
             .select("*")
-            .eq("id", currentUser.id)
+            .eq(
+              "id",
+              currentUser.id
+            )
             .maybeSingle();
+
 
         if (
           !result.error &&
@@ -2334,6 +2582,7 @@
             result.data.referral_code ||
             result.data.referralCode ||
             referralCode;
+
         }
 
         else if (result.error) {
@@ -2352,8 +2601,12 @@
         );
       }
 
+
       currentProfilePhone =
-        String(phone || "").trim();
+        String(
+          phone || ""
+        ).trim();
+
 
       currentReferralCode =
         String(
@@ -2362,52 +2615,66 @@
         .trim()
         .toUpperCase();
 
+
       const customerName =
         $("customerName");
 
       if (customerName) {
+
         customerName.textContent =
           name;
       }
+
 
       const accountName =
         $("accountProfileName");
 
       if (accountName) {
+
         accountName.textContent =
           name;
       }
+
 
       const accountEmail =
         $("accountProfileEmail");
 
       if (accountEmail) {
+
         accountEmail.textContent =
           currentUser.email ||
           "No email set";
       }
 
+
       const initial =
-        String(name || "T")
-          .trim()
-          .charAt(0)
-          .toUpperCase() || "T";
+        String(
+          name || "T"
+        )
+        .trim()
+        .charAt(0)
+        .toUpperCase() || "T";
+
 
       const accountInitial =
         $("accountProfileInitial");
 
       if (accountInitial) {
+
         accountInitial.textContent =
           initial;
       }
+
 
       const headerInitial =
         $("headerProfileCircle");
 
       if (headerInitial) {
+
         headerInitial.textContent =
           initial;
       }
+
 
       const servicePhone =
         $("servicePhone");
@@ -2416,10 +2683,12 @@
         servicePhone &&
         currentProfilePhone
       ) {
+
         servicePhone.value =
           currentProfilePhone;
       }
     }
+
 
     /* =========================================================
        AGENT APPLICATION
@@ -2428,6 +2697,17 @@
     window.openAgentApplication =
       function() {
 
+        if (!currentUser) {
+
+          showMessageBox(
+            "Please sign in again.",
+            "error"
+          );
+
+          return;
+        }
+
+
         const name =
           currentProfile?.full_name ||
           currentProfile?.name ||
@@ -2435,49 +2715,74 @@
           currentUser?.user_metadata?.name ||
           "";
 
+
         const phone =
           currentProfilePhone ||
           currentUser?.user_metadata?.phone ||
           currentUser?.phone ||
           "";
 
+
         $("agentFullName").value =
           name;
+
 
         $("agentPhone").value =
           phone;
 
+
         $("agentReason").value =
           "";
 
+
         $("agentApplicationModal")
-          .classList.remove("hidden");
+          .classList.remove(
+            "hidden"
+          );
       };
+
 
     window.closeAgentApplication =
       function() {
 
         $("agentApplicationModal")
-          .classList.add("hidden");
+          .classList.add(
+            "hidden"
+          );
       };
 
+
     window.submitAgentApplication =
-      function() {
+      async function() {
+
+        if (!currentUser) {
+
+          showMessageBox(
+            "Your session has expired. Please sign in again.",
+            "error"
+          );
+
+          return;
+        }
+
 
         const name =
           $("agentFullName")
             .value
             .trim();
 
+
         const phone =
           $("agentPhone")
             .value
             .trim();
 
+
         const reason =
           $("agentReason")
             .value
             .trim();
+
 
         if (!name) {
 
@@ -2489,6 +2794,7 @@
           return;
         }
 
+
         if (!phone) {
 
           showMessageBox(
@@ -2498,6 +2804,7 @@
 
           return;
         }
+
 
         if (!reason) {
 
@@ -2509,20 +2816,90 @@
           return;
         }
 
-        /*
-         * The application form is ready.
-         * Database submission will be connected
-         * after the Agent Applications table/flow
-         * is confirmed.
-         */
 
-        closeAgentApplication();
+        const submitButton =
+          $("agentSubmitButton");
 
-        showMessageBox(
-          "Agent application received.",
-          "success"
-        );
+
+        if (submitButton) {
+
+          submitButton.disabled =
+            true;
+
+          submitButton.textContent =
+            "Submitting...";
+        }
+
+
+        try {
+
+          const result =
+            await supabase
+              .from("agent_applications")
+              .insert({
+
+                user_id:
+                  currentUser.id,
+
+                full_name:
+                  name,
+
+                phone_number:
+                  phone,
+
+                reason:
+                  reason
+
+              });
+
+
+          if (result.error) {
+
+            console.error(
+              "Agent application error:",
+              result.error
+            );
+
+            throw result.error;
+          }
+
+
+          closeAgentApplication();
+
+
+          showMessageBox(
+            "Your agent application has been submitted successfully.",
+            "success"
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "Agent application submission error:",
+            error
+          );
+
+
+          showMessageBox(
+            error?.message ||
+            "Could not submit your agent application. Please try again.",
+            "error"
+          );
+
+        } finally {
+
+          if (submitButton) {
+
+            submitButton.disabled =
+              false;
+
+            submitButton.textContent =
+              "Submit Application";
+          }
+        }
       };
+
 
     /* =========================================================
        REFERRAL
@@ -2533,41 +2910,52 @@
       return currentReferralCode || "";
     }
 
+
     window.generateReferralInfo =
       function() {
 
         const code =
           getReferralCode();
 
+
         const codeElement =
           $("referralCode");
+
 
         const linkElement =
           $("referralLink");
 
+
         if (!code) {
 
           if (codeElement) {
+
             codeElement.textContent =
               "Unavailable";
           }
 
+
           if (linkElement) {
-            linkElement.value = "";
+
+            linkElement.value =
+              "";
           }
 
           return;
         }
+
 
         const link =
           new URL(
             "https://tombrian-dotcom.github.io/TomBrian-website-/signup.html"
           );
 
+
         link.searchParams.set(
           "ref",
           code
         );
+
 
         if (codeElement) {
 
@@ -2575,12 +2963,14 @@
             code;
         }
 
+
         if (linkElement) {
 
           linkElement.value =
             link.href;
         }
       };
+
 
     /* =========================================================
        COPY REFERRAL LINK
@@ -2592,8 +2982,10 @@
         const input =
           $("referralLink");
 
+
         const link =
           input?.value || "";
+
 
         if (!link) {
 
@@ -2605,11 +2997,13 @@
           return;
         }
 
+
         try {
 
           await navigator.clipboard.writeText(
             link
           );
+
 
           showMessageBox(
             "Invite link copied.",
@@ -2621,15 +3015,21 @@
           if (input) {
 
             input.focus();
+
             input.select();
+
             input.setSelectionRange(
               0,
               99999
             );
 
+
             try {
 
-              document.execCommand("copy");
+              document.execCommand(
+                "copy"
+              );
+
 
               showMessageBox(
                 "Invite link copied.",
@@ -2647,6 +3047,7 @@
         }
       };
 
+
     /* =========================================================
        SHARE REFERRAL LINK
     ========================================================= */
@@ -2657,11 +3058,14 @@
         const input =
           $("referralLink");
 
+
         const link =
           input?.value || "";
 
+
         const code =
           getReferralCode();
+
 
         if (!link || !code) {
 
@@ -2672,6 +3076,7 @@
 
           return;
         }
+
 
         const shareData = {
 
@@ -2684,6 +3089,7 @@
           url:
             link
         };
+
 
         try {
 
@@ -2702,9 +3108,11 @@
             error?.name ===
             "AbortError"
           ) {
+
             return;
           }
         }
+
 
         const message =
           encodeURIComponent(
@@ -2712,11 +3120,14 @@
             link
           );
 
+
         window.open(
-          "https://wa.me/?text=" + message,
+          "https://wa.me/?text=" +
+          message,
           "_blank"
         );
       };
+
 
     /* =========================================================
        BALANCE
@@ -2726,14 +3137,19 @@
 
       if (!currentUser) return;
 
+
       try {
 
         const result =
           await supabase
             .from("profiles")
             .select("balance")
-            .eq("id", currentUser.id)
+            .eq(
+              "id",
+              currentUser.id
+            )
             .maybeSingle();
+
 
         if (
           !result.error &&
@@ -2742,7 +3158,9 @@
         ) {
 
           currentBalance =
-            Number(result.data.balance) || 0;
+            Number(
+              result.data.balance
+            ) || 0;
         }
 
       } catch (error) {
@@ -2753,8 +3171,10 @@
         );
       }
 
+
       updateBalanceDisplay();
     }
+
 
     function updateBalanceDisplay() {
 
@@ -2763,22 +3183,29 @@
           currentBalance
         ).toFixed(2);
 
+
       const balance =
         $("balanceValue");
 
+
       if (balance) {
+
         balance.textContent =
           value;
       }
 
+
       const accountBalance =
         $("accountBalanceValue");
 
+
       if (accountBalance) {
+
         accountBalance.textContent =
           value;
       }
     }
+
 
     /* =========================================================
        COMMISSION
@@ -2788,14 +3215,19 @@
 
       if (!currentUser) return;
 
+
       try {
 
         const result =
           await supabase
             .from("profiles")
             .select("commission")
-            .eq("id", currentUser.id)
+            .eq(
+              "id",
+              currentUser.id
+            )
             .maybeSingle();
+
 
         if (
           !result.error &&
@@ -2817,8 +3249,10 @@
         );
       }
 
+
       const commission =
         $("commissionValue");
+
 
       if (commission) {
 
@@ -2826,6 +3260,7 @@
           currentCommission.toFixed(2);
       }
     }
+
 
     /* =========================================================
        TRANSACTIONS
@@ -2836,12 +3271,16 @@
       const list =
         $("transactionsList");
 
+
       if (!list) return;
+
 
       list.innerHTML =
         '<div class="empty-state">No transactions yet.</div>';
 
+
       if (!currentUser) return;
+
 
       try {
 
@@ -2849,7 +3288,10 @@
           await supabase
             .from("transactions")
             .select("*")
-            .eq("user_id", currentUser.id)
+            .eq(
+              "user_id",
+              currentUser.id
+            )
             .order(
               "created_at",
               {
@@ -2857,6 +3299,7 @@
               }
             )
             .limit(10);
+
 
         if (result.error) {
 
@@ -2868,70 +3311,90 @@
           return;
         }
 
+
         const data =
           result.data;
+
 
         if (
           !data ||
           data.length === 0
         ) {
+
           return;
         }
 
-        list.innerHTML = "";
 
-        data.forEach(function(transaction) {
+        list.innerHTML =
+          "";
 
-          const row =
-            document.createElement("div");
 
-          row.className =
-            "transaction";
+        data.forEach(
+          function(transaction) {
 
-          const type =
-            transaction.transaction_type ||
-            transaction.type ||
-            "Transaction";
+            const row =
+              document.createElement(
+                "div"
+              );
 
-          const amount =
-            Number(
-              transaction.amount || 0
-            ).toFixed(2);
 
-          const date =
-            formatDate(
-              transaction.created_at
+            row.className =
+              "transaction";
+
+
+            const type =
+              transaction.transaction_type ||
+              transaction.type ||
+              "Transaction";
+
+
+            const amount =
+              Number(
+                transaction.amount || 0
+              ).toFixed(2);
+
+
+            const date =
+              formatDate(
+                transaction.created_at
+              );
+
+
+            row.innerHTML = `
+
+              <div class="transaction-left">
+
+                <div class="transaction-icon">
+                  🧾
+                </div>
+
+                <div>
+
+                  <div class="transaction-name">
+                    ${escapeHtml(type)}
+                  </div>
+
+                  <div class="transaction-date">
+                    ${escapeHtml(date)}
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="transaction-amount">
+                KES ${amount}
+              </div>
+
+            `;
+
+
+            list.appendChild(
+              row
             );
 
-          row.innerHTML = `
-            <div class="transaction-left">
-
-              <div class="transaction-icon">
-                🧾
-              </div>
-
-              <div>
-
-                <div class="transaction-name">
-                  ${escapeHtml(type)}
-                </div>
-
-                <div class="transaction-date">
-                  ${escapeHtml(date)}
-                </div>
-
-              </div>
-
-            </div>
-
-            <div class="transaction-amount">
-              KES ${amount}
-            </div>
-          `;
-
-          list.appendChild(row);
-
-        });
+          }
+        );
 
       } catch (error) {
 
@@ -2942,11 +3405,14 @@
       }
     }
 
+
     function formatDate(value) {
 
       if (!value) {
+
         return "—";
       }
+
 
       try {
 
@@ -2965,15 +3431,34 @@
       }
     }
 
+
     function escapeHtml(value) {
 
-      return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+      return String(
+        value ?? ""
+      )
+      .replaceAll(
+        "&",
+        "&amp;"
+      )
+      .replaceAll(
+        "<",
+        "&lt;"
+      )
+      .replaceAll(
+        ">",
+        "&gt;"
+      )
+      .replaceAll(
+        '"',
+        "&quot;"
+      )
+      .replaceAll(
+        "'",
+        "&#039;"
+      );
     }
+
 
     /* =========================================================
        ACCOUNT NAVIGATION
@@ -2983,20 +3468,36 @@
       function() {
 
         $("dashboardPage")
-          .classList.add("hidden");
+          .classList.add(
+            "hidden"
+          );
+
 
         document
-          .querySelectorAll(".page")
-          .forEach(function(page) {
+          .querySelectorAll(
+            ".page"
+          )
+          .forEach(
+            function(page) {
 
-            page.classList.remove("active");
+              page.classList.remove(
+                "active"
+              );
 
-          });
+            }
+          );
+
 
         $("accountPage")
-          .classList.add("active");
+          .classList.add(
+            "active"
+          );
 
-        setActiveNav("navAccount");
+
+        setActiveNav(
+          "navAccount"
+        );
+
 
         loadProfile();
         loadBalance();
@@ -3004,47 +3505,81 @@
         generateReferralInfo();
       };
 
+
     window.closeAccount =
       function() {
 
         $("accountPage")
-          .classList.remove("active");
+          .classList.remove(
+            "active"
+          );
+
 
         $("dashboardPage")
-          .classList.remove("hidden");
+          .classList.remove(
+            "hidden"
+          );
+
 
         document
-          .querySelectorAll(".page")
-          .forEach(function(page) {
+          .querySelectorAll(
+            ".page"
+          )
+          .forEach(
+            function(page) {
 
-            page.classList.remove("active");
+              page.classList.remove(
+                "active"
+              );
 
-          });
+            }
+          );
 
-        setActiveNav("navHome");
+
+        setActiveNav(
+          "navHome"
+        );
       };
+
 
     window.backToAccount =
       function() {
 
         document
-          .querySelectorAll(".page")
-          .forEach(function(page) {
+          .querySelectorAll(
+            ".page"
+          )
+          .forEach(
+            function(page) {
 
-            page.classList.remove("active");
+              page.classList.remove(
+                "active"
+              );
 
-          });
+            }
+          );
+
 
         $("accountPage")
-          .classList.add("active");
+          .classList.add(
+            "active"
+          );
+
 
         $("dashboardPage")
-          .classList.add("hidden");
+          .classList.add(
+            "hidden"
+          );
 
-        setActiveNav("navAccount");
+
+        setActiveNav(
+          "navAccount"
+        );
+
 
         generateReferralInfo();
       };
+
 
     /* =========================================================
        INVITE PAGE
@@ -3054,23 +3589,40 @@
       function() {
 
         $("dashboardPage")
-          .classList.add("hidden");
+          .classList.add(
+            "hidden"
+          );
+
 
         document
-          .querySelectorAll(".page")
-          .forEach(function(page) {
+          .querySelectorAll(
+            ".page"
+          )
+          .forEach(
+            function(page) {
 
-            page.classList.remove("active");
+              page.classList.remove(
+                "active"
+              );
 
-          });
+            }
+          );
+
 
         $("invitePage")
-          .classList.add("active");
+          .classList.add(
+            "active"
+          );
 
-        setActiveNav("navAccount");
+
+        setActiveNav(
+          "navAccount"
+        );
+
 
         generateReferralInfo();
       };
+
 
     /* =========================================================
        SETTINGS
@@ -3080,23 +3632,40 @@
       function() {
 
         $("dashboardPage")
-          .classList.add("hidden");
+          .classList.add(
+            "hidden"
+          );
+
 
         document
-          .querySelectorAll(".page")
-          .forEach(function(page) {
+          .querySelectorAll(
+            ".page"
+          )
+          .forEach(
+            function(page) {
 
-            page.classList.remove("active");
+              page.classList.remove(
+                "active"
+              );
 
-          });
+            }
+          );
+
 
         $("settingsPage")
-          .classList.add("active");
+          .classList.add(
+            "active"
+          );
 
-        setActiveNav("navAccount");
+
+        setActiveNav(
+          "navAccount"
+        );
+
 
         loadSettings();
       };
+
 
     /* =========================================================
        ABOUT
@@ -3106,21 +3675,37 @@
       function() {
 
         $("dashboardPage")
-          .classList.add("hidden");
+          .classList.add(
+            "hidden"
+          );
+
 
         document
-          .querySelectorAll(".page")
-          .forEach(function(page) {
+          .querySelectorAll(
+            ".page"
+          )
+          .forEach(
+            function(page) {
 
-            page.classList.remove("active");
+              page.classList.remove(
+                "active"
+              );
 
-          });
+            }
+          );
+
 
         $("aboutPage")
-          .classList.add("active");
+          .classList.add(
+            "active"
+          );
 
-        setActiveNav("navAccount");
+
+        setActiveNav(
+          "navAccount"
+        );
       };
+
 
     /* =========================================================
        HOME
@@ -3130,22 +3715,36 @@
       function() {
 
         document
-          .querySelectorAll(".page")
-          .forEach(function(page) {
+          .querySelectorAll(
+            ".page"
+          )
+          .forEach(
+            function(page) {
 
-            page.classList.remove("active");
+              page.classList.remove(
+                "active"
+              );
 
-          });
+            }
+          );
+
 
         $("dashboardPage")
-          .classList.remove("hidden");
+          .classList.remove(
+            "hidden"
+          );
 
-        setActiveNav("navHome");
+
+        setActiveNav(
+          "navHome"
+        );
+
 
         loadBalance();
         loadTransactions();
         loadCommission();
       };
+
 
     /* =========================================================
        TRANSACTIONS NAV
@@ -3156,14 +3755,17 @@
 
         showHome();
 
+
         setActiveNav(
           "navTransactions"
         );
+
 
         showMessageBox(
           "Transaction history is shown on the dashboard."
         );
       };
+
 
     /* =========================================================
        COMMISSION NAV
@@ -3174,11 +3776,14 @@
 
         showHome();
 
+
         setActiveNav(
           "navCommission"
         );
 
+
         loadCommission();
+
 
         showMessageBox(
           "Commission balance: KES " +
@@ -3186,23 +3791,36 @@
         );
       };
 
+
     function setActiveNav(id) {
 
       document
-        .querySelectorAll(".nav-button")
-        .forEach(function(button) {
+        .querySelectorAll(
+          ".nav-button"
+        )
+        .forEach(
+          function(button) {
 
-          button.classList.remove("active");
+            button.classList.remove(
+              "active"
+            );
 
-        });
+          }
+        );
+
 
       const button =
         $(id);
 
+
       if (button) {
-        button.classList.add("active");
+
+        button.classList.add(
+          "active"
+        );
       }
     }
+
 
     /* =========================================================
        SERVICE MODAL
@@ -3213,6 +3831,7 @@
 
         currentAction =
           action;
+
 
         const titles = {
 
@@ -3227,32 +3846,47 @@
 
           withdraw:
             "Withdraw"
+
         };
 
-        $("serviceTitle").textContent =
+
+        $("serviceTitle")
+          .textContent =
           titles[action] ||
           "Service";
 
-        $("servicePhone").value =
+
+        $("servicePhone")
+          .value =
           currentProfilePhone ||
           "";
 
-        $("serviceAmount").value =
+
+        $("serviceAmount")
+          .value =
           "";
 
+
         $("serviceModal")
-          .classList.remove("hidden");
+          .classList.remove(
+            "hidden"
+          );
       };
+
 
     window.closeService =
       function() {
 
         $("serviceModal")
-          .classList.add("hidden");
+          .classList.add(
+            "hidden"
+          );
+
 
         currentAction =
           null;
       };
+
 
     window.submitService =
       function() {
@@ -3262,10 +3896,13 @@
             .value
             .trim();
 
+
         const amount =
           Number(
-            $("serviceAmount").value
+            $("serviceAmount")
+              .value
           );
+
 
         if (!phone) {
 
@@ -3276,6 +3913,7 @@
 
           return;
         }
+
 
         if (
           !amount ||
@@ -3290,12 +3928,15 @@
           return;
         }
 
+
         showMessageBox(
           "This service will be connected to live processing shortly."
         );
 
+
         closeService();
       };
+
 
     /* =========================================================
        EDIT PROFILE
@@ -3307,49 +3948,66 @@
         const nameElement =
           $("accountProfileName");
 
+
         const name =
           nameElement
             ? nameElement.textContent
             : "Customer";
 
-        $("editFullName").value =
+
+        $("editFullName")
+          .value =
           name === "Customer"
             ? ""
             : name;
 
-        $("editPhone").value =
+
+        $("editPhone")
+          .value =
           currentProfilePhone ||
           "";
 
-        $("editEmail").value =
+
+        $("editEmail")
+          .value =
           currentUser?.email ||
           "";
 
+
         $("editProfileModal")
-          .classList.remove("hidden");
+          .classList.remove(
+            "hidden"
+          );
       };
+
 
     window.closeEditProfile =
       function() {
 
         $("editProfileModal")
-          .classList.add("hidden");
+          .classList.add(
+            "hidden"
+          );
       };
+
 
     window.saveProfile =
       async function() {
 
         if (!currentUser) return;
 
+
         const fullName =
           $("editFullName")
             .value
             .trim();
 
+
         const phone =
           $("editPhone")
             .value
             .trim();
+
 
         if (!fullName) {
 
@@ -3361,6 +4019,7 @@
           return;
         }
 
+
         if (!phone) {
 
           showMessageBox(
@@ -3370,6 +4029,7 @@
 
           return;
         }
+
 
         try {
 
@@ -3383,12 +4043,17 @@
 
                 phone:
                   phone
+
               }
+
             });
 
+
           if (authResult.error) {
+
             throw authResult.error;
           }
+
 
           const profileResult =
             await supabase
@@ -3407,6 +4072,7 @@
                 currentUser.id
               );
 
+
           if (profileResult.error) {
 
             console.warn(
@@ -3415,19 +4081,25 @@
             );
           }
 
+
           currentProfilePhone =
             phone;
 
+
           await loadProfile();
+
 
           generateReferralInfo();
 
+
           closeEditProfile();
+
 
           showMessageBox(
             "Profile updated successfully.",
             "success"
           );
+
 
         } catch (error) {
 
@@ -3435,6 +4107,7 @@
             "Profile update error:",
             error
           );
+
 
           showMessageBox(
             error?.message ||
@@ -3444,6 +4117,7 @@
         }
       };
 
+
     /* =========================================================
        PASSWORD
     ========================================================= */
@@ -3451,22 +4125,32 @@
     window.openPasswordModal =
       function() {
 
-        $("newPassword").value =
+        $("newPassword")
+          .value =
           "";
 
-        $("confirmPassword").value =
+
+        $("confirmPassword")
+          .value =
           "";
+
 
         $("passwordModal")
-          .classList.remove("hidden");
+          .classList.remove(
+            "hidden"
+          );
       };
+
 
     window.closePasswordModal =
       function() {
 
         $("passwordModal")
-          .classList.add("hidden");
+          .classList.add(
+            "hidden"
+          );
       };
+
 
     window.changePassword =
       async function() {
@@ -3475,11 +4159,16 @@
           $("newPassword")
             .value;
 
+
         const confirm =
           $("confirmPassword")
             .value;
 
-        if (password.length < 6) {
+
+        if (
+          password.length <
+          6
+        ) {
 
           showMessageBox(
             "Password must be at least 6 characters.",
@@ -3489,7 +4178,11 @@
           return;
         }
 
-        if (password !== confirm) {
+
+        if (
+          password !==
+          confirm
+        ) {
 
           showMessageBox(
             "Passwords do not match.",
@@ -3499,6 +4192,7 @@
           return;
         }
 
+
         try {
 
           const result =
@@ -3506,18 +4200,24 @@
 
               password:
                 password
+
             });
 
+
           if (result.error) {
+
             throw result.error;
           }
 
+
           closePasswordModal();
+
 
           showMessageBox(
             "Password updated successfully.",
             "success"
           );
+
 
         } catch (error) {
 
@@ -3526,6 +4226,7 @@
             error
           );
 
+
           showMessageBox(
             error?.message ||
             "Could not update your password.",
@@ -3533,6 +4234,7 @@
           );
         }
       };
+
 
     /* =========================================================
        SETTINGS
@@ -3545,16 +4247,20 @@
           "tombrian_notifications"
         );
 
+
       const transactionAlerts =
         localStorage.getItem(
           "tombrian_transaction_alerts"
         );
 
+
       const notificationsToggle =
         $("notificationsToggle");
 
+
       const transactionAlertsToggle =
         $("transactionAlertsToggle");
+
 
       if (notificationsToggle) {
 
@@ -3562,12 +4268,14 @@
           notifications !== "false";
       }
 
+
       if (transactionAlertsToggle) {
 
         transactionAlertsToggle.checked =
           transactionAlerts !== "false";
       }
     }
+
 
     window.saveSetting =
       function(key, value) {
@@ -3579,11 +4287,13 @@
             : "false"
         );
 
+
         showMessageBox(
           "Setting updated.",
           "success"
         );
       };
+
 
     /* =========================================================
        SIGN OUT
@@ -3597,12 +4307,16 @@
           const result =
             await supabase.auth.signOut();
 
+
           if (result.error) {
+
             throw result.error;
           }
 
+
           window.location.href =
             "login.html";
+
 
         } catch (error) {
 
@@ -3611,12 +4325,14 @@
             error
           );
 
+
           showMessageBox(
             "Could not sign out. Please try again.",
             "error"
           );
         }
       };
+
 
     /* =========================================================
        START
