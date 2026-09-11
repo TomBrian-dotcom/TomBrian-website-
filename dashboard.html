@@ -154,6 +154,14 @@
     .welcome p {
       color: var(--muted);
       font-size: 14px;
+    }
+
+    .welcome .kiswahili-greeting {
+      margin-top: 4px;
+      display: block;
+    }
+
+    .welcome #customerEmail {
       display: none;
     }
 
@@ -1000,8 +1008,12 @@
 
 <section class="welcome">
   <h1>
-    Karibu tena, tujitume 💪🏾
+    Welcome back <span id="customerName">Customer</span>
   </h1>
+
+  <p class="kiswahili-greeting">
+    Karibu tujitume tena 💪🏾
+  </p>
 
   <p id="customerEmail">
     Loading account...
