@@ -122,6 +122,82 @@
       font-weight: 800;
     }
 
+    /* =========================================================
+       NOTIFICATIONS
+    ========================================================= */
+
+    .notification-panel {
+      position: fixed;
+      top: 76px;
+      right: 18px;
+      z-index: 250;
+      width: min(360px, calc(100vw - 28px));
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 20px 45px rgba(15, 23, 42, .18);
+      overflow: hidden;
+    }
+
+    .notification-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .notification-header h2 {
+      font-size: 18px;
+      color: var(--dark);
+    }
+
+    .notification-close {
+      width: 34px;
+      height: 34px;
+      border: none;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--dark);
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .notification-close:hover {
+      background: #e2e8f0;
+    }
+
+    .notification-empty {
+      padding: 34px 20px;
+      text-align: center;
+    }
+
+    .notification-empty-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: var(--green-light);
+      color: var(--green-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+      font-size: 25px;
+    }
+
+    .notification-empty h3 {
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .notification-empty p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
     main {
       max-width: 1100px;
       margin: 0 auto;
@@ -988,6 +1064,12 @@
       .transaction-amount {
         font-size: 12px;
       }
+
+      .notification-panel {
+        top: 72px;
+        right: 13px;
+        width: calc(100vw - 26px);
+      }
     }
   </style>
 
@@ -1013,7 +1095,8 @@
 
       <button
         class="icon-button"
-        onclick="showMessageBox('Notifications are coming soon.')"
+        aria-label="Notifications"
+        onclick="openNotifications()"
       >
         🔔
       </button>
@@ -1029,6 +1112,50 @@
     </div>
 
   </header>
+
+
+  <!-- NOTIFICATIONS -->
+
+  <div
+    class="notification-panel hidden"
+    id="notificationPanel"
+  >
+
+    <div class="notification-header">
+
+      <h2>
+        Notifications
+      </h2>
+
+      <button
+        class="notification-close"
+        aria-label="Close notifications"
+        onclick="closeNotifications()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="notification-empty">
+
+      <div class="notification-empty-icon">
+        🔔
+      </div>
+
+      <h3>
+        No new notifications
+      </h3>
+
+      <p>
+        You're all caught up. Important TomBrian
+        account and transaction updates will appear here.
+      </p>
+
+    </div>
+
+  </div>
 
 
   <!-- DASHBOARD -->
@@ -2383,6 +2510,38 @@
 
 
     /* =========================================================
+       NOTIFICATIONS
+    ========================================================= */
+
+    window.openNotifications =
+      function() {
+
+        const panel =
+          $("notificationPanel");
+
+        if (!panel) return;
+
+        panel.classList.remove(
+          "hidden"
+        );
+      };
+
+
+    window.closeNotifications =
+      function() {
+
+        const panel =
+          $("notificationPanel");
+
+        if (!panel) return;
+
+        panel.classList.add(
+          "hidden"
+        );
+      };
+
+
+    /* =========================================================
        MESSAGE
     ========================================================= */
 
@@ -3479,6 +3638,9 @@
     window.openAccount =
       function() {
 
+        closeNotifications();
+
+
         $("dashboardPage")
           .classList.add(
             "hidden"
@@ -3600,6 +3762,9 @@
     window.openInvitePage =
       function() {
 
+        closeNotifications();
+
+
         $("dashboardPage")
           .classList.add(
             "hidden"
@@ -3642,6 +3807,9 @@
 
     window.openSettingsPage =
       function() {
+
+        closeNotifications();
+
 
         $("dashboardPage")
           .classList.add(
@@ -3686,6 +3854,9 @@
     window.openAboutPage =
       function() {
 
+        closeNotifications();
+
+
         $("dashboardPage")
           .classList.add(
             "hidden"
@@ -3725,6 +3896,9 @@
 
     window.showHome =
       function() {
+
+        closeNotifications();
+
 
         document
           .querySelectorAll(
@@ -3840,6 +4014,9 @@
 
     window.openService =
       function(action) {
+
+        closeNotifications();
+
 
         currentAction =
           action;
@@ -4344,6 +4521,38 @@
           );
         }
       };
+
+
+    /* =========================================================
+       CLOSE NOTIFICATIONS WHEN CLICKING ELSEWHERE
+    ========================================================= */
+
+    document.addEventListener(
+      "click",
+      function(event) {
+
+        const panel =
+          $("notificationPanel");
+
+        if (!panel) return;
+
+        const clickedInsidePanel =
+          panel.contains(event.target);
+
+        const clickedBell =
+          event.target.closest(
+            ".icon-button"
+          );
+
+        if (
+          !clickedInsidePanel &&
+          !clickedBell
+        ) {
+
+          closeNotifications();
+        }
+      }
+    );
 
 
     /* =========================================================
