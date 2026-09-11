@@ -256,6 +256,24 @@
       font-size: 11px;
     }
 
+    .agent-button {
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+      min-height: 50px;
+      padding: 12px 18px;
+      background: var(--green);
+      color: white;
+      font-weight: 800;
+      font-size: 15px;
+      box-shadow: 0 5px 15px rgba(22, 163, 74, .18);
+      margin-bottom: 28px;
+    }
+
+    .agent-button:hover {
+      background: var(--green-dark);
+    }
+
     .commission-card {
       background: white;
       border: 1px solid var(--border);
@@ -1065,6 +1083,15 @@
   </button>
 
 </section>
+
+<!-- AGENT -->
+
+<button
+  class="agent-button"
+  onclick="openAgentApplication()"
+>
+  🤝 Agent Application
+</button>
 
 <div class="section-title">
   Commission
@@ -3228,6 +3255,133 @@
     }
 
 
+
+
+    /* =========================================================
+       AGENT APPLICATION
+    ========================================================= */
+
+    window.openAgentApplication =
+      function() {
+
+        if (!currentUser) {
+          showMessageBox(
+            "Please sign in again.",
+            "error"
+          );
+          return;
+        }
+
+        const name =
+          currentProfile?.full_name ||
+          currentProfile?.name ||
+          currentUser?.user_metadata?.full_name ||
+          currentUser?.user_metadata?.name ||
+          "";
+
+        const phone =
+          currentProfilePhone ||
+          currentUser?.user_metadata?.phone ||
+          currentUser?.phone ||
+          "";
+
+        $("agentFullName").value = name;
+        $("agentPhone").value = phone;
+        $("agentReason").value = "";
+
+        $("agentApplicationModal")
+          .classList.remove("hidden");
+      };
+
+    window.closeAgentApplication =
+      function() {
+        $("agentApplicationModal")
+          .classList.add("hidden");
+      };
+
+    window.submitAgentApplication =
+      async function() {
+
+        if (!currentUser) {
+          showMessageBox(
+            "Your session has expired. Please sign in again.",
+            "error"
+          );
+          return;
+        }
+
+        const name = $("agentFullName").value.trim();
+        const phone = $("agentPhone").value.trim();
+        const reason = $("agentReason").value.trim();
+
+        if (!name) {
+          showMessageBox("Please enter your full name.", "error");
+          return;
+        }
+
+        if (!phone) {
+          showMessageBox("Please enter your phone number.", "error");
+          return;
+        }
+
+        if (!reason) {
+          showMessageBox("Please enter a short reason.", "error");
+          return;
+        }
+
+        const submitButton = $("agentSubmitButton");
+
+        if (submitButton) {
+          submitButton.disabled = true;
+          submitButton.textContent = "Submitting...";
+        }
+
+        try {
+          const result =
+            await supabase
+              .from("agent_applications")
+              .insert({
+                user_id: currentUser.id,
+                full_name: name,
+                phone: phone,
+                reason: reason
+              });
+
+          if (result.error) {
+            console.error(
+              "Agent application error:",
+              result.error
+            );
+            throw result.error;
+          }
+
+          closeAgentApplication();
+
+          showMessageBox(
+            "Your agent application has been submitted successfully.",
+            "success"
+          );
+
+        } catch (error) {
+          console.error(
+            "Agent application submission error:",
+            error
+          );
+
+          showMessageBox(
+            error?.message ||
+            "Could not submit your agent application. Please try again.",
+            "error"
+          );
+
+        } finally {
+          if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = "Submit Application";
+          }
+        }
+      };
+
     /* =========================================================
        NOTIFICATIONS
     ========================================================= */
@@ -3801,6 +3955,90 @@
 
   </script>
 
+
+
+
+  <!-- AGENT APPLICATION MODAL -->
+
+  <div
+    class="modal-overlay hidden"
+    id="agentApplicationModal"
+  >
+
+    <div class="modal">
+
+      <div class="modal-header">
+        <h2>
+          Agent Application
+        </h2>
+
+        <button
+          class="close-button"
+          onclick="closeAgentApplication()"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label for="agentFullName">
+          Full Name
+        </label>
+
+        <input
+          class="form-input"
+          id="agentFullName"
+          type="text"
+          placeholder="Your full name"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="agentPhone">
+          Phone Number
+        </label>
+
+        <input
+          class="form-input"
+          id="agentPhone"
+          type="tel"
+          placeholder="07XXXXXXXX"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="agentReason">
+          Reason / Short Note
+        </label>
+
+        <textarea
+          class="form-textarea"
+          id="agentReason"
+          maxlength="300"
+          placeholder="Why would you like to become a TomBrian agent?"
+        ></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button
+          class="secondary-button"
+          onclick="closeAgentApplication()"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="primary-button"
+          id="agentSubmitButton"
+          onclick="submitAgentApplication()"
+        >
+          Submit Application
+        </button>
+      </div>
+
+    </div>
+
+  </div>
 
   <!-- NOTIFICATIONS -->
   <div id="notificationsPanel" class="modal-overlay hidden" onclick="closeNotifications()">
