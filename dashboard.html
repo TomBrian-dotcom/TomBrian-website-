@@ -154,6 +154,7 @@
     .welcome p {
       color: var(--muted);
       font-size: 14px;
+      display: none;
     }
 
     .balance-card {
@@ -971,7 +972,7 @@
 <div class="header-actions">
   <button
     class="icon-button"
-    onclick="showMessageBox('Notifications are coming soon.')"
+    onclick="openNotifications()"
   >
     🔔
   </button>
@@ -3218,6 +3219,26 @@
 
 
     /* =========================================================
+       NOTIFICATIONS
+    ========================================================= */
+    window.openNotifications =
+      function() {
+        const panel = $("notificationsPanel");
+        if (panel) {
+          panel.classList.remove("hidden");
+        }
+      };
+
+    window.closeNotifications =
+      function() {
+        const panel = $("notificationsPanel");
+        if (panel) {
+          panel.classList.add("hidden");
+        }
+      };
+
+
+    /* =========================================================
        SERVICE MODAL
     ========================================================= */
 
@@ -3732,6 +3753,20 @@
     initialize();
 
   </script>
+
+
+  <!-- NOTIFICATIONS -->
+  <div id="notificationsPanel" class="modal-overlay hidden" onclick="closeNotifications()">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Notifications</h2>
+        <button class="icon-button" type="button" onclick="closeNotifications()">✕</button>
+      </div>
+      <div style="padding: 20px 0; color: var(--muted); text-align: center;">
+        No new notifications.
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
