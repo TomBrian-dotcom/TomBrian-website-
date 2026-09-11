@@ -3232,8 +3232,25 @@
        NOTIFICATIONS
     ========================================================= */
     window.openNotifications =
-      function() {
-        const panel = $("notificationsPanel");
+      async function() {
+
+        /*
+         * Refresh the balance first so the notification panel
+         * always shows the customer's latest available balance.
+         */
+        await loadBalance();
+
+        const balance =
+          $("notificationBalance");
+
+        if (balance) {
+          balance.textContent =
+            Number(currentBalance).toFixed(2);
+        }
+
+        const panel =
+          $("notificationsPanel");
+
         if (panel) {
           panel.classList.remove("hidden");
         }
@@ -3241,7 +3258,10 @@
 
     window.closeNotifications =
       function() {
-        const panel = $("notificationsPanel");
+
+        const panel =
+          $("notificationsPanel");
+
         if (panel) {
           panel.classList.add("hidden");
         }
@@ -3307,7 +3327,7 @@
 
 
     window.submitService =
-      function() {
+      async function() {
 
         const phone =
           $("servicePhone")
@@ -3346,19 +3366,36 @@
         }
 
 
+        /*
+         * Refresh the balance before any money-related check.
+         */
+        await loadBalance();
+
         /* =========================================================
-           BUY AIRTIME — BALANCE CHECK
+           BUY AIRTIME / WITHDRAW — BALANCE CHECK
         ========================================================= */
 
         if (
-          currentAction === "buy" &&
+          (
+            currentAction === "buy" ||
+            currentAction === "withdraw"
+          ) &&
           amount > currentBalance
         ) {
 
+          const message =
+            currentAction === "withdraw"
+              ? "Insufficient funds. You can withdraw up to KES " +
+                Number(currentBalance).toFixed(2) +
+                ". Your current balance is KES " +
+                Number(currentBalance).toFixed(2) +
+                "."
+              : "Insufficient funds. Your account balance is KES " +
+                Number(currentBalance).toFixed(2) +
+                ". Please top up your account and try again.";
+
           showMessageBox(
-            "Insufficient funds. Your account balance is KES " +
-            Number(currentBalance).toFixed(2) +
-            ". Please top up your account and try again.",
+            message,
             "error"
           );
 
@@ -3767,12 +3804,23 @@
 
   <!-- NOTIFICATIONS -->
   <div id="notificationsPanel" class="modal-overlay hidden" onclick="closeNotifications()">
-    <div class="modal-card" onclick="event.stopPropagation()">
+    <div class="modal" onclick="event.stopPropagation()">
       <div class="modal-header">
         <h2>Notifications</h2>
-        <button class="icon-button" type="button" onclick="closeNotifications()">✕</button>
+        <button class="close-button" type="button" onclick="closeNotifications()">×</button>
       </div>
-      <div style="padding: 20px 0; color: var(--muted); text-align: center;">
+
+      <div style="padding: 4px 0 8px;">
+        <div style="font-size: 13px; color: var(--muted); margin-bottom: 7px;">
+          Current account balance
+        </div>
+
+        <div style="font-size: 25px; font-weight: 900;">
+          KES <span id="notificationBalance">0.00</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 18px; padding: 14px; border-radius: 13px; background: #f8fafc; color: var(--muted); font-size: 13px; line-height: 1.5;">
         No new notifications.
       </div>
     </div>
