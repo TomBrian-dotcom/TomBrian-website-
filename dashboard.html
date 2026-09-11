@@ -1,72 +1,3737 @@
-```javascript
-window.submitService =
-  function() {
+<!DOCTYPE html>
 
-    const phone =
-      $("servicePhone")
-        .value
-        .trim();
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TomBrian | Dashboard</title>
 
-
-    const amount =
-      Number(
-        $("serviceAmount")
-          .value
-      );
-
-
-    if (!phone) {
-
-      showMessageBox(
-        "Please enter a phone number.",
-        "error"
-      );
-
-      return;
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
+    :root {
+      --green: #16a34a;
+      --green-dark: #15803d;
+      --green-light: #dcfce7;
+      --dark: #0f172a;
+      --dark-2: #1e293b;
+      --text: #172033;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --bg: #f8fafc;
+      --white: #ffffff;
+      --danger: #dc2626;
+      --warning: #d97706;
+      --shadow: 0 10px 30px rgba(15, 23, 42, .08);
+    }
 
-    if (
-      !amount ||
-      amount <= 0
-    ) {
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
 
-      showMessageBox(
-        "Please enter a valid amount.",
-        "error"
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 68px;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      color: var(--dark);
+      font-size: 19px;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--green), #22c55e);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      letter-spacing: -1px;
+      box-shadow: 0 5px 15px rgba(22, 163, 74, .25);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-button {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--dark);
+    }
+
+    .icon-button:hover {
+      background: #f1f5f9;
+    }
+
+    .profile-circle {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--dark);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 18px 100px;
+    }
+
+    .connection {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 22px;
+    }
+
+    .connection-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .welcome {
+      margin-bottom: 24px;
+    }
+
+    .welcome h1 {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .welcome p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .balance-card {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .balance-card::after {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      right: -60px;
+      top: -70px;
+      border-radius: 50%;
+      background: rgba(34, 197, 94, .12);
+    }
+
+    .balance-label {
+      color: rgba(255,255,255,.7);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .balance-value {
+      font-size: 35px;
+      font-weight: 900;
+      margin-bottom: 5px;
+    }
+
+    .balance-currency {
+      color: rgba(255,255,255,.7);
+      font-size: 13px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 13px;
+      margin-bottom: 28px;
+    }
+
+    .action-card {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 17px;
+      padding: 17px 12px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(15,23,42,.04);
+      transition: .2s ease;
+    }
+
+    .action-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .action-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: var(--green-light);
+      color: var(--green-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .action-card h3 {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .action-card p {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .commission-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 15px rgba(15,23,42,.04);
+    }
+
+    .commission-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .commission-label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+
+    .commission-value {
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .commission-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 15px;
+      background: #fef3c7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 23px;
+    }
+
+    .transactions-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 25px;
+    }
+
+    .transaction {
+      padding: 15px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .transaction:last-child {
+      border-bottom: none;
+    }
+
+    .transaction-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .transaction-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .transaction-name {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .transaction-date {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    .transaction-amount {
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .empty-state {
+      padding: 35px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .notice {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      padding: 15px;
+      border-radius: 14px;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-top: 20px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 90;
+    }
+
+    .nav-inner {
+      width: 100%;
+      max-width: 600px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .nav-button {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      padding: 7px 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+    }
+
+    .nav-button span:first-child {
+      font-size: 20px;
+    }
+
+    .nav-button.active {
+      color: var(--green-dark);
+      font-weight: 800;
+    }
+
+    .page {
+      display: none;
+      min-height: calc(100vh - 68px);
+      padding: 22px 18px 100px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .back-button {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 20px;
+    }
+
+    .page-header h2 {
+      font-size: 23px;
+    }
+
+    .profile-card {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      border-radius: 22px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .profile-initial {
+      width: 65px;
+      height: 65px;
+      border-radius: 20px;
+      background: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 27px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .profile-info h2 {
+      font-size: 21px;
+      margin-bottom: 5px;
+    }
+
+    .profile-info p {
+      color: rgba(255,255,255,.7);
+      font-size: 13px;
+      word-break: break-word;
+    }
+
+    .account-balance {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 22px;
+    }
+
+    .account-balance-label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+
+    .account-balance-value {
+      font-size: 27px;
+      font-weight: 900;
+    }
+
+    .account-section {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .account-section-title {
+      padding: 16px 18px 10px;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      font-weight: 800;
+    }
+
+    .account-item {
+      width: 100%;
+      background: white;
+      border: none;
+      border-top: 1px solid var(--border);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      text-align: left;
+      gap: 13px;
+    }
+
+    .account-item:hover {
+      background: #f8fafc;
+    }
+
+    .account-item-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .account-item-content {
+      flex: 1;
+    }
+
+    .account-item-title {
+      font-weight: 750;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .account-item-subtitle {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .chevron {
+      color: #94a3b8;
+      font-size: 20px;
+    }
+
+    .logout-item {
+      color: var(--danger);
+    }
+
+    .logout-item .account-item-icon {
+      color: var(--danger);
+      background: #fee2e2;
+    }
+
+    .account-footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 10px 0 30px;
+    }
+
+    .invite-hero {
+      background: linear-gradient(135deg, #17233d, #0d111c);
+      color: white;
+      border-radius: 22px;
+      padding: 23px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(217,164,65,.25);
+    }
+
+    .invite-hero-icon {
+      font-size: 38px;
+      margin-bottom: 12px;
+    }
+
+    .invite-hero h3 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .invite-hero p {
+      color: rgba(255,255,255,.72);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .invite-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 15px;
+    }
+
+    .field-label {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+
+    .referral-code {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      margin-bottom: 22px;
+      word-break: break-word;
+    }
+
+    .referral-link-box {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 13px;
+      font-size: 13px;
+      color: var(--text);
+      word-break: break-all;
+      margin-bottom: 15px;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .primary-button,
+    .secondary-button,
+    .danger-button {
+      border: none;
+      border-radius: 13px;
+      min-height: 46px;
+      padding: 10px 15px;
+      font-weight: 750;
+    }
+
+    .primary-button {
+      background: var(--green);
+      color: white;
+    }
+
+    .primary-button:hover {
+      background: var(--green-dark);
+    }
+
+    .secondary-button {
+      background: #f1f5f9;
+      color: var(--dark);
+    }
+
+    .danger-button {
+      background: #fee2e2;
+      color: var(--danger);
+    }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 17px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .setting-row:last-child {
+      border-bottom: none;
+    }
+
+    .setting-info {
+      flex: 1;
+    }
+
+    .setting-title {
+      font-weight: 750;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .setting-description {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .switch {
+      position: relative;
+      width: 48px;
+      height: 27px;
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      background: #cbd5e1;
+      transition: .2s;
+    }
+
+    .slider::before {
+      content: "";
+      position: absolute;
+      width: 21px;
+      height: 21px;
+      left: 3px;
+      top: 3px;
+      border-radius: 50%;
+      background: white;
+      transition: .2s;
+      box-shadow: 0 2px 5px rgba(0,0,0,.15);
+    }
+
+    .switch input:checked + .slider {
+      background: var(--green);
+    }
+
+    .switch input:checked + .slider::before {
+      transform: translateX(21px);
+    }
+
+    .about-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 30px 22px;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .about-logo {
+      width: 78px;
+      height: 78px;
+      border-radius: 23px;
+      background: linear-gradient(135deg, var(--green), #22c55e);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 28px;
+      margin: 0 auto 15px;
+    }
+
+    .about-card h2 {
+      font-size: 26px;
+      margin-bottom: 5px;
+    }
+
+    .tagline {
+      color: var(--green-dark);
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .about-card p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .about-info {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .about-row {
+      padding: 17px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-row:last-child {
+      border-bottom: none;
+    }
+
+    .about-row strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+
+    .about-row span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: rgba(15,23,42,.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 470px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: white;
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 0 25px 60px rgba(15,23,42,.25);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+      font-size: 20px;
+    }
+
+    .close-button {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: none;
+      background: #f1f5f9;
+      font-size: 19px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 7px;
+      font-weight: 700;
+    }
+
+    .form-input {
+      width: 100%;
+      height: 46px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0 13px;
+      outline: none;
+      color: var(--text);
+      background: white;
+    }
+
+    .form-input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(22,163,74,.1);
+    }
+
+    .form-input[readonly] {
+      background: #f8fafc;
+      color: var(--muted);
+    }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .message-box {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 500;
+      width: min(90%, 430px);
+      background: var(--dark);
+      color: white;
+      padding: 14px 17px;
+      border-radius: 13px;
+      box-shadow: var(--shadow);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .message-box.success {
+      background: var(--green-dark);
+    }
+
+    .message-box.error {
+      background: var(--danger);
+    }
+
+    @media (max-width: 700px) {
+      .actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .welcome h1 {
+        font-size: 24px;
+      }
+
+      .balance-value {
+        font-size: 30px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      header {
+        padding: 0 13px;
+      }
+
+      main,
+      .page {
+        padding-left: 13px;
+        padding-right: 13px;
+      }
+
+      .brand {
+        font-size: 17px;
+      }
+
+      .logo {
+        width: 37px;
+        height: 37px;
+      }
+
+      .profile-card {
+        padding: 18px;
+      }
+
+      .button-row,
+      .modal-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .transaction {
+        padding: 13px;
+      }
+
+      .transaction-amount {
+        font-size: 12px;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="logo">TB</div>
+      <span>TomBrian</span>
+    </div>
+
+
+<div class="header-actions">
+  <button
+    class="icon-button"
+    onclick="showMessageBox('Notifications are coming soon.')"
+  >
+    🔔
+  </button>
+
+  <button
+    class="profile-circle"
+    id="headerProfileCircle"
+    onclick="openAccount()"
+  >
+    T
+  </button>
+</div>
+
+  </header>
+
+  <!-- DASHBOARD -->
+
+  <main id="dashboardPage">
+
+
+<div class="connection">
+  <span class="connection-dot"></span>
+  <span id="connectionText">Connected</span>
+</div>
+
+<section class="welcome">
+  <h1>
+    Welcome,
+    <span id="customerName">Customer</span>
+    👋
+  </h1>
+
+  <p id="customerEmail">
+    Loading account...
+  </p>
+</section>
+
+<section class="balance-card">
+  <div class="balance-label">
+    Available Balance
+  </div>
+
+  <div class="balance-value">
+    KES <span id="balanceValue">0.00</span>
+  </div>
+
+  <div class="balance-currency">
+    TomBrian Account Balance
+  </div>
+</section>
+
+<div class="section-title">
+  Quick Actions
+</div>
+
+<section class="actions-grid">
+
+  <button class="action-card" onclick="openService('buy')">
+    <div class="action-icon">📱</div>
+    <h3>Buy Airtime</h3>
+    <p>Purchase airtime</p>
+  </button>
+
+  <button class="action-card" onclick="openService('sell')">
+    <div class="action-icon">💰</div>
+    <h3>Sell Airtime</h3>
+    <p>Sell your airtime</p>
+  </button>
+
+  <button class="action-card" onclick="openService('topup')">
+    <div class="action-icon">➕</div>
+    <h3>Top Up</h3>
+    <p>Add money</p>
+  </button>
+
+  <button class="action-card" onclick="openService('withdraw')">
+    <div class="action-icon">🏦</div>
+    <h3>Withdraw</h3>
+    <p>Withdraw funds</p>
+  </button>
+
+</section>
+
+<div class="section-title">
+  Commission
+</div>
+
+<section class="commission-card">
+
+  <div class="commission-row">
+
+    <div>
+      <div class="commission-label">
+        Available Commission
+      </div>
+
+      <div class="commission-value">
+        KES <span id="commissionValue">0.00</span>
+      </div>
+    </div>
+
+    <div class="commission-icon">
+      🎁
+    </div>
+
+  </div>
+
+</section>
+
+<div class="section-title">
+  Recent Transactions
+</div>
+
+<section
+  class="transactions-card"
+  id="transactionsList"
+>
+  <div class="empty-state">
+    No transactions yet.
+  </div>
+</section>
+
+<div class="notice">
+  <strong>TomBrian Services</strong><br>
+  Live airtime, M-Pesa top-up, withdrawal and transaction processing
+  will be connected to the production services as they are enabled.
+</div>
+
+  </main>
+
+  <!-- ACCOUNT PAGE -->
+
+  <section class="page" id="accountPage">
+
+
+<div class="page-header">
+  <button class="back-button" onclick="closeAccount()">
+    ←
+  </button>
+
+  <h2>Account</h2>
+</div>
+
+<div class="profile-card">
+
+  <div
+    class="profile-initial"
+    id="accountProfileInitial"
+  >
+    T
+  </div>
+
+  <div class="profile-info">
+
+    <h2 id="accountProfileName">
+      Customer
+    </h2>
+
+    <p id="accountProfileEmail">
+      No email set
+    </p>
+
+  </div>
+
+</div>
+
+<div class="account-balance">
+
+  <div class="account-balance-label">
+    Available Balance
+  </div>
+
+  <div class="account-balance-value">
+    KES <span id="accountBalanceValue">0.00</span>
+  </div>
+
+</div>
+
+
+<div class="account-section">
+
+  <div class="account-section-title">
+    Profile
+  </div>
+
+  <button
+    class="account-item"
+    onclick="openEditProfile()"
+  >
+
+    <div class="account-item-icon">
+      👤
+    </div>
+
+    <div class="account-item-content">
+
+      <div class="account-item-title">
+        My Profile
+      </div>
+
+      <div class="account-item-subtitle">
+        View and update your personal information
+      </div>
+
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+
+  </button>
+
+</div>
+
+
+<div class="account-section">
+
+  <div class="account-section-title">
+    Referrals
+  </div>
+
+  <button
+    class="account-item"
+    onclick="openInvitePage()"
+  >
+
+    <div class="account-item-icon">
+      👥
+    </div>
+
+    <div class="account-item-content">
+
+      <div class="account-item-title">
+        Invite Friends
+      </div>
+
+      <div class="account-item-subtitle">
+        Share your TomBrian invite link and grow your network
+      </div>
+
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+
+  </button>
+
+</div>
+
+
+<div class="account-section">
+
+  <div class="account-section-title">
+    Preferences
+  </div>
+
+  <button
+    class="account-item"
+    onclick="openSettingsPage()"
+  >
+
+    <div class="account-item-icon">
+      ⚙️
+    </div>
+
+    <div class="account-item-content">
+
+      <div class="account-item-title">
+        Settings
+      </div>
+
+      <div class="account-item-subtitle">
+        Manage your account and notification preferences
+      </div>
+
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+
+  </button>
+
+</div>
+
+
+<div class="account-section">
+
+  <div class="account-section-title">
+    TomBrian
+  </div>
+
+  <button
+    class="account-item"
+    onclick="openAboutPage()"
+  >
+
+    <div class="account-item-icon">
+      ℹ️
+    </div>
+
+    <div class="account-item-content">
+
+      <div class="account-item-title">
+        About TomBrian
+      </div>
+
+      <div class="account-item-subtitle">
+        Learn more about TomBrian
+      </div>
+
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+
+  </button>
+
+</div>
+
+
+<div class="account-section">
+
+  <div class="account-section-title">
+    Security
+  </div>
+
+  <button
+    class="account-item"
+    onclick="openPasswordModal()"
+  >
+
+    <div class="account-item-icon">
+      🔐
+    </div>
+
+    <div class="account-item-content">
+
+      <div class="account-item-title">
+        Change Password
+      </div>
+
+      <div class="account-item-subtitle">
+        Update your account password
+      </div>
+
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+
+  </button>
+
+
+  <button
+    class="account-item logout-item"
+    onclick="signOut()"
+  >
+
+    <div class="account-item-icon">
+      🚪
+    </div>
+
+    <div class="account-item-content">
+
+      <div class="account-item-title">
+        Sign Out
+      </div>
+
+      <div class="account-item-subtitle">
+        Sign out of your TomBrian account
+      </div>
+
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+
+  </button>
+
+</div>
+
+<div class="account-footer">
+  TomBrian • Dream • Work • Achieve
+</div>
+
+  </section>
+
+  <!-- INVITE PAGE -->
+
+  <section class="page" id="invitePage">
+
+
+<div class="page-header">
+
+  <button
+    class="back-button"
+    onclick="backToAccount()"
+  >
+    ←
+  </button>
+
+  <h2>
+    Invite Friends
+  </h2>
+
+</div>
+
+<div class="invite-hero">
+
+  <div class="invite-hero-icon">
+    👥
+  </div>
+
+  <h3>
+    Invite people to TomBrian
+  </h3>
+
+  <p>
+    Every TomBrian customer has a personal invite link.
+    Share yours with friends and family.
+  </p>
+
+</div>
+
+<div class="invite-card">
+
+  <div class="field-label">
+    Your referral code
+  </div>
+
+  <div
+    class="referral-code"
+    id="referralCode"
+  >
+    Loading...
+  </div>
+
+  <div class="field-label">
+    Your invite link
+  </div>
+
+  <input
+    class="referral-link-box"
+    id="referralLink"
+    type="text"
+    readonly
+    value=""
+  >
+
+  <div class="button-row">
+
+    <button
+      class="secondary-button"
+      onclick="copyReferralLink()"
+    >
+      📋 Copy Invite Link
+    </button>
+
+    <button
+      class="primary-button"
+      onclick="shareReferralLink()"
+    >
+      📤 Share With Friends
+    </button>
+
+  </div>
+
+</div>
+
+  </section>
+
+  <!-- SETTINGS PAGE -->
+
+  <section class="page" id="settingsPage">
+
+
+<div class="page-header">
+
+  <button
+    class="back-button"
+    onclick="backToAccount()"
+  >
+    ←
+  </button>
+
+  <h2>
+    Settings
+  </h2>
+
+</div>
+
+<div class="account-section">
+
+  <div class="account-section-title">
+    Notifications
+  </div>
+
+  <div class="setting-row">
+
+    <div class="setting-info">
+
+      <div class="setting-title">
+        Notifications
+      </div>
+
+      <div class="setting-description">
+        Receive general TomBrian notifications
+      </div>
+
+    </div>
+
+    <label class="switch">
+
+      <input
+        type="checkbox"
+        id="notificationsToggle"
+        onchange="saveSetting('tombrian_notifications', this.checked)"
+      >
+
+      <span class="slider"></span>
+
+    </label>
+
+  </div>
+
+
+  <div class="setting-row">
+
+    <div class="setting-info">
+
+      <div class="setting-title">
+        Transaction Alerts
+      </div>
+
+      <div class="setting-description">
+        Receive alerts about account transactions
+      </div>
+
+    </div>
+
+    <label class="switch">
+
+      <input
+        type="checkbox"
+        id="transactionAlertsToggle"
+        onchange="saveSetting('tombrian_transaction_alerts', this.checked)"
+      >
+
+      <span class="slider"></span>
+
+    </label>
+
+  </div>
+
+</div>
+
+
+<div class="account-section">
+
+  <div class="account-section-title">
+    Account
+  </div>
+
+  <button
+    class="account-item"
+    onclick="openEditProfile()"
+  >
+
+    <div class="account-item-icon">
+      👤
+    </div>
+
+    <div class="account-item-content">
+
+      <div class="account-item-title">
+        Edit Profile
+      </div>
+
+      <div class="account-item-subtitle">
+        Update your name and phone number
+      </div>
+
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+
+  </button>
+
+
+  <button
+    class="account-item"
+    onclick="openPasswordModal()"
+  >
+
+    <div class="account-item-icon">
+      🔐
+    </div>
+
+    <div class="account-item-content">
+
+      <div class="account-item-title">
+        Change Password
+      </div>
+
+      <div class="account-item-subtitle">
+        Update your password
+      </div>
+
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+
+  </button>
+
+</div>
+
+  </section>
+
+  <!-- ABOUT PAGE -->
+
+  <section class="page" id="aboutPage">
+
+
+<div class="page-header">
+
+  <button
+    class="back-button"
+    onclick="backToAccount()"
+  >
+    ←
+  </button>
+
+  <h2>
+    About TomBrian
+  </h2>
+
+</div>
+
+<div class="about-card">
+
+  <div class="about-logo">
+    TB
+  </div>
+
+  <h2>
+    TomBrian
+  </h2>
+
+  <div class="tagline">
+    Dream • Work • Achieve
+  </div>
+
+  <p>
+    TomBrian is a digital platform designed to make everyday
+    account, airtime, money and referral services simple and
+    accessible.
+  </p>
+
+</div>
+
+<div class="about-info">
+
+  <div class="about-row">
+
+    <strong>
+      Version
+    </strong>
+
+    <span>
+      TomBrian Web 1.0
+    </span>
+
+  </div>
+
+  <div class="about-row">
+
+    <strong>
+      Our Goal
+    </strong>
+
+    <span>
+      To provide convenient and reliable digital services
+      for TomBrian customers.
+    </span>
+
+  </div>
+
+  <div class="about-row">
+
+    <strong>
+      Services
+    </strong>
+
+    <span>
+      Airtime services, account management, referrals,
+      top-ups and withdrawals.
+    </span>
+
+  </div>
+
+  <div class="about-row">
+
+    <strong>
+      Support
+    </strong>
+
+    <span>
+      TomBrian customer support will be available through
+      the supported TomBrian communication channels.
+    </span>
+
+  </div>
+
+</div>
+
+  </section>
+
+  <!-- BOTTOM NAV -->
+
+  <div class="bottom-nav">
+
+
+<div class="nav-inner">
+
+  <button
+    class="nav-button active"
+    id="navHome"
+    onclick="showHome()"
+  >
+    <span>⌂</span>
+    <span>Home</span>
+  </button>
+
+  <button
+    class="nav-button"
+    id="navTransactions"
+    onclick="showTransactions()"
+  >
+    <span>▤</span>
+    <span>Transactions</span>
+  </button>
+
+  <button
+    class="nav-button"
+    id="navCommission"
+    onclick="showCommission()"
+  >
+    <span>◉</span>
+    <span>Commission</span>
+  </button>
+
+  <button
+    class="nav-button"
+    id="navAccount"
+    onclick="openAccount()"
+  >
+    <span>👤</span>
+    <span>Account</span>
+  </button>
+
+</div>
+
+  </div>
+
+  <!-- SERVICE MODAL -->
+
+  <div
+    class="modal-overlay hidden"
+    id="serviceModal"
+  >
+
+
+<div class="modal">
+
+  <div class="modal-header">
+
+    <h2 id="serviceTitle">
+      Service
+    </h2>
+
+    <button
+      class="close-button"
+      onclick="closeService()"
+    >
+      ×
+    </button>
+
+  </div>
+
+  <div>
+
+    <div class="form-group">
+
+      <label for="servicePhone">
+        Phone Number
+      </label>
+
+      <input
+        class="form-input"
+        id="servicePhone"
+        type="tel"
+        placeholder="07XXXXXXXX"
+      >
+
+    </div>
+
+    <div class="form-group">
+
+      <label for="serviceAmount">
+        Amount (KES)
+      </label>
+
+      <input
+        class="form-input"
+        id="serviceAmount"
+        type="number"
+        min="1"
+        placeholder="Enter amount"
+      >
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button
+        class="secondary-button"
+        onclick="closeService()"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="primary-button"
+        onclick="submitService()"
+      >
+        Continue
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+  </div>
+
+  <!-- EDIT PROFILE MODAL -->
+
+  <div
+    class="modal-overlay hidden"
+    id="editProfileModal"
+  >
+
+
+<div class="modal">
+
+  <div class="modal-header">
+
+    <h2>
+      Edit Profile
+    </h2>
+
+    <button
+      class="close-button"
+      onclick="closeEditProfile()"
+    >
+      ×
+    </button>
+
+  </div>
+
+  <div class="form-group">
+
+    <label for="editFullName">
+      Full Name
+    </label>
+
+    <input
+      class="form-input"
+      id="editFullName"
+      type="text"
+      placeholder="Your full name"
+    >
+
+  </div>
+
+  <div class="form-group">
+
+    <label for="editPhone">
+      Phone Number
+    </label>
+
+    <input
+      class="form-input"
+      id="editPhone"
+      type="tel"
+      placeholder="07XXXXXXXX"
+    >
+
+  </div>
+
+  <div class="form-group">
+
+    <label for="editEmail">
+      Email
+    </label>
+
+    <input
+      class="form-input"
+      id="editEmail"
+      type="email"
+      readonly
+    >
+
+  </div>
+
+  <div class="modal-actions">
+
+    <button
+      class="secondary-button"
+      onclick="closeEditProfile()"
+    >
+      Cancel
+    </button>
+
+    <button
+      class="primary-button"
+      onclick="saveProfile()"
+    >
+      Save Changes
+    </button>
+
+  </div>
+
+</div>
+
+  </div>
+
+  <!-- PASSWORD MODAL -->
+
+  <div
+    class="modal-overlay hidden"
+    id="passwordModal"
+  >
+
+
+<div class="modal">
+
+  <div class="modal-header">
+
+    <h2>
+      Change Password
+    </h2>
+
+    <button
+      class="close-button"
+      onclick="closePasswordModal()"
+    >
+      ×
+    </button>
+
+  </div>
+
+  <div class="form-group">
+
+    <label for="newPassword">
+      New Password
+    </label>
+
+    <input
+      class="form-input"
+      id="newPassword"
+      type="password"
+      placeholder="At least 6 characters"
+    >
+
+  </div>
+
+  <div class="form-group">
+
+    <label for="confirmPassword">
+      Confirm Password
+    </label>
+
+    <input
+      class="form-input"
+      id="confirmPassword"
+      type="password"
+      placeholder="Repeat password"
+    >
+
+  </div>
+
+  <div class="modal-actions">
+
+    <button
+      class="secondary-button"
+      onclick="closePasswordModal()"
+    >
+      Cancel
+    </button>
+
+    <button
+      class="primary-button"
+      onclick="changePassword()"
+    >
+      Update Password
+    </button>
+
+  </div>
+
+</div>
+
+  </div>
+
+  <!-- MESSAGE -->
+
+  <div
+    class="message-box hidden"
+    id="messageBox"
+  ></div>
+
+  <!-- SUPABASE + JAVASCRIPT -->
+
+  <script type="module">
+
+    import {
+      createClient
+    } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+
+    /* =========================================================
+       SUPABASE
+    ========================================================= */
+
+    const SUPABASE_URL =
+      "https://ekqhsnzkovzmepxdajtu.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_v4DmfQMCBRvJE_dJvgk1og_v6JMXE_r";
+
+    const supabase =
+      createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
       );
 
-      return;
+
+    /* =========================================================
+       STATE
+    ========================================================= */
+
+    let currentUser = null;
+    let currentProfile = null;
+    let currentProfilePhone = "";
+    let currentBalance = 0;
+    let currentCommission = 0;
+    let currentReferralCode = "";
+    let currentAction = null;
+
+
+    /* =========================================================
+       ELEMENT HELPER
+    ========================================================= */
+
+    function $(id) {
+      return document.getElementById(id);
     }
 
 
     /* =========================================================
-       BUY AIRTIME — BALANCE CHECK
+       MESSAGE
     ========================================================= */
 
-    if (
-      currentAction === "buy" &&
-      amount > currentBalance
-    ) {
+    window.showMessageBox = function(message, type = "") {
 
-      showMessageBox(
-        "Insufficient funds. Your account balance is not enough to buy this airtime. Please top up your account and try again.",
-        "error"
-      );
+      const box = $("messageBox");
 
-      return;
+      if (!box) return;
+
+      box.textContent = message;
+
+      box.className =
+        "message-box" +
+        (type ? " " + type : "");
+
+      box.classList.remove("hidden");
+
+      clearTimeout(window.__messageTimer);
+
+      window.__messageTimer =
+        setTimeout(function() {
+          box.classList.add("hidden");
+        }, 3500);
+    };
+
+
+    /* =========================================================
+       AUTH SESSION
+    ========================================================= */
+
+    async function getCurrentSession() {
+
+      const result =
+        await supabase.auth.getSession();
+
+      if (result.error) {
+        console.error(
+          "Session error:",
+          result.error
+        );
+      }
+
+      return result.data?.session || null;
     }
 
 
     /* =========================================================
-       SERVICE PROCESSING
+       INITIALIZE
     ========================================================= */
 
-    showMessageBox(
-      "This service will be connected to live processing shortly."
+    async function initialize() {
+
+      try {
+
+        const session =
+          await getCurrentSession();
+
+        if (!session) {
+
+          window.location.href =
+            "login.html";
+
+          return;
+        }
+
+        currentUser =
+          session.user;
+
+
+        /*
+         * IMPORTANT:
+         * Load the profile first.
+         *
+         * Balance, commission and transactions
+         * are loaded separately so they cannot
+         * block the Account page.
+         */
+
+        await loadProfile();
+
+
+        /*
+         * Generate the referral information
+         * after the profile has been loaded.
+         */
+
+        generateReferralInfo();
+
+
+        /*
+         * These are intentionally NOT awaited.
+         * If one database table is unavailable,
+         * the Account page still works.
+         */
+
+        loadBalance();
+        loadCommission();
+        loadTransactions();
+        loadSettings();
+
+
+        $("connectionText").textContent =
+          "Connected";
+
+
+      } catch (error) {
+
+        console.error(
+          "Dashboard initialization error:",
+          error
+        );
+
+        showMessageBox(
+          "Could not load your account.",
+          "error"
+        );
+      }
+    }
+
+
+    /* =========================================================
+       AUTH STATE
+    ========================================================= */
+
+    supabase.auth.onAuthStateChange(
+      function(event, session) {
+
+        if (event === "SIGNED_OUT") {
+
+          window.location.href =
+            "login.html";
+
+          return;
+        }
+
+        if (
+          event === "SIGNED_IN" &&
+          session?.user
+        ) {
+
+          currentUser =
+            session.user;
+
+          /*
+           * Do not block the auth callback.
+           */
+
+          setTimeout(async function() {
+
+            await loadProfile();
+
+            generateReferralInfo();
+
+            loadBalance();
+            loadCommission();
+            loadTransactions();
+
+          }, 0);
+        }
+      }
     );
 
 
-    closeService();
-  };
-```
+    /* =========================================================
+       PROFILE
+    ========================================================= */
+
+    async function loadProfile() {
+
+      if (!currentUser) return;
+
+
+      let name =
+        currentUser.user_metadata?.full_name ||
+        currentUser.user_metadata?.name ||
+        "Customer";
+
+
+      let phone =
+        currentUser.user_metadata?.phone ||
+        currentUser.phone ||
+        "";
+
+
+      /*
+       * Auth metadata is only a fallback.
+       *
+       * The permanent referral code is read
+       * from profiles.referral_code, exactly
+       * like the TomBrian App.
+       */
+
+      let referralCode =
+        currentUser.user_metadata?.referral_code ||
+        currentUser.user_metadata?.referralCode ||
+        currentUser.user_metadata?.ref ||
+        "";
+
+
+      try {
+
+        const result =
+          await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", currentUser.id)
+            .maybeSingle();
+
+
+        if (
+          !result.error &&
+          result.data
+        ) {
+
+          currentProfile =
+            result.data;
+
+
+          name =
+            result.data.full_name ||
+            result.data.name ||
+            name;
+
+
+          phone =
+            result.data.phone ||
+            phone;
+
+
+          /*
+           * IMPORTANT:
+           *
+           * This is the same permanent referral
+           * code used by the App.
+           */
+
+          referralCode =
+            result.data.referral_code ||
+            result.data.referralCode ||
+            referralCode;
+        }
+
+        else if (result.error) {
+
+          console.warn(
+            "Profile query:",
+            result.error
+          );
+        }
+
+      } catch (error) {
+
+        console.warn(
+          "Profile query error:",
+          error
+        );
+      }
+
+
+      currentProfilePhone =
+        String(phone || "").trim();
+
+
+      currentReferralCode =
+        String(
+          referralCode || ""
+        )
+        .trim()
+        .toUpperCase();
+
+
+      /*
+       * Update dashboard name.
+       */
+
+      const customerName =
+        $("customerName");
+
+      if (customerName) {
+        customerName.textContent =
+          name;
+      }
+
+
+      /*
+       * Update dashboard email.
+       */
+
+      const customerEmail =
+        $("customerEmail");
+
+      if (customerEmail) {
+        customerEmail.textContent =
+          currentUser.email ||
+          "Signed in";
+      }
+
+
+      /*
+       * Update Account name.
+       */
+
+      const accountName =
+        $("accountProfileName");
+
+      if (accountName) {
+        accountName.textContent =
+          name;
+      }
+
+
+      /*
+       * Update Account email.
+       */
+
+      const accountEmail =
+        $("accountProfileEmail");
+
+      if (accountEmail) {
+        accountEmail.textContent =
+          currentUser.email ||
+          "No email set";
+      }
+
+
+      /*
+       * Calculate initial.
+       */
+
+      const initial =
+        String(name || "T")
+          .trim()
+          .charAt(0)
+          .toUpperCase() || "T";
+
+
+      /*
+       * Account initial.
+       */
+
+      const accountInitial =
+        $("accountProfileInitial");
+
+      if (accountInitial) {
+        accountInitial.textContent =
+          initial;
+      }
+
+
+      /*
+       * Header initial.
+       */
+
+      const headerInitial =
+        $("headerProfileCircle");
+
+      if (headerInitial) {
+        headerInitial.textContent =
+          initial;
+      }
+
+
+      /*
+       * Update service phone.
+       */
+
+      const servicePhone =
+        $("servicePhone");
+
+      if (
+        servicePhone &&
+        currentProfilePhone
+      ) {
+        servicePhone.value =
+          currentProfilePhone;
+      }
+    }
+
+
+    /* =========================================================
+       REFERRAL
+    ========================================================= */
+
+    function getReferralCode() {
+
+      /*
+       * NEVER generate a referral code from
+       * the Supabase user ID.
+       *
+       * The website must use the same permanent
+       * profiles.referral_code as the App.
+       */
+
+      return currentReferralCode || "";
+    }
+
+
+    window.generateReferralInfo =
+      function() {
+
+        const code =
+          getReferralCode();
+
+        const codeElement =
+          $("referralCode");
+
+        const linkElement =
+          $("referralLink");
+
+
+        if (!code) {
+
+          if (codeElement) {
+            codeElement.textContent =
+              "Unavailable";
+          }
+
+          if (linkElement) {
+            linkElement.value = "";
+          }
+
+          return;
+        }
+
+
+        /*
+         * NORMAL WEB REFERRAL LINK
+         *
+         * Example:
+         * https://tombrian-dotcom.github.io/TomBrian-website-/signup.html?ref=ABC123
+         */
+
+        const link =
+          new URL(
+            "https://tombrian-dotcom.github.io/TomBrian-website-/signup.html"
+          );
+
+        link.searchParams.set(
+          "ref",
+          code
+        );
+
+
+        if (codeElement) {
+
+          codeElement.textContent =
+            code;
+        }
+
+
+        if (linkElement) {
+
+          linkElement.value =
+            link.href;
+        }
+      };
+
+
+    /* =========================================================
+       COPY REFERRAL LINK
+    ========================================================= */
+
+    window.copyReferralLink =
+      async function() {
+
+        const input =
+          $("referralLink");
+
+        const link =
+          input?.value || "";
+
+
+        if (!link) {
+
+          showMessageBox(
+            "Your referral link is not available yet.",
+            "error"
+          );
+
+          return;
+        }
+
+
+        try {
+
+          await navigator.clipboard.writeText(
+            link
+          );
+
+          showMessageBox(
+            "Invite link copied.",
+            "success"
+          );
+
+        } catch (error) {
+
+          if (input) {
+
+            input.focus();
+            input.select();
+            input.setSelectionRange(
+              0,
+              99999
+            );
+
+            try {
+
+              document.execCommand("copy");
+
+              showMessageBox(
+                "Invite link copied.",
+                "success"
+              );
+
+            } catch (copyError) {
+
+              showMessageBox(
+                "Please copy the link manually.",
+                "error"
+              );
+            }
+          }
+        }
+      };
+
+
+    /* =========================================================
+       SHARE REFERRAL LINK
+    ========================================================= */
+
+    window.shareReferralLink =
+      async function() {
+
+        const input =
+          $("referralLink");
+
+        const link =
+          input?.value || "";
+
+        const code =
+          getReferralCode();
+
+
+        if (!link || !code) {
+
+          showMessageBox(
+            "Your referral link is not available yet.",
+            "error"
+          );
+
+          return;
+        }
+
+
+        const shareData = {
+
+          title:
+            "Join TomBrian",
+
+          text:
+            "Join me on TomBrian. Create your account using my invite link:",
+
+          url:
+            link
+        };
+
+
+        try {
+
+          if (navigator.share) {
+
+            await navigator.share(
+              shareData
+            );
+
+            return;
+          }
+
+        } catch (error) {
+
+          if (
+            error?.name ===
+            "AbortError"
+          ) {
+            return;
+          }
+        }
+
+
+        /*
+         * WhatsApp fallback.
+         */
+
+        const message =
+          encodeURIComponent(
+            "Join me on TomBrian. Create your account using my invite link:\n" +
+            link
+          );
+
+
+        window.open(
+          "https://wa.me/?text=" + message,
+          "_blank"
+        );
+      };
+
+
+    /* =========================================================
+       BALANCE
+    ========================================================= */
+
+    async function loadBalance() {
+
+      if (!currentUser) return;
+
+
+      try {
+
+        const result =
+          await supabase
+            .from("profiles")
+            .select("balance")
+            .eq("id", currentUser.id)
+            .maybeSingle();
+
+
+        if (
+          !result.error &&
+          result.data &&
+          result.data.balance != null
+        ) {
+
+          currentBalance =
+            Number(result.data.balance) || 0;
+        }
+
+      } catch (error) {
+
+        console.warn(
+          "Balance loading:",
+          error
+        );
+      }
+
+
+      updateBalanceDisplay();
+    }
+
+
+    function updateBalanceDisplay() {
+
+      const value =
+        Number(
+          currentBalance
+        ).toFixed(2);
+
+
+      const balance =
+        $("balanceValue");
+
+      if (balance) {
+        balance.textContent =
+          value;
+      }
+
+
+      const accountBalance =
+        $("accountBalanceValue");
+
+      if (accountBalance) {
+        accountBalance.textContent =
+          value;
+      }
+    }
+
+
+    /* =========================================================
+       COMMISSION
+    ========================================================= */
+
+    async function loadCommission() {
+
+      if (!currentUser) return;
+
+
+      try {
+
+        const result =
+          await supabase
+            .from("profiles")
+            .select("commission")
+            .eq("id", currentUser.id)
+            .maybeSingle();
+
+
+        if (
+          !result.error &&
+          result.data &&
+          result.data.commission != null
+        ) {
+
+          currentCommission =
+            Number(
+              result.data.commission
+            ) || 0;
+        }
+
+      } catch (error) {
+
+        console.warn(
+          "Commission loading:",
+          error
+        );
+      }
+
+
+      const commission =
+        $("commissionValue");
+
+      if (commission) {
+
+        commission.textContent =
+          currentCommission.toFixed(2);
+      }
+    }
+
+
+    /* =========================================================
+       TRANSACTIONS
+    ========================================================= */
+
+    async function loadTransactions() {
+
+      const list =
+        $("transactionsList");
+
+      if (!list) return;
+
+
+      list.innerHTML =
+        '<div class="empty-state">No transactions yet.</div>';
+
+
+      if (!currentUser) return;
+
+
+      try {
+
+        const result =
+          await supabase
+            .from("transactions")
+            .select("*")
+            .eq("user_id", currentUser.id)
+            .order(
+              "created_at",
+              {
+                ascending: false
+              }
+            )
+            .limit(10);
+
+
+        if (result.error) {
+
+          console.warn(
+            "Transactions:",
+            result.error
+          );
+
+          return;
+        }
+
+
+        const data =
+          result.data;
+
+
+        if (
+          !data ||
+          data.length === 0
+        ) {
+          return;
+        }
+
+
+        list.innerHTML = "";
+
+
+        data.forEach(function(transaction) {
+
+          const row =
+            document.createElement("div");
+
+          row.className =
+            "transaction";
+
+
+          const type =
+            transaction.transaction_type ||
+            transaction.type ||
+            "Transaction";
+
+
+          const amount =
+            Number(
+              transaction.amount || 0
+            ).toFixed(2);
+
+
+          const date =
+            formatDate(
+              transaction.created_at
+            );
+
+
+          row.innerHTML = `
+            <div class="transaction-left">
+
+              <div class="transaction-icon">
+                🧾
+              </div>
+
+              <div>
+
+                <div class="transaction-name">
+                  ${escapeHtml(type)}
+                </div>
+
+                <div class="transaction-date">
+                  ${escapeHtml(date)}
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="transaction-amount">
+              KES ${amount}
+            </div>
+          `;
+
+
+          list.appendChild(row);
+
+        });
+
+
+      } catch (error) {
+
+        console.warn(
+          "Transaction loading error:",
+          error
+        );
+      }
+    }
+
+
+    function formatDate(value) {
+
+      if (!value) {
+        return "—";
+      }
+
+
+      try {
+
+        return new Date(value)
+          .toLocaleString(
+            "en-KE",
+            {
+              dateStyle: "medium",
+              timeStyle: "short"
+            }
+          );
+
+      } catch (error) {
+
+        return String(value);
+      }
+    }
+
+
+    function escapeHtml(value) {
+
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+
+    /* =========================================================
+       ACCOUNT NAVIGATION
+    ========================================================= */
+
+    window.openAccount =
+      function() {
+
+        $("dashboardPage")
+          .classList.add("hidden");
+
+
+        document
+          .querySelectorAll(".page")
+          .forEach(function(page) {
+
+            page.classList.remove("active");
+
+          });
+
+
+        $("accountPage")
+          .classList.add("active");
+
+
+        setActiveNav("navAccount");
+
+
+        /*
+         * Refresh account information.
+         */
+
+        loadProfile();
+        loadBalance();
+        loadCommission();
+        generateReferralInfo();
+      };
+
+
+    window.closeAccount =
+      function() {
+
+        $("accountPage")
+          .classList.remove("active");
+
+
+        $("dashboardPage")
+          .classList.remove("hidden");
+
+
+        document
+          .querySelectorAll(".page")
+          .forEach(function(page) {
+
+            page.classList.remove("active");
+
+          });
+
+
+        setActiveNav("navHome");
+      };
+
+
+    window.backToAccount =
+      function() {
+
+        document
+          .querySelectorAll(".page")
+          .forEach(function(page) {
+
+            page.classList.remove("active");
+
+          });
+
+
+        $("accountPage")
+          .classList.add("active");
+
+
+        $("dashboardPage")
+          .classList.add("hidden");
+
+
+        setActiveNav("navAccount");
+
+        generateReferralInfo();
+      };
+
+
+    /* =========================================================
+       INVITE PAGE
+    ========================================================= */
+
+    window.openInvitePage =
+      function() {
+
+        $("dashboardPage")
+          .classList.add("hidden");
+
+
+        document
+          .querySelectorAll(".page")
+          .forEach(function(page) {
+
+            page.classList.remove("active");
+
+          });
+
+
+        $("invitePage")
+          .classList.add("active");
+
+
+        setActiveNav("navAccount");
+
+
+        /*
+         * Make sure latest profile referral code
+         * is shown.
+         */
+
+        generateReferralInfo();
+      };
+
+
+    /* =========================================================
+       SETTINGS
+    ========================================================= */
+
+    window.openSettingsPage =
+      function() {
+
+        $("dashboardPage")
+          .classList.add("hidden");
+
+
+        document
+          .querySelectorAll(".page")
+          .forEach(function(page) {
+
+            page.classList.remove("active");
+
+          });
+
+
+        $("settingsPage")
+          .classList.add("active");
+
+
+        setActiveNav("navAccount");
+
+        loadSettings();
+      };
+
+
+    /* =========================================================
+       ABOUT
+    ========================================================= */
+
+    window.openAboutPage =
+      function() {
+
+        $("dashboardPage")
+          .classList.add("hidden");
+
+
+        document
+          .querySelectorAll(".page")
+          .forEach(function(page) {
+
+            page.classList.remove("active");
+
+          });
+
+
+        $("aboutPage")
+          .classList.add("active");
+
+
+        setActiveNav("navAccount");
+      };
+
+
+    /* =========================================================
+       HOME
+    ========================================================= */
+
+    window.showHome =
+      function() {
+
+        document
+          .querySelectorAll(".page")
+          .forEach(function(page) {
+
+            page.classList.remove("active");
+
+          });
+
+
+        $("dashboardPage")
+          .classList.remove("hidden");
+
+
+        setActiveNav("navHome");
+
+
+        loadBalance();
+        loadTransactions();
+        loadCommission();
+      };
+
+
+    /* =========================================================
+       TRANSACTIONS NAV
+    ========================================================= */
+
+    window.showTransactions =
+      function() {
+
+        showHome();
+
+        setActiveNav(
+          "navTransactions"
+        );
+
+        showMessageBox(
+          "Transaction history is shown on the dashboard."
+        );
+      };
+
+
+    /* =========================================================
+       COMMISSION NAV
+    ========================================================= */
+
+    window.showCommission =
+      function() {
+
+        showHome();
+
+        setActiveNav(
+          "navCommission"
+        );
+
+        loadCommission();
+
+        showMessageBox(
+          "Commission balance: KES " +
+          currentCommission.toFixed(2)
+        );
+      };
+
+
+    function setActiveNav(id) {
+
+      document
+        .querySelectorAll(".nav-button")
+        .forEach(function(button) {
+
+          button.classList.remove("active");
+
+        });
+
+
+      const button =
+        $(id);
+
+      if (button) {
+        button.classList.add("active");
+      }
+    }
+
+
+    /* =========================================================
+       SERVICE MODAL
+    ========================================================= */
+
+    window.openService =
+      function(action) {
+
+        currentAction =
+          action;
+
+
+        const titles = {
+
+          buy:
+            "Buy Airtime",
+
+          sell:
+            "Sell Airtime",
+
+          topup:
+            "Top Up",
+
+          withdraw:
+            "Withdraw"
+        };
+
+
+        $("serviceTitle").textContent =
+          titles[action] ||
+          "Service";
+
+
+        $("servicePhone").value =
+          currentProfilePhone ||
+          "";
+
+
+        $("serviceAmount").value =
+          "";
+
+
+        $("serviceModal")
+          .classList.remove("hidden");
+      };
+
+
+    window.closeService =
+      function() {
+
+        $("serviceModal")
+          .classList.add("hidden");
+
+
+        currentAction =
+          null;
+      };
+
+
+    window.submitService =
+      function() {
+
+        const phone =
+          $("servicePhone")
+            .value
+            .trim();
+
+
+        const amount =
+          Number(
+            $("serviceAmount").value
+          );
+
+
+        if (!phone) {
+
+          showMessageBox(
+            "Please enter a phone number.",
+            "error"
+          );
+
+          return;
+        }
+
+
+        if (
+          !amount ||
+          amount <= 0
+        ) {
+
+          showMessageBox(
+            "Please enter a valid amount.",
+            "error"
+          );
+
+          return;
+        }
+
+
+        /* =========================================================
+           BUY AIRTIME — BALANCE CHECK
+        ========================================================= */
+
+        if (
+          currentAction === "buy" &&
+          amount > currentBalance
+        ) {
+
+          showMessageBox(
+            "Insufficient funds. Your account balance is KES " +
+            Number(currentBalance).toFixed(2) +
+            ". Please top up your account and try again.",
+            "error"
+          );
+
+          return;
+        }
+
+
+        showMessageBox(
+          "This service will be connected to live processing shortly."
+        );
+
+        closeService();
+      };
+
+
+    /* =========================================================
+       EDIT PROFILE
+    ========================================================= */
+
+    window.openEditProfile =
+      function() {
+
+        const nameElement =
+          $("accountProfileName");
+
+
+        const name =
+          nameElement
+            ? nameElement.textContent
+            : "Customer";
+
+
+        $("editFullName").value =
+          name === "Customer"
+            ? ""
+            : name;
+
+
+        $("editPhone").value =
+          currentProfilePhone ||
+          "";
+
+
+        $("editEmail").value =
+          currentUser?.email ||
+          "";
+
+
+        $("editProfileModal")
+          .classList.remove("hidden");
+      };
+
+
+    window.closeEditProfile =
+      function() {
+
+        $("editProfileModal")
+          .classList.add("hidden");
+      };
+
+
+    window.saveProfile =
+      async function() {
+
+        if (!currentUser) return;
+
+
+        const fullName =
+          $("editFullName")
+            .value
+            .trim();
+
+
+        const phone =
+          $("editPhone")
+            .value
+            .trim();
+
+
+        if (!fullName) {
+
+          showMessageBox(
+            "Please enter your full name.",
+            "error"
+          );
+
+          return;
+        }
+
+
+        if (!phone) {
+
+          showMessageBox(
+            "Please enter your phone number.",
+            "error"
+          );
+
+          return;
+        }
+
+
+        try {
+
+          /*
+           * Update Auth metadata.
+           */
+
+          const authResult =
+            await supabase.auth.updateUser({
+
+              data: {
+
+                full_name:
+                  fullName,
+
+                phone:
+                  phone
+              }
+            });
+
+
+          if (authResult.error) {
+            throw authResult.error;
+          }
+
+
+          /*
+           * Update profiles.
+           *
+           * IMPORTANT:
+           * referral_code is deliberately
+           * not changed.
+           */
+
+          const profileResult =
+            await supabase
+              .from("profiles")
+              .update({
+
+                full_name:
+                  fullName,
+
+                phone:
+                  phone
+
+              })
+              .eq(
+                "id",
+                currentUser.id
+              );
+
+
+          if (profileResult.error) {
+
+            console.warn(
+              "Profile update:",
+              profileResult.error
+            );
+          }
+
+
+          currentProfilePhone =
+            phone;
+
+
+          await loadProfile();
+
+
+          generateReferralInfo();
+
+
+          closeEditProfile();
+
+
+          showMessageBox(
+            "Profile updated successfully.",
+            "success"
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "Profile update error:",
+            error
+          );
+
+
+          showMessageBox(
+            error?.message ||
+            "Could not update your profile.",
+            "error"
+          );
+        }
+      };
+
+
+    /* =========================================================
+       PASSWORD
+    ========================================================= */
+
+    window.openPasswordModal =
+      function() {
+
+        $("newPassword").value =
+          "";
+
+        $("confirmPassword").value =
+          "";
+
+
+        $("passwordModal")
+          .classList.remove("hidden");
+      };
+
+
+    window.closePasswordModal =
+      function() {
+
+        $("passwordModal")
+          .classList.add("hidden");
+      };
+
+
+    window.changePassword =
+      async function() {
+
+        const password =
+          $("newPassword")
+            .value;
+
+
+        const confirm =
+          $("confirmPassword")
+            .value;
+
+
+        if (password.length < 6) {
+
+          showMessageBox(
+            "Password must be at least 6 characters.",
+            "error"
+          );
+
+          return;
+        }
+
+
+        if (password !== confirm) {
+
+          showMessageBox(
+            "Passwords do not match.",
+            "error"
+          );
+
+          return;
+        }
+
+
+        try {
+
+          const result =
+            await supabase.auth.updateUser({
+
+              password:
+                password
+            });
+
+
+          if (result.error) {
+            throw result.error;
+          }
+
+
+          closePasswordModal();
+
+
+          showMessageBox(
+            "Password updated successfully.",
+            "success"
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "Password update:",
+            error
+          );
+
+
+          showMessageBox(
+            error?.message ||
+            "Could not update your password.",
+            "error"
+          );
+        }
+      };
+
+
+    /* =========================================================
+       SETTINGS
+    ========================================================= */
+
+    function loadSettings() {
+
+      const notifications =
+        localStorage.getItem(
+          "tombrian_notifications"
+        );
+
+
+      const transactionAlerts =
+        localStorage.getItem(
+          "tombrian_transaction_alerts"
+        );
+
+
+      const notificationsToggle =
+        $("notificationsToggle");
+
+
+      const transactionAlertsToggle =
+        $("transactionAlertsToggle");
+
+
+      if (notificationsToggle) {
+
+        notificationsToggle.checked =
+          notifications !== "false";
+      }
+
+
+      if (transactionAlertsToggle) {
+
+        transactionAlertsToggle.checked =
+          transactionAlerts !== "false";
+      }
+    }
+
+
+    window.saveSetting =
+      function(key, value) {
+
+        localStorage.setItem(
+          key,
+          value
+            ? "true"
+            : "false"
+        );
+
+
+        showMessageBox(
+          "Setting updated.",
+          "success"
+        );
+      };
+
+
+    /* =========================================================
+       SIGN OUT
+    ========================================================= */
+
+    window.signOut =
+      async function() {
+
+        try {
+
+          const result =
+            await supabase.auth.signOut();
+
+
+          if (result.error) {
+            throw result.error;
+          }
+
+
+          window.location.href =
+            "login.html";
+
+
+        } catch (error) {
+
+          console.error(
+            "Sign out error:",
+            error
+          );
+
+
+          showMessageBox(
+            "Could not sign out. Please try again.",
+            "error"
+          );
+        }
+      };
+
+
+    /* =========================================================
+       START
+    ========================================================= */
+
+    initialize();
+
+  </script>
+
+</body>
+</html>
