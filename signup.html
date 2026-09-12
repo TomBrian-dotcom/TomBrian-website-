@@ -608,6 +608,21 @@
       if (error) throw error;
       if (!data.user) throw new Error("Account was not created. Please try again.");
 
+      // ✅ FIX: Save phone number and full_name to profiles table
+      if (data.user) {
+        try {
+          await supabase.from('profiles').upsert({
+            id: data.user.id,
+            full_name: fullName,
+            phone_number: phone,
+            updated_at: new Date().toIso8601String()
+          }, { onConflict: 'id' });
+        } catch (profileError) {
+          console.error("Error saving profile:", profileError);
+          // Continue anyway - profile might be created by trigger
+        }
+      }
+
       if (data.session) {
         if (referralCode) {
           const result = await claimReferralForCurrentUser(referralCode);
