@@ -1041,5 +1041,236 @@ class _NotificationsPageState extends State<NotificationsPage> {
 '''
 text = text[:ns] + notifications_page + text[ne:]
 
+# Replace the placeholder Transaction History page with a real Supabase-backed
+# history view. This changes only the build copy, not the protected source.
+transactions_start = text.find("class TransactionsPage extends StatelessWidget")
+transactions_end = text.find("class AccountPage extends StatelessWidget", transactions_start)
+if transactions_start < 0 or transactions_end < 0:
+    raise SystemExit("PATCH_ERROR: TransactionsPage markers not found")
+
+transactions_page = r'''class TransactionsPage extends StatefulWidget {
+  const TransactionsPage({super.key});
+
+  @override
+  State<TransactionsPage> createState() => _TransactionsPageState();
+}
+
+class _TransactionsPageState extends State<TransactionsPage> {
+  bool loading = true;
+  String? error;
+  List<Map<String, dynamic>> transactions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadTransactions();
+  }
+
+  Future<void> loadTransactions() async {
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user == null) {
+      if (!mounted) return;
+      setState(() {
+        loading = false;
+        error = 'Please log in to view your transaction history.';
+      });
+      return;
+    }
+
+    if (mounted) {
+      setState(() {
+        loading = true;
+        error = null;
+      });
+    }
+
+    try {
+      final data = await Supabase.instance.client
+          .from('transactions')
+          .select('id, amount, transaction_type, description, created_at')
+          .eq('user_id', user.id)
+          .order('created_at', ascending: false)
+          .limit(100);
+
+      if (!mounted) return;
+      setState(() {
+        transactions = List<Map<String, dynamic>>.from(data as List);
+        loading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        loading = false;
+        error = 'Could not load transaction history: ' + e.toString();
+      });
+    }
+  }
+
+  String formatDate(dynamic value) {
+    if (value == null) return '';
+    final date = DateTime.tryParse(value.toString());
+    if (date == null) return value.toString();
+    final local = date.toLocal();
+    String two(int n) => n.toString().padLeft(2, '0');
+    return local.year.toString() +
+        '-' + two(local.month) +
+        '-' + two(local.day) +
+        ' ' + two(local.hour) +
+        ':' + two(local.minute);
+  }
+
+  String formatAmount(dynamic value) {
+    final amount = value is num
+        ? value.toDouble()
+        : double.tryParse(value?.toString() ?? '') ?? 0.0;
+    return amount.toStringAsFixed(2);
+  }
+
+  Widget transactionCard(Map<String, dynamic> transaction) {
+    final type = (transaction['transaction_type'] ?? 'Transaction')
+        .toString()
+        .trim();
+    final description = (transaction['description'] ?? '').toString().trim();
+    final subtitle = description.isEmpty
+        ? formatDate(transaction['created_at'])
+        : description + '\n' + formatDate(transaction['created_at']);
+
+    return Card(
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 8,
+        ),
+        leading: const CircleAvatar(
+          backgroundColor: Color(0x22D9A441),
+          child: Icon(
+            Icons.receipt_long_outlined,
+            color: Color(0xFFD9A441),
+          ),
+        ),
+        title: Text(
+          type.isEmpty ? 'Transaction' : type,
+          style: const TextStyle(fontWeight: FontWeight.w800),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 6),
+          child: Text(subtitle),
+        ),
+        isThreeLine: description.isNotEmpty,
+        trailing: Text(
+          'KES ' + formatAmount(transaction['amount']),
+          style: const TextStyle(
+            fontWeight: FontWeight.w800,
+            fontSize: 15,
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Transaction History'),
+        actions: [
+          IconButton(
+            tooltip: 'Refresh transactions',
+            onPressed: loading ? null : loadTransactions,
+            icon: loading
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.refresh),
+          ),
+        ],
+      ),
+      body: RefreshIndicator(
+        onRefresh: loadTransactions,
+        child: loading
+            ? ListView(
+                children: const [
+                  SizedBox(height: 220),
+                  Center(child: CircularProgressIndicator()),
+                ],
+              )
+            : error != null
+                ? ListView(
+                    padding: const EdgeInsets.all(24),
+                    children: [
+                      const SizedBox(height: 100),
+                      const Icon(Icons.error_outline, size: 60),
+                      const SizedBox(height: 16),
+                      Text(error!, textAlign: TextAlign.center),
+                      const SizedBox(height: 16),
+                      Center(
+                        child: FilledButton(
+                          onPressed: loadTransactions,
+                          child: const Text('Retry'),
+                        ),
+                      ),
+                    ],
+                  )
+                : transactions.isEmpty
+                    ? ListView(
+                        padding: const EdgeInsets.all(24),
+                        children: const [
+                          SizedBox(height: 120),
+                          Icon(
+                            Icons.receipt_long_outlined,
+                            size: 70,
+                            color: Color(0xFFD9A441),
+                          ),
+                          SizedBox(height: 20),
+                          Center(
+                            child: Text(
+                              'No transactions yet.',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Center(
+                            child: Text(
+                              'Your completed TomBrian transactions will appear here.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white54),
+                            ),
+                          ),
+                        ],
+                      )
+                    : ListView(
+                        padding: const EdgeInsets.all(16),
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(4, 4, 4, 12),
+                            child: Text(
+                              transactions.length.toString() +
+                                  ' recent transaction' +
+                                  (transactions.length == 1 ? '' : 's'),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                          ...transactions.map(transactionCard),
+                          const SizedBox(height: 24),
+                        ],
+                      ),
+      ),
+    );
+  }
+}
+
+'''
+text = text[:transactions_start] + transactions_page + text[transactions_end:]
+print("PATCH_OK: TRANSACTIONS_PAGE_REAL")
+
+
 main.write_text(text, encoding="utf-8")
 print("PATCH_OK:", main)
