@@ -274,5 +274,349 @@ text = text.replace("""                child: ClipRRect(
 
 text = text.replace("""Image.asset('assets/tombrian_logo.jpg', fit: BoxFit.cover, errorBuilder: (_, __, ___) => const Icon(Icons.phone_android, size: 52, color: Color(0xFFD9A441)))""", """const Icon(Icons.phone_android, size: 52, color: Color(0xFFD9A441))""", 1)
 
+
+# Final refinement: the Agent Dashboard should have only the bell icon.
+import re
+
+agent_start = text.find("class AgentDashboardPage extends StatefulWidget")
+agent_end = text.find("class AdminCard", agent_start)
+if agent_start < 0 or agent_end < 0:
+    raise SystemExit("PATCH_ERROR: Agent Dashboard markers not found during refinement")
+
+agent = text[agent_start:agent_end]
+agent = re.sub(r"\n  Future<void> loadUnreadNotificationCount\(\) async \{.*?\n  \}\n", "\n", agent, flags=re.S)
+agent = agent.replace("\n  int unreadNotificationCount = 0;", "")
+agent = agent.replace("\n      await loadUnreadNotificationCount();", "")
+
+agent = re.sub(
+    r"\n          Stack\(\s*alignment: Alignment\.center,\s*children: \[.*?\n          \),\n          IconButton\(\s*tooltip: 'Refresh dashboard'",
+    "\n          IconButton(\n            tooltip: 'Notifications',\n            onPressed: () => openPage(const NotificationsPage()),\n            icon: const Icon(Icons.notifications_none),\n          ),\n          IconButton(\n            tooltip: 'Refresh dashboard'",
+    agent,
+    flags=re.S,
+)
+
+agent = re.sub(
+    r"\n            const SizedBox\(height: 12\),\n            Card\(\s*child: ListTile\(\s*leading: const Icon\(\s*Icons\.notifications_none,.*?\n            \),\n            const SizedBox\(height: 24\),",
+    "\n            const SizedBox(height: 24),",
+    agent,
+    flags=re.S,
+)
+
+text = text[:agent_start] + agent + text[agent_end:]
+
+ns = text.find("class NotificationsPage extends StatefulWidget")
+ne = text.find("class TransactionsPage extends StatelessWidget", ns)
+if ns < 0 or ne < 0:
+    raise SystemExit("PATCH_ERROR: NotificationsPage markers not found during refinement")
+
+notifications_page = r'''class NotificationsPage extends StatefulWidget {
+  const NotificationsPage({super.key});
+
+  @override
+  State<NotificationsPage> createState() => _NotificationsPageState();
+}
+
+class _NotificationsPageState extends State<NotificationsPage> {
+  bool loading = true;
+  bool markingAllRead = false;
+  String? error;
+  List<Map<String, dynamic>> notifications = [];
+  List<Map<String, dynamic>> transactions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadActivity();
+  }
+
+  Future<void> loadActivity() async {
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user == null) {
+      if (mounted) {
+        setState(() {
+          loading = false;
+          error = 'Please log in to view account activity.';
+        });
+      }
+      return;
+    }
+
+    if (mounted) {
+      setState(() {
+        loading = true;
+        error = null;
+      });
+    }
+
+    try {
+      final client = Supabase.instance.client;
+
+      final notificationData = await client
+          .from('notifications')
+          .select('id, title, message, is_read, created_at')
+          .eq('user_id', user.id)
+          .order('created_at', ascending: false)
+          .limit(50);
+
+      final transactionData = await client
+          .from('transactions')
+          .select('id, amount, transaction_type, created_at')
+          .eq('user_id', user.id)
+          .order('created_at', ascending: false)
+          .limit(50);
+
+      if (!mounted) return;
+      setState(() {
+        notifications = List<Map<String, dynamic>>.from(notificationData as List);
+        transactions = List<Map<String, dynamic>>.from(transactionData as List);
+        loading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        loading = false;
+        error = 'Could not load account activity: $e';
+      });
+    }
+  }
+
+  String formatDate(dynamic value) {
+    if (value == null) return '';
+    final date = DateTime.tryParse(value.toString());
+    if (date == null) return value.toString();
+    final d = date.toLocal();
+    String two(int n) => n.toString().padLeft(2, '0');
+    return '\${d.year}-\${two(d.month)}-\${two(d.day)} \${two(d.hour)}:\${two(d.minute)}';
+  }
+
+  Future<void> markAsRead(Map<String, dynamic> notification) async {
+    final id = notification['id'];
+    if (id == null || notification['is_read'] == true) return;
+
+    try {
+      await Supabase.instance.client
+          .from('notifications')
+          .update({'is_read': true})
+          .eq('id', id);
+
+      if (!mounted) return;
+      setState(() => notification['is_read'] = true);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not mark notification as read: $e')),
+      );
+    }
+  }
+
+  Future<void> markAllAsRead() async {
+    if (markingAllRead) return;
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user == null) return;
+
+    setState(() => markingAllRead = true);
+    try {
+      await Supabase.instance.client
+          .from('notifications')
+          .update({'is_read': true})
+          .eq('user_id', user.id)
+          .eq('is_read', false);
+
+      if (!mounted) return;
+      setState(() {
+        for (final item in notifications) {
+          item['is_read'] = true;
+        }
+        markingAllRead = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => markingAllRead = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not mark notifications as read: $e')),
+      );
+    }
+  }
+
+  Widget transactionCard(Map<String, dynamic> tx) {
+    final type = (tx['transaction_type'] ?? 'Transaction').toString();
+    final amount = (tx['amount'] ?? 0).toString();
+
+    return Card(
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(16),
+        leading: const CircleAvatar(
+          backgroundColor: Color(0x22D9A441),
+          child: Icon(Icons.receipt_long_outlined, color: Color(0xFFD9A441)),
+        ),
+        title: Text(type, style: const TextStyle(fontWeight: FontWeight.w700)),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 6),
+          child: Text(formatDate(tx['created_at'])),
+        ),
+        trailing: Text(
+          'KES $amount',
+          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+        ),
+      ),
+    );
+  }
+
+  Widget notificationCard(Map<String, dynamic> notification) {
+    final isUnread = notification['is_read'] != true;
+    final title = (notification['title'] ?? 'TomBrian notification').toString();
+    final message = (notification['message'] ?? '').toString();
+
+    return Card(
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(16),
+        leading: CircleAvatar(
+          backgroundColor: const Color(0x22D9A441),
+          child: Icon(
+            isUnread ? Icons.notifications_active_outlined : Icons.notifications_none,
+            color: const Color(0xFFD9A441),
+          ),
+        ),
+        title: Row(
+          children: [
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(fontWeight: isUnread ? FontWeight.w800 : FontWeight.w600),
+              ),
+            ),
+            if (isUnread)
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  shape: BoxShape.circle,
+                ),
+              ),
+          ],
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(message),
+              const SizedBox(height: 8),
+              Text(
+                formatDate(notification['created_at']),
+                style: const TextStyle(color: Colors.white54, fontSize: 12),
+              ),
+            ],
+          ),
+        ),
+        onTap: () => markAsRead(notification),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final unread = notifications.where((n) => n['is_read'] != true).length;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Account Activity'),
+        actions: [
+          if (unread > 0)
+            IconButton(
+              tooltip: 'Mark all messages as read',
+              onPressed: markingAllRead ? null : markAllAsRead,
+              icon: markingAllRead
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.done_all),
+            ),
+        ],
+      ),
+      body: RefreshIndicator(
+        onRefresh: loadActivity,
+        child: loading
+            ? ListView(
+                children: const [
+                  SizedBox(height: 220),
+                  Center(child: CircularProgressIndicator()),
+                ],
+              )
+            : error != null
+                ? ListView(
+                    padding: const EdgeInsets.all(24),
+                    children: [
+                      const SizedBox(height: 100),
+                      const Icon(Icons.error_outline, size: 60),
+                      const SizedBox(height: 16),
+                      Text(error!, textAlign: TextAlign.center),
+                      const SizedBox(height: 16),
+                      Center(
+                        child: FilledButton(
+                          onPressed: loadActivity,
+                          child: const Text('Retry'),
+                        ),
+                      ),
+                    ],
+                  )
+                : (transactions.isEmpty && notifications.isEmpty)
+                    ? ListView(
+                        padding: const EdgeInsets.all(24),
+                        children: const [
+                          SizedBox(height: 130),
+                          Icon(Icons.receipt_long_outlined, size: 70, color: Color(0xFFD9A441)),
+                          SizedBox(height: 20),
+                          Center(
+                            child: Text('No account activity yet', style: TextStyle(fontSize: 20)),
+                          ),
+                          SizedBox(height: 8),
+                          Center(
+                            child: Text(
+                              'Your real transactions and TomBrian messages will appear here.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white54),
+                            ),
+                          ),
+                        ],
+                      )
+                    : ListView(
+                        padding: const EdgeInsets.all(16),
+                        children: [
+                          if (transactions.isNotEmpty) ...[
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(4, 4, 4, 10),
+                              child: Text(
+                                'Recent transactions',
+                                style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800),
+                              ),
+                            ),
+                            ...transactions.map(transactionCard),
+                          ],
+                          if (notifications.isNotEmpty) ...[
+                            const SizedBox(height: 20),
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(4, 4, 4, 10),
+                              child: Text(
+                                'TomBrian messages',
+                                style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800),
+                              ),
+                            ),
+                            ...notifications.map(notificationCard),
+                          ],
+                          const SizedBox(height: 24),
+                        ],
+                      ),
+      ),
+    );
+  }
+}
+
+'''
+text = text[:ns] + notifications_page + text[ne:]
+
 main.write_text(text, encoding="utf-8")
 print("PATCH_OK:", main)
