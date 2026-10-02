@@ -151,7 +151,7 @@ new = """      appBar: AppBar(
               IconButton(
                 tooltip: 'Notifications',
                 onPressed: () async {
-                  await openPage(const NotificationsPage());
+                  openPage(const NotificationsPage());
                   await loadUnreadNotificationCount();
                 },
                 icon: const Icon(Icons.notifications_none),
