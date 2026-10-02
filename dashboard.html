@@ -3529,85 +3529,109 @@
     window.submitService =
       async function() {
 
-        const phone =
-          $("servicePhone")
-            .value
-            .trim();
+        if (!currentUser) {
+          showMessageBox("Your session has expired. Please sign in again.", "error");
+          return;
+        }
 
-
-        const amount =
-          Number(
-            $("serviceAmount").value
-          );
-
+        const phone = $("servicePhone").value.trim();
+        const amount = Number($("serviceAmount").value);
+        const submitButton = $("serviceSubmitButton");
 
         if (!phone) {
-
-          showMessageBox(
-            "Please enter a phone number.",
-            "error"
-          );
-
+          showMessageBox("Please enter a phone number.", "error");
           return;
         }
 
-
-        if (
-          !amount ||
-          amount <= 0
-        ) {
-
-          showMessageBox(
-            "Please enter a valid amount.",
-            "error"
-          );
-
+        if (!amount || amount <= 0) {
+          showMessageBox("Please enter a valid amount.", "error");
           return;
         }
 
-
-        /*
-         * Refresh the balance before any money-related check.
-         */
-        await loadBalance();
-
-        /* =========================================================
-           BUY AIRTIME / WITHDRAW — BALANCE CHECK
-        ========================================================= */
-
-        if (
-          (
-            currentAction === "buy" ||
-            currentAction === "withdraw"
-          ) &&
-          amount > currentBalance
-        ) {
-
-          const message =
-            currentAction === "withdraw"
-              ? "Insufficient funds. You can withdraw up to KES " +
-                Number(currentBalance).toFixed(2) +
-                ". Your current balance is KES " +
-                Number(currentBalance).toFixed(2) +
-                "."
-              : "Insufficient funds. Your account balance is KES " +
-                Number(currentBalance).toFixed(2) +
-                ". Please top up your account and try again.";
-
-          showMessageBox(
-            message,
-            "error"
-          );
-
-          return;
+        if (submitButton) {
+          submitButton.disabled = true;
+          submitButton.textContent = "Submitting...";
         }
 
+        try {
+          await loadBalance();
 
-        showMessageBox(
-          "This service will be connected to live processing shortly."
-        );
+          if (currentAction === "withdraw") {
+            if (amount > currentBalance) {
+              throw new Error(
+                "Insufficient funds. You can withdraw up to KES " +
+                Number(currentBalance).toFixed(2) + "."
+              );
+            }
 
-        closeService();
+            const result = await supabase.rpc("request_withdrawal", {
+              p_amount: amount,
+              p_phone: phone,
+              p_description: "Customer account withdrawal request"
+            });
+
+            if (result.error) throw result.error;
+
+            closeService();
+            await loadBalance();
+            showMessageBox(
+              "Withdrawal request submitted successfully. It is now pending admin processing.",
+              "success"
+            );
+            return;
+          }
+
+          if (currentAction === "topup") {
+            const result = await supabase.rpc("request_top_up", {
+              p_amount: amount,
+              p_phone: phone,
+              p_description: "Customer top-up request"
+            });
+
+            if (result.error) throw result.error;
+
+            closeService();
+            showMessageBox(
+              "Top-up request submitted successfully. It is now pending admin processing.",
+              "success"
+            );
+            return;
+          }
+
+          if (currentAction === "buy") {
+            if (amount > currentBalance) {
+              throw new Error(
+                "Insufficient funds. Your balance is KES " +
+                Number(currentBalance).toFixed(2) + "."
+              );
+            }
+            showMessageBox(
+              "Airtime purchase processing is not enabled yet.",
+              "error"
+            );
+            return;
+          }
+
+          if (currentAction === "sell") {
+            showMessageBox(
+              "Airtime selling processing is not enabled yet.",
+              "error"
+            );
+            return;
+          }
+
+        } catch (error) {
+          console.error("Service request error:", error);
+          showMessageBox(
+            error?.message || "Could not submit the request. Please try again.",
+            "error"
+          );
+        } finally {
+          if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = "Submit Request";
+          }
+        }
       };
 
 
