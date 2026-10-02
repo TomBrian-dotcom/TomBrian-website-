@@ -508,11 +508,185 @@ else:
 admin_start = text.find("class AdminDashboardPage extends StatefulWidget")
 admin_end = text.find("class AgentDashboardPage", admin_start)
 admin_block = text[admin_start:admin_end]
+
+# Restore the Admin Dashboard customer-notification action.
+if "Future<void> sendNotification()" not in admin_block:
+    notification_method = r'''  Future<void> sendNotification() async {
+    final titleController = TextEditingController();
+    final messageController = TextEditingController();
+    String recipient = 'all';
+    String? selectedUserId;
+    bool sending = false;
+
+    try {
+      await showDialog<void>(
+        context: context,
+        builder: (dialogContext) {
+          return StatefulBuilder(
+            builder: (context, setDialogState) {
+              final customers = profiles
+                  .where((p) => p['role']?.toString().toLowerCase() != 'admin')
+                  .toList();
+
+              return AlertDialog(
+                title: const Text('Send Notification'),
+                content: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DropdownButtonFormField<String>(
+                        value: recipient,
+                        decoration: const InputDecoration(labelText: 'Recipients'),
+                        items: const [
+                          DropdownMenuItem(value: 'all', child: Text('All customers')),
+                          DropdownMenuItem(value: 'specific', child: Text('Specific customer')),
+                        ],
+                        onChanged: sending ? null : (value) {
+                          if (value == null) return;
+                          setDialogState(() {
+                            recipient = value;
+                            if (recipient == 'all') selectedUserId = null;
+                          });
+                        },
+                      ),
+                      if (recipient == 'specific') ...[
+                        const SizedBox(height: 12),
+                        DropdownButtonFormField<String>(
+                          value: selectedUserId,
+                          decoration: const InputDecoration(labelText: 'Customer'),
+                          items: customers.map((customer) {
+                            final id = customer['id']?.toString() ?? '';
+                            final name = (customer['full_name'] ?? 'Unnamed customer').toString();
+                            final phone = (customer['phone'] ?? '').toString();
+                            return DropdownMenuItem<String>(
+                              value: id,
+                              child: Text(phone.isEmpty ? name : '$name — $phone', overflow: TextOverflow.ellipsis),
+                            );
+                          }).toList(),
+                          onChanged: sending ? null : (value) => setDialogState(() => selectedUserId = value),
+                        ),
+                      ],
+                      const SizedBox(height: 12),
+                      TextField(
+                        controller: titleController,
+                        enabled: !sending,
+                        maxLength: 100,
+                        decoration: const InputDecoration(labelText: 'Title', hintText: 'Example: TomBrian update'),
+                      ),
+                      const SizedBox(height: 4),
+                      TextField(
+                        controller: messageController,
+                        enabled: !sending,
+                        maxLines: 5,
+                        maxLength: 1000,
+                        decoration: const InputDecoration(labelText: 'Message', hintText: 'Write the notification message...', alignLabelWithHint: true),
+                      ),
+                    ],
+                  ),
+                ),
+                actions: [
+                  TextButton(onPressed: sending ? null : () => Navigator.pop(dialogContext), child: const Text('Cancel')),
+                  FilledButton.icon(
+                    onPressed: sending ? null : () async {
+                      final title = titleController.text.trim();
+                      final message = messageController.text.trim();
+                      if (title.isEmpty || message.isEmpty) {
+                        ScaffoldMessenger.of(this.context).showSnackBar(const SnackBar(content: Text('Enter both a notification title and message.')));
+                        return;
+                      }
+                      if (recipient == 'specific' && (selectedUserId == null || selectedUserId!.isEmpty)) {
+                        ScaffoldMessenger.of(this.context).showSnackBar(const SnackBar(content: Text('Select a customer first.')));
+                        return;
+                      }
+                      setDialogState(() => sending = true);
+                      try {
+                        final userIds = recipient == 'all'
+                            ? profiles.where((p) => p['role']?.toString().toLowerCase() != 'admin').map((p) => p['id']?.toString() ?? '').where((id) => id.isNotEmpty).toList()
+                            : <String>[selectedUserId!];
+                        if (userIds.isEmpty) throw Exception('No customer accounts were found.');
+                        final now = DateTime.now().toIso8601String();
+                        final rows = userIds.map((userId) => <String, dynamic>{
+                          'user_id': userId,
+                          'title': title,
+                          'message': message,
+                          'is_read': false,
+                          'created_at': now,
+                        }).toList();
+                        await Supabase.instance.client.from('notifications').insert(rows);
+                        if (!mounted) return;
+                        Navigator.pop(dialogContext);
+                        ScaffoldMessenger.of(this.context).showSnackBar(SnackBar(content: Text('Notification sent successfully.')));
+                      } catch (e) {
+                        if (!mounted) return;
+                        setDialogState(() => sending = false);
+                        ScaffoldMessenger.of(this.context).showSnackBar(SnackBar(content: Text('Could not send notification: $e')));
+                      }
+                    },
+                    icon: sending ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2)) : const Icon(Icons.send),
+                    label: Text(sending ? 'Sending...' : 'Send'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      );
+    } finally {
+      titleController.dispose();
+      messageController.dispose();
+    }
+  }
+
+'''
+    admin_marker = "  Future<void> logout() async {"
+    if admin_marker not in admin_block:
+        raise SystemExit("PATCH_ERROR: Admin logout marker not found")
+    admin_block = admin_block.replace(admin_marker, notification_method + admin_marker, 1)
+
+notification_card_marker = """            const SizedBox(height: 20),
+            buildCommissionSettingsSection(),
+"""
+notification_card_insert = """            Card(
+              child: ListTile(
+                leading: const Icon(
+                  Icons.notifications_active_outlined,
+                  color: Color(0xFFD9A441),
+                ),
+                title: const Text(
+                  'Customer Notifications',
+                  style: TextStyle(fontWeight: FontWeight.w800),
+                ),
+                subtitle: const Text(
+                  'Send an in-app message to all customers or one customer.',
+                ),
+                trailing: FilledButton.icon(
+                  onPressed: sendNotification,
+                  icon: const Icon(Icons.send),
+                  label: const Text('Send'),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            buildCommissionSettingsSection(),
+"""
+if notification_card_marker not in admin_block:
+    raise SystemExit("PATCH_ERROR: Admin commission section marker not found")
+admin_block = admin_block.replace(notification_card_marker, notification_card_insert, 1)
+
+text = text[:admin_start] + admin_block + text[admin_end:]
+print("ADMIN_NOTIFICATIONS_RESTORED")
+
+admin_start = text.find("class AdminDashboardPage extends StatefulWidget")
+admin_end = text.find("class AgentDashboardPage", admin_start)
+admin_block = text[admin_start:admin_end]
 required_admin_commission_markers = [
     "buildCommissionSettingsSection()",
     "Commission Settings",
     "Commission rate",
     "saveCommissionRate",
+    "sendNotification()",
+    "Customer Notifications",
 ]
 missing_admin_markers = [
     marker for marker in required_admin_commission_markers
