@@ -509,6 +509,263 @@ admin_start = text.find("class AdminDashboardPage extends StatefulWidget")
 admin_end = text.find("class AgentDashboardPage", admin_start)
 admin_block = text[admin_start:admin_end]
 
+# Add the Admin transaction history page once so the card above has a real destination.
+if "class AdminTransactionsPage extends StatefulWidget" not in text:
+    admin_transactions_page = r'''class AdminTransactionsPage extends StatefulWidget {
+  const AdminTransactionsPage({super.key});
+
+  @override
+  State<AdminTransactionsPage> createState() => _AdminTransactionsPageState();
+}
+
+class _AdminTransactionsPageState extends State<AdminTransactionsPage> {
+  bool loading = true;
+  String? error;
+  List<Map<String, dynamic>> transactions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadTransactions();
+  }
+
+  Future<void> loadTransactions() async {
+    final client = Supabase.instance.client;
+    final user = client.auth.currentUser;
+    if (user == null) {
+      if (!mounted) return;
+      setState(() {
+        loading = false;
+        error = 'Please log in as an admin to view transaction history.';
+      });
+      return;
+    }
+
+    if (mounted) setState(() {
+      loading = true;
+      error = null;
+    });
+
+    try {
+      final profile = await client
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .maybeSingle();
+
+      if (profile?['role']?.toString().toLowerCase() != 'admin') {
+        throw Exception('Admin authentication required.');
+      }
+
+      final data = await client
+          .from('transactions')
+          .select(
+            'id, user_id, amount, transaction_type, description, created_at',
+          )
+          .order('created_at', ascending: false)
+          .limit(200);
+
+      if (!mounted) return;
+      setState(() {
+        transactions = List<Map<String, dynamic>>.from(data as List);
+        loading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        loading = false;
+        error = 'Could not load transaction history: $e';
+      });
+    }
+  }
+
+  String formatDate(dynamic value) {
+    if (value == null) return 'Unknown date';
+    final date = DateTime.tryParse(value.toString());
+    if (date == null) return value.toString();
+    final d = date.toLocal();
+    String two(int n) => n.toString().padLeft(2, '0');
+    return d.year.toString() +
+        '-' + two(d.month) +
+        '-' + two(d.day) +
+        ' ' + two(d.hour) +
+        ':' + two(d.minute);
+  }
+
+  String formatAmount(dynamic value) {
+    final amount = value is num
+        ? value.toDouble()
+        : double.tryParse(value?.toString() ?? '') ?? 0.0;
+    return amount.toStringAsFixed(2);
+  }
+
+  Widget transactionCard(Map<String, dynamic> tx) {
+    final type = (tx['transaction_type'] ?? 'Transaction').toString().trim();
+    final description = (tx['description'] ?? '').toString().trim();
+    final userId = (tx['user_id'] ?? '').toString();
+
+    return Card(
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 10,
+        ),
+        leading: const CircleAvatar(
+          backgroundColor: Color(0x22D9A441),
+          child: Icon(
+            Icons.receipt_long_outlined,
+            color: Color(0xFFD9A441),
+          ),
+        ),
+        title: Text(
+          type.isEmpty ? 'Transaction' : type,
+          style: const TextStyle(fontWeight: FontWeight.w800),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 6),
+          child: Text(
+            'User: ' + (userId.isEmpty ? 'Unknown user' : userId) +
+                (description.isEmpty ? '' : '
+' + description) +
+                '
+' + formatDate(tx['created_at']),
+          ),
+        ),
+        isThreeLine: true,
+        trailing: Text(
+          'KES ' + formatAmount(tx['amount']),
+          style: const TextStyle(
+            fontWeight: FontWeight.w800,
+            fontSize: 15,
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Admin Transaction History'),
+        actions: [
+          IconButton(
+            tooltip: 'Refresh transactions',
+            onPressed: loading ? null : loadTransactions,
+            icon: loading
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.refresh),
+          ),
+        ],
+      ),
+      body: RefreshIndicator(
+        onRefresh: loadTransactions,
+        child: loading
+            ? ListView(
+                children: const [
+                  SizedBox(height: 220),
+                  Center(child: CircularProgressIndicator()),
+                ],
+              )
+            : error != null
+                ? ListView(
+                    padding: const EdgeInsets.all(24),
+                    children: [
+                      const SizedBox(height: 100),
+                      const Icon(Icons.error_outline, size: 60),
+                      const SizedBox(height: 16),
+                      Text(error!, textAlign: TextAlign.center),
+                      const SizedBox(height: 16),
+                      Center(
+                        child: FilledButton(
+                          onPressed: loadTransactions,
+                          child: const Text('Retry'),
+                        ),
+                      ),
+                    ],
+                  )
+                : transactions.isEmpty
+                    ? ListView(
+                        padding: const EdgeInsets.all(24),
+                        children: const [
+                          SizedBox(height: 120),
+                          Icon(
+                            Icons.receipt_long_outlined,
+                            size: 70,
+                            color: Color(0xFFD9A441),
+                          ),
+                          SizedBox(height: 20),
+                          Center(
+                            child: Text(
+                              'No transactions yet.',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : ListView(
+                        padding: const EdgeInsets.all(16),
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(4, 4, 4, 12),
+                            child: Text(
+                              transactions.length.toString() +
+                                  ' recent transaction' +
+                                  (transactions.length == 1 ? '' : 's'),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                          ...transactions.map(transactionCard),
+                          const SizedBox(height: 24),
+                        ],
+                      ),
+      ),
+    );
+  }
+}
+
+'''
+    text = text.replace(
+        "class AgentDashboardPage extends StatefulWidget",
+        admin_transactions_page + "class AgentDashboardPage extends StatefulWidget",
+        1,
+    )
+
+
+# Make the Admin Dashboard Transactions card open a real history page.
+admin_transactions_card = """                    title: 'Transactions',
+                    value: '${transactions.length}',
+                    icon: Icons.receipt_long_outlined,
+"""
+admin_transactions_card_replacement = """                    title: 'Transactions',
+                    value: '${transactions.length}',
+                    icon: Icons.receipt_long_outlined,
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const AdminTransactionsPage(),
+                      ),
+                    ),
+"""
+if admin_transactions_card in admin_block:
+    admin_block = admin_block.replace(
+        admin_transactions_card,
+        admin_transactions_card_replacement,
+        1,
+    )
+elif "AdminTransactionsPage" not in admin_block:
+    raise SystemExit("PATCH_ERROR: Admin Transactions card marker not found")
+
 # Restore the Admin Dashboard customer-notification action.
 if "Future<void> sendNotification()" not in admin_block:
     notification_method = r'''  Future<void> sendNotification() async {
