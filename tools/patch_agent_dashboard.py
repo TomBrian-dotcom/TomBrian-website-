@@ -486,7 +486,7 @@ if "double commissionRate = 0.0;" not in admin_block:
               'Manage users, balances, transactions and agent applications.',
               style: TextStyle(color: Colors.white60),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 20),
 """
     build_insert = """            const Text(
               'Manage users, balances, transactions and agent applications.',
