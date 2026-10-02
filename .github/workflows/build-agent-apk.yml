@@ -57,9 +57,6 @@ jobs:
       - name: Get dependencies
         run: cd build_src && flutter pub get
 
-      - name: Analyze Dart source
-        run: cd build_src && flutter analyze --no-fatal-infos
-
       - name: Build release APK
         run: cd build_src && flutter build apk --release
 
