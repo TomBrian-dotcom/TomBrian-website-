@@ -1401,7 +1401,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
     final description = (transaction['description'] ?? '').toString().trim();
     final subtitle = description.isEmpty
         ? formatDate(transaction['created_at'])
-        : description + '\n' + formatDate(transaction['created_at']);
+        : description + ' - ' + formatDate(transaction['created_at']);
 
     return Card(
       child: ListTile(
