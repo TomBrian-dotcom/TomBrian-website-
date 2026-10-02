@@ -625,10 +625,8 @@ class _AdminTransactionsPageState extends State<AdminTransactionsPage> {
           padding: const EdgeInsets.only(top: 6),
           child: Text(
             'User: ' + (userId.isEmpty ? 'Unknown user' : userId) +
-                (description.isEmpty ? '' : '
-' + description) +
-                '
-' + formatDate(tx['created_at']),
+                (description.isEmpty ? '' : ' - ' + description) +
+                ' - ' + formatDate(tx['created_at']),
           ),
         ),
         isThreeLine: true,
