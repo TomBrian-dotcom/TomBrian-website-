@@ -501,10 +501,9 @@ if "double commissionRate = 0.0;" not in admin_block:
     admin_block = admin_block.replace(build_marker, build_insert, 1)
 
     text = text[:admin_start] + admin_block + text[admin_end:]
-    print("ADMIN_COMMISSION_INJECTED");
-} else {
-    print("ADMIN_COMMISSION_ALREADY_PRESENT");
-}
+    print("ADMIN_COMMISSION_INJECTED")
+else:
+    print("ADMIN_COMMISSION_ALREADY_PRESENT")
 
 admin_start = text.find("class AdminDashboardPage extends StatefulWidget")
 admin_end = text.find("class AdminCard", admin_start)
