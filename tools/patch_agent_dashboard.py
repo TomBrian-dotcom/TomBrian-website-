@@ -644,8 +644,7 @@ if "Future<void> sendNotification()" not in admin_block:
         raise SystemExit("PATCH_ERROR: Admin logout marker not found")
     admin_block = admin_block.replace(admin_marker, notification_method + admin_marker, 1)
 
-notification_card_marker = """            const SizedBox(height: 20),
-            buildCommissionSettingsSection(),
+notification_card_marker = """            buildAgentApplicationsSection(),
 """
 notification_card_insert = """            Card(
               child: ListTile(
@@ -668,10 +667,10 @@ notification_card_insert = """            Card(
               ),
             ),
             const SizedBox(height: 20),
-            buildCommissionSettingsSection(),
+            buildAgentApplicationsSection(),
 """
 if notification_card_marker not in admin_block:
-    raise SystemExit("PATCH_ERROR: Admin commission section marker not found")
+    raise SystemExit("PATCH_ERROR: Admin applications section marker not found")
 admin_block = admin_block.replace(notification_card_marker, notification_card_insert, 1)
 
 text = text[:admin_start] + admin_block + text[admin_end:]
