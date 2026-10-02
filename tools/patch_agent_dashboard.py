@@ -275,6 +275,33 @@ text = text.replace("""                child: ClipRRect(
 text = text.replace("""Image.asset('assets/tombrian_logo.jpg', fit: BoxFit.cover, errorBuilder: (_, __, ___) => const Icon(Icons.phone_android, size: 52, color: Color(0xFFD9A441)))""", """const Icon(Icons.phone_android, size: 52, color: Color(0xFFD9A441))""", 1)
 
 
+
+# Preserve the Admin Dashboard commission control.
+# The protected 6,810-line source contains an editable Commission Settings
+# section with a percentage field and Save button. Fail the build if that
+# section is missing instead of silently shipping an incomplete admin page.
+admin_start = text.find("class AdminDashboardPage extends StatefulWidget")
+admin_end = text.find("class AdminCard", admin_start)
+if admin_start < 0 or admin_end < 0:
+    raise SystemExit("PATCH_ERROR: Admin Dashboard markers not found")
+admin_block = text[admin_start:admin_end]
+required_admin_commission_markers = [
+    "buildCommissionSettingsSection()",
+    "Commission Settings",
+    "Commission rate",
+    "saveCommissionRate",
+]
+missing_admin_markers = [
+    marker for marker in required_admin_commission_markers
+    if marker not in admin_block
+]
+if missing_admin_markers:
+    raise SystemExit(
+        "PATCH_ERROR: Admin commission control missing: "
+        + ", ".join(missing_admin_markers)
+    )
+print("ADMIN_COMMISSION_OK")
+
 # Final refinement: the Agent Dashboard should have only the bell icon.
 import re
 
