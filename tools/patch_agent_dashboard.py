@@ -204,7 +204,7 @@ if old not in block:
     raise SystemExit("PATCH_ERROR: AppBar marker not found")
 block = block.replace(old, new, 1)
 
-marker = """            const SizedBox(height: 20),
+marker = """            const SizedBox(height: 24),
             const Text(
               'Agent actions',"""
 insert = """            const SizedBox(height: 20),
