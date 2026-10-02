@@ -743,25 +743,35 @@ class _AdminTransactionsPageState extends State<AdminTransactionsPage> {
 
 
 # Make the Admin Dashboard Transactions card open a real history page.
-admin_transactions_card = """                    title: 'Transactions',
-                    value: '${transactions.length}',
-                    icon: Icons.receipt_long_outlined,
-"""
-admin_transactions_card_replacement = """                    title: 'Transactions',
-                    value: '${transactions.length}',
-                    icon: Icons.receipt_long_outlined,
-"""
-if admin_transactions_card in admin_block:
-    admin_block = admin_block.replace(
-        admin_transactions_card,
-        """                    title: 'Transactions',
+admin_transactions_card = """                Expanded(
+                  child: AdminCard(
+                    title: 'Transactions',
                     value: '${transactions.length}',
                     icon: Icons.receipt_long_outlined,
                   ),
                 ),
-              ],
-            ),
-""",
+"""
+admin_transactions_card_replacement = """                Expanded(
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const AdminTransactionsPage(),
+                      ),
+                    ),
+                    child: AdminCard(
+                      title: 'Transactions',
+                      value: '${transactions.length}',
+                      icon: Icons.receipt_long_outlined,
+                    ),
+                  ),
+                ),
+"""
+if admin_transactions_card in admin_block:
+    admin_block = admin_block.replace(
+        admin_transactions_card,
+        admin_transactions_card_replacement,
         1,
     )
 elif "AdminTransactionsPage" not in admin_block:
