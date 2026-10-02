@@ -14,50 +14,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Extract Flutter source
-        shell: bash
+      - name: Prepare Flutter source
         run: |
           rm -rf build_src
-          mkdir -p build_src
-          unzip -q main_corrected.zip -d build_src
-
-          test -f build_src/main.dart
           mkdir -p build_src/lib
-          cp build_src/main.dart build_src/lib/main.dart
-          rm build_src/main.dart
-
-          mkdir -p build_src/assets
-          if command -v magick >/dev/null 2>&1; then
-            magick -size 1x1 xc:white build_src/assets/tombrian_logo.jpg
-          else
-            convert -size 1x1 xc:white build_src/assets/tombrian_logo.jpg
-          fi
-
-          cat > build_src/pubspec.yaml <<'YAML'
-name: tombrian
-publish_to: 'none'
-description: TomBrian airtime sales app.
-version: 1.0.1+2
-
-environment:
-  sdk: '>=3.0.0 <4.0.0'
-
-dependencies:
-  flutter:
-    sdk: flutter
-  cupertino_icons: ^1.0.8
-  supabase_flutter: ^2.9.0
-  flutter_secure_storage: ^9.2.4
-  url_launcher: ^6.3.2
-  app_links: ^6.4.1
-
-flutter:
-  uses-material-design: true
-  assets:
-    - assets/tombrian_logo.jpg
-YAML
-
-          echo "Source lines:"
+          unzip -q main_corrected.zip -d build_src
+          test -f build_src/main.dart
+          mv build_src/main.dart build_src/lib/main.dart
+          cp tools/flutter_pubspec.yaml build_src/pubspec.yaml
           wc -l build_src/lib/main.dart
 
       - name: Patch Agent Dashboard
@@ -82,12 +46,10 @@ YAML
       - name: Generate Android project
         run: cd build_src && flutter create --platforms=android .
 
-      - name: Configure Android networking
+      - name: Enable Android internet
         run: |
           MANIFEST="build_src/android/app/src/main/AndroidManifest.xml"
-          if ! grep -q "android.permission.INTERNET" "$MANIFEST"; then
-            sed -i '/<manifest[^>]*>/a    <uses-permission android:name="android.permission.INTERNET"/>' "$MANIFEST"
-          fi
+          sed -i '/<manifest[^>]*>/a    <uses-permission android:name="android.permission.INTERNET"/>' "$MANIFEST"
 
       - name: Get dependencies
         run: cd build_src && flutter pub get
@@ -103,9 +65,9 @@ YAML
           ls -lh build_src/build/app/outputs/flutter-apk/app-release.apk
           test -f build_src/build/app/outputs/flutter-apk/app-release.apk
 
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: tombrian-agent-dashboard-${{ github.run_number }}
+          name: tombrian-agent-dashboard
           path: build_src/build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
