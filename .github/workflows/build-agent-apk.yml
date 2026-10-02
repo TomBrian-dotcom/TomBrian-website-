@@ -1,4 +1,4 @@
-name: TomBrian Agent APK Test
+name: Build TomBrian Agent APK
 
 on:
   push:
@@ -7,15 +7,105 @@ on:
   workflow_dispatch:
 
 jobs:
-  inspect:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Inspect Flutter source archive
+      - name: Extract Flutter source
+        shell: bash
         run: |
-          unzip -l main_corrected.zip
+          rm -rf build_src
           mkdir -p build_src
           unzip -q main_corrected.zip -d build_src
-          find build_src -maxdepth 6 -type f -print
+
+          test -f build_src/main.dart
+          mkdir -p build_src/lib
+          cp build_src/main.dart build_src/lib/main.dart
+          rm build_src/main.dart
+
+          mkdir -p build_src/assets
+          if command -v magick >/dev/null 2>&1; then
+            magick -size 1x1 xc:white build_src/assets/tombrian_logo.jpg
+          else
+            convert -size 1x1 xc:white build_src/assets/tombrian_logo.jpg
+          fi
+
+          cat > build_src/pubspec.yaml <<'YAML'
+name: tombrian
+publish_to: 'none'
+description: TomBrian airtime sales app.
+version: 1.0.1+2
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  supabase_flutter: ^2.9.0
+  flutter_secure_storage: ^9.2.4
+  url_launcher: ^6.3.2
+  app_links: ^6.4.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/tombrian_logo.jpg
+YAML
+
+          echo "Source lines:"
+          wc -l build_src/lib/main.dart
+
+      - name: Patch Agent Dashboard
+        run: |
+          cd build_src
+          python "$GITHUB_WORKSPACE/tools/patch_agent_dashboard.py"
+          grep -n "commissionRate\|unreadNotificationCount\|refreshAgentDashboard" lib/main.dart
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.35.4"
+          channel: stable
+          cache: true
+
+      - name: Generate Android project
+        run: cd build_src && flutter create --platforms=android .
+
+      - name: Configure Android networking
+        run: |
+          MANIFEST="build_src/android/app/src/main/AndroidManifest.xml"
+          if ! grep -q "android.permission.INTERNET" "$MANIFEST"; then
+            sed -i '/<manifest[^>]*>/a    <uses-permission android:name="android.permission.INTERNET"/>' "$MANIFEST"
+          fi
+
+      - name: Get dependencies
+        run: cd build_src && flutter pub get
+
+      - name: Analyze Dart source
+        run: cd build_src && flutter analyze --no-fatal-infos
+
+      - name: Build release APK
+        run: cd build_src && flutter build apk --release
+
+      - name: Verify APK
+        run: |
+          ls -lh build_src/build/app/outputs/flutter-apk/app-release.apk
+          test -f build_src/build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tombrian-agent-dashboard-${{ github.run_number }}
+          path: build_src/build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
