@@ -3583,17 +3583,21 @@
           }
 
           if (currentAction === "topup") {
-            const result = await supabase.rpc("request_top_up", {
-              p_amount: amount,
-              p_phone: phone,
-              p_description: "Customer top-up request"
+            const result = await supabase.functions.invoke("mpesa-transactions", {
+              body: {
+                action: "topup",
+                amount: amount,
+                phone: phone
+              }
             });
 
             if (result.error) throw result.error;
+            if (result.data?.error) throw new Error(result.data.error);
 
             closeService();
             showMessageBox(
-              "Top-up request submitted successfully. It is now pending admin processing.",
+              result.data?.customer_message ||
+              "M-Pesa prompt sent. Enter your M-Pesa PIN on your phone to complete the top up.",
               "success"
             );
             return;
