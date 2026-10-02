@@ -2788,7 +2788,7 @@
         if (
           !result.error &&
           result.data &&
-          result.data.commission != null
+          result.data.commission_rate != null
         ) {
 
           currentCommission =
@@ -3229,8 +3229,9 @@
         loadCommission();
 
         showMessageBox(
-          "Commission balance: KES " +
-          currentCommission.toFixed(2)
+          "Current commission rate: " +
+          currentCommission.toFixed(2) +
+          "%"
         );
       };
 
@@ -3344,7 +3345,9 @@
                 user_id: currentUser.id,
                 full_name: name,
                 phone: phone,
-                reason: reason
+                reason: reason,
+                terms_agreed: true,
+                status: "pending"
               });
 
           if (result.error) {
