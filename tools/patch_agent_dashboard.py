@@ -750,17 +750,18 @@ admin_transactions_card = """                    title: 'Transactions',
 admin_transactions_card_replacement = """                    title: 'Transactions',
                     value: '${transactions.length}',
                     icon: Icons.receipt_long_outlined,
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const AdminTransactionsPage(),
-                      ),
-                    ),
 """
 if admin_transactions_card in admin_block:
     admin_block = admin_block.replace(
         admin_transactions_card,
-        admin_transactions_card_replacement,
+        """                    title: 'Transactions',
+                    value: '${transactions.length}',
+                    icon: Icons.receipt_long_outlined,
+                  ),
+                ),
+              ],
+            ),
+""",
         1,
     )
 elif "AdminTransactionsPage" not in admin_block:
