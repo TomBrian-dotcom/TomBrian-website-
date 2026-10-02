@@ -509,17 +509,22 @@ if "double commissionRate = 0.0;" not in admin_block:
 admin_start = text.find("class AdminDashboardPage extends StatefulWidget")
 admin_end = text.find("class AdminCard", admin_start)
 admin_block = text[admin_start:admin_end]
-for (final marker in [
-  "buildCommissionSettingsSection()",
-  "Commission Settings",
-  "Commission rate",
-  "saveCommissionRate",
-]) {
-  if (!admin_block.contains(marker)) {
-    throw Exception("PATCH_ERROR: Admin commission control missing: " + marker);
-  }
-}
-print("ADMIN_COMMISSION_OK");
+required_admin_commission_markers = [
+    "buildCommissionSettingsSection()",
+    "Commission Settings",
+    "Commission rate",
+    "saveCommissionRate",
+]
+missing_admin_markers = [
+    marker for marker in required_admin_commission_markers
+    if marker not in admin_block
+]
+if missing_admin_markers:
+    raise SystemExit(
+        "PATCH_ERROR: Admin commission control missing: "
+        + ", ".join(missing_admin_markers)
+    )
+print("ADMIN_COMMISSION_OK")
 
 # Final refinement: the Agent Dashboard should have only the bell icon.
 import re
