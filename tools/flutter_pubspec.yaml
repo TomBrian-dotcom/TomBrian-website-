@@ -1,0 +1,19 @@
+name: tombrian
+publish_to: 'none'
+description: TomBrian airtime sales app.
+version: 1.0.1+2
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  supabase_flutter: ^2.9.0
+  flutter_secure_storage: ^9.2.4
+  url_launcher: ^6.3.2
+  app_links: ^6.4.1
+
+flutter:
+  uses-material-design: true
