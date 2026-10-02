@@ -242,7 +242,7 @@ insert = """            const SizedBox(height: 20),
                 ),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () async {
-                  await openPage(const NotificationsPage());
+                  openPage(const NotificationsPage());
                   await loadUnreadNotificationCount();
                 },
               ),
