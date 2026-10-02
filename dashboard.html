@@ -1103,11 +1103,11 @@
 
     <div>
       <div class="commission-label">
-        Available Commission
+        Commission Rate
       </div>
 
       <div class="commission-value">
-        KES <span id="commissionValue">0.00</span>
+        <span id="commissionValue">0.00</span>%
       </div>
     </div>
 
@@ -2710,9 +2710,9 @@
 
         const result =
           await supabase
-            .from("profiles")
+            .from("balances")
             .select("balance")
-            .eq("id", currentUser.id)
+            .eq("user_id", currentUser.id)
             .maybeSingle();
 
 
@@ -2779,9 +2779,9 @@
 
         const result =
           await supabase
-            .from("profiles")
-            .select("commission")
-            .eq("id", currentUser.id)
+            .from("commission_settings")
+            .select("commission_rate")
+            .eq("id", 1)
             .maybeSingle();
 
 
@@ -2793,7 +2793,7 @@
 
           currentCommission =
             Number(
-              result.data.commission
+              result.data.commission_rate
             ) || 0;
         }
 
@@ -3387,27 +3387,70 @@
     ========================================================= */
     window.openNotifications =
       async function() {
-
-        /*
-         * Refresh the balance first so the notification panel
-         * always shows the customer's latest available balance.
-         */
         await loadBalance();
 
-        const balance =
-          $("notificationBalance");
+        const balance = $("notificationBalance");
+        if (balance) balance.textContent = Number(currentBalance).toFixed(2);
 
-        if (balance) {
-          balance.textContent =
-            Number(currentBalance).toFixed(2);
+        const list = $("notificationsList");
+        if (list) {
+          list.innerHTML = '<div class="empty-state">Loading notifications...</div>';
+          try {
+            const result = await supabase
+              .from("notifications")
+              .select("id, title, message, is_read, created_at")
+              .eq("user_id", currentUser.id)
+              .order("created_at", { ascending: false })
+              .limit(30);
+
+            if (result.error) throw result.error;
+            const rows = result.data || [];
+
+            if (!rows.length) {
+              list.innerHTML = '<div class="empty-state">No notifications yet.</div>';
+            } else {
+              list.innerHTML = "";
+              rows.forEach(function(notification) {
+                const row = document.createElement("div");
+                row.style.cssText = "padding:14px;border:1px solid var(--border);border-radius:13px;margin-bottom:10px;background:" +
+                  (notification.is_read ? "white" : "#f0fdf4") + ";";
+
+                const title = document.createElement("div");
+                title.style.cssText = "font-weight:800;font-size:14px;margin-bottom:5px;";
+                title.textContent = notification.title || "TomBrian Notification";
+
+                const message = document.createElement("div");
+                message.style.cssText = "color:var(--muted);font-size:13px;line-height:1.5;";
+                message.textContent = notification.message || "";
+
+                const date = document.createElement("div");
+                date.style.cssText = "color:var(--muted);font-size:11px;margin-top:8px;";
+                date.textContent = formatDate(notification.created_at);
+
+                row.appendChild(title);
+                row.appendChild(message);
+                row.appendChild(date);
+                list.appendChild(row);
+              });
+
+              const unreadIds = rows.filter(function(n) {
+                return n.is_read !== true;
+              }).map(function(n) { return n.id; });
+
+              if (unreadIds.length) {
+                await supabase.from("notifications")
+                  .update({ is_read: true })
+                  .in("id", unreadIds);
+              }
+            }
+          } catch (error) {
+            console.warn("Notifications loading:", error);
+            list.innerHTML = '<div class="empty-state">Could not load notifications right now.</div>';
+          }
         }
 
-        const panel =
-          $("notificationsPanel");
-
-        if (panel) {
-          panel.classList.remove("hidden");
-        }
+        const panel = $("notificationsPanel");
+        if (panel) panel.classList.remove("hidden");
       };
 
     window.closeNotifications =
@@ -4058,8 +4101,8 @@
         </div>
       </div>
 
-      <div style="margin-top: 18px; padding: 14px; border-radius: 13px; background: #f8fafc; color: var(--muted); font-size: 13px; line-height: 1.5;">
-        No new notifications.
+      <div id="notificationsList" style="margin-top: 18px;">
+        <div class="empty-state">No notifications yet.</div>
       </div>
     </div>
   </div>
