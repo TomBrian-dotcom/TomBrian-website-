@@ -282,7 +282,7 @@ text = text.replace("""Image.asset('assets/tombrian_logo.jpg', fit: BoxFit.cover
 # Supabase-backed editable percentage control into the build source if it
 # is missing, then verify it exists before the build continues.
 admin_start = text.find("class AdminDashboardPage extends StatefulWidget")
-admin_end = text.find("class AdminCard", admin_start)
+admin_end = text.find("class AgentDashboardPage", admin_start)
 if admin_start < 0 or admin_end < 0:
     raise SystemExit("PATCH_ERROR: Admin Dashboard markers not found")
 admin_block = text[admin_start:admin_end]
@@ -506,7 +506,7 @@ else:
     print("ADMIN_COMMISSION_ALREADY_PRESENT")
 
 admin_start = text.find("class AdminDashboardPage extends StatefulWidget")
-admin_end = text.find("class AdminCard", admin_start)
+admin_end = text.find("class AgentDashboardPage", admin_start)
 admin_block = text[admin_start:admin_end]
 required_admin_commission_markers = [
     "buildCommissionSettingsSection()",
