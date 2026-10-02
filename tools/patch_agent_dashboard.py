@@ -550,7 +550,7 @@ agent = re.sub(
 
 text = text[:agent_start] + agent + text[agent_end:]
 
-ns = text.find("class NotificationsPage extends StatefulWidget")
+ns = text.find("class NotificationsPage extends StatelessWidget")
 ne = text.find("class TransactionsPage extends StatelessWidget", ns)
 if ns < 0 or ne < 0:
     raise SystemExit("PATCH_ERROR: NotificationsPage markers not found during refinement")
