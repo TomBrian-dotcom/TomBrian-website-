@@ -66,8 +66,8 @@ YAML
           wc -l "$APP_DIR"/lib/main.dart
 
       - name: Patch Agent Dashboard
-        working-directory: ${{ env.APP_DIR }}
         run: |
+          cd "$APP_DIR"
           python "$GITHUB_WORKSPACE/tools/patch_agent_dashboard.py"
           grep -n "commissionRate\|unreadNotificationCount\|refreshAgentDashboard" lib/main.dart
 
@@ -85,30 +85,25 @@ YAML
           cache: true
 
       - name: Generate Android project
-        working-directory: ${{ env.APP_DIR }}
-        run: flutter create --platforms=android .
+        run: cd "$APP_DIR" && flutter create --platforms=android .
 
       - name: Get dependencies
-        working-directory: ${{ env.APP_DIR }}
-        run: flutter pub get
+        run: cd "$APP_DIR" && flutter pub get
 
       - name: Analyze Dart source
-        working-directory: ${{ env.APP_DIR }}
-        run: flutter analyze --no-fatal-infos
+        run: cd "$APP_DIR" && flutter analyze --no-fatal-infos
 
       - name: Build release APK
-        working-directory: ${{ env.APP_DIR }}
-        run: flutter build apk --release
+        run: cd "$APP_DIR" && flutter build apk --release
 
       - name: Verify APK
-        working-directory: ${{ env.APP_DIR }}
         run: |
-          ls -lh build/app/outputs/flutter-apk/app-release.apk
-          test -f build/app/outputs/flutter-apk/app-release.apk
+          ls -lh "$APP_DIR/build/app/outputs/flutter-apk/app-release.apk"
+          test -f "$APP_DIR/build/app/outputs/flutter-apk/app-release.apk"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: tombrian-agent-dashboard-${{ github.run_number }}
-          path: ${{ env.APP_DIR }}/build/app/outputs/flutter-apk/app-release.apk
+          path: build_src/**/build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
