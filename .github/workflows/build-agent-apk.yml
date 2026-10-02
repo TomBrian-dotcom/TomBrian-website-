@@ -46,6 +46,9 @@ jobs:
       - name: Generate Android project
         run: cd build_src && flutter create --platforms=android .
 
+      - name: Remove generated placeholder test
+        run: rm -rf build_src/test
+
       - name: Enable Android internet
         run: |
           MANIFEST="build_src/android/app/src/main/AndroidManifest.xml"
