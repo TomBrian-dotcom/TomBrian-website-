@@ -28,7 +28,7 @@ jobs:
         run: |
           cd build_src
           python "$GITHUB_WORKSPACE/tools/patch_agent_dashboard.py"
-          grep -n "commissionRate\|unreadNotificationCount\|refreshAgentDashboard" lib/main.dart
+          grep -n "commissionRate\|Account Activity\|refreshAgentDashboard" lib/main.dart
 
       - name: Set up Java
         uses: actions/setup-java@v4
