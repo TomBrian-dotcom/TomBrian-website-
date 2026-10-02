@@ -256,5 +256,23 @@ block = block.replace(marker, insert, 1)
 
 block = block.replace("__DOLLAR__", chr(36))
 text = text[:start] + block + text[end:]
+text = text.replace("""                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: Image.asset(
+                    'assets/tombrian_logo.jpg',
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) =>
+                        const Icon(
+                      Icons.phone_android,
+                      size: 32,
+                    ),
+                  ),
+                ),""", """                child: const Icon(
+                  Icons.phone_android,
+                  size: 32,
+                ),""", 1)
+
+text = text.replace("""Image.asset('assets/tombrian_logo.jpg', fit: BoxFit.cover, errorBuilder: (_, __, ___) => const Icon(Icons.phone_android, size: 52, color: Color(0xFFD9A441)))""", """const Icon(Icons.phone_android, size: 52, color: Color(0xFFD9A441))""", 1)
+
 main.write_text(text, encoding="utf-8")
 print("PATCH_OK:", main)
