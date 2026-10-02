@@ -276,31 +276,250 @@ text = text.replace("""Image.asset('assets/tombrian_logo.jpg', fit: BoxFit.cover
 
 
 
-# Preserve the Admin Dashboard commission control.
-# The protected 6,810-line source contains an editable Commission Settings
-# section with a percentage field and Save button. Fail the build if that
-# section is missing instead of silently shipping an incomplete admin page.
+# Preserve and restore the Admin Dashboard commission control.
+# The protected 6,810-line recovery source has this control, but the
+# main_corrected.zip build source may be an older copy. Inject the same
+# Supabase-backed editable percentage control into the build source if it
+# is missing, then verify it exists before the build continues.
 admin_start = text.find("class AdminDashboardPage extends StatefulWidget")
 admin_end = text.find("class AdminCard", admin_start)
 if admin_start < 0 or admin_end < 0:
     raise SystemExit("PATCH_ERROR: Admin Dashboard markers not found")
 admin_block = text[admin_start:admin_end]
-required_admin_commission_markers = [
-    "buildCommissionSettingsSection()",
-    "Commission Settings",
-    "Commission rate",
-    "saveCommissionRate",
-]
-missing_admin_markers = [
-    marker for marker in required_admin_commission_markers
-    if marker not in admin_block
-]
-if missing_admin_markers:
-    raise SystemExit(
-        "PATCH_ERROR: Admin commission control missing: "
-        + ", ".join(missing_admin_markers)
-    )
-print("ADMIN_COMMISSION_OK")
+
+if "double commissionRate = 0.0;" not in admin_block:
+    state_marker = """  List<Map<String, dynamic>> transactions = [];
+  List<Map<String, dynamic>> agentApplications = [];
+"""
+    state_insert = """  List<Map<String, dynamic>> transactions = [];
+  List<Map<String, dynamic>> agentApplications = [];
+
+  final commissionRateController = TextEditingController();
+  double commissionRate = 0.0;
+  bool loadingCommissionRate = true;
+  bool savingCommissionRate = false;
+"""
+    if state_marker not in admin_block:
+        raise SystemExit("PATCH_ERROR: Admin state marker not found")
+    admin_block = admin_block.replace(state_marker, state_insert, 1)
+
+    init_marker = """  void initState() {
+    super.initState();
+    loadAdminData();
+  }
+"""
+    init_insert = """  void initState() {
+    super.initState();
+    loadAdminData();
+    loadCommissionRate();
+  }
+
+  Future<void> loadCommissionRate() async {
+    try {
+      final data = await Supabase.instance.client
+          .from('commission_settings')
+          .select('commission_rate')
+          .eq('id', 1)
+          .maybeSingle();
+
+      final value = data?['commission_rate'];
+      final rate = value is num
+          ? value.toDouble()
+          : double.tryParse(value?.toString() ?? '');
+
+      if (!mounted) return;
+      setState(() {
+        commissionRate = rate ?? 0.0;
+        commissionRateController.text = commissionRate.toStringAsFixed(2);
+        loadingCommissionRate = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        loadingCommissionRate = false;
+        commissionRate = 0.0;
+        commissionRateController.text = '0.00';
+      });
+    }
+  }
+
+  Future<void> saveCommissionRate() async {
+    if (savingCommissionRate) return;
+
+    final value = double.tryParse(
+      commissionRateController.text.trim().replaceAll('%', ''),
+    );
+
+    if (value == null || value < 0 || value > 100) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Enter a commission rate between 0% and 100%.'),
+        ),
+      );
+      return;
+    }
+
+    FocusScope.of(context).unfocus();
+    setState(() => savingCommissionRate = true);
+
+    try {
+      await Supabase.instance.client.from('commission_settings').upsert(
+        {
+          'id': 1,
+          'commission_rate': value,
+          'updated_at': DateTime.now().toIso8601String(),
+        },
+        onConflict: 'id',
+      );
+
+      if (!mounted) return;
+      setState(() {
+        commissionRate = value;
+        commissionRateController.text = value.toStringAsFixed(2);
+        savingCommissionRate = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Commission rate updated to ${value.toStringAsFixed(2)}%.',
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => savingCommissionRate = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Could not update commission rate: $e'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  Widget buildCommissionSettingsSection() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Row(
+              children: [
+                Icon(Icons.percent, color: Color(0xFFD9A441)),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Commission Settings',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Set the commission percentage that will be used for eligible agent transactions.',
+              style: TextStyle(color: Colors.white60, height: 1.4),
+            ),
+            const SizedBox(height: 16),
+            if (loadingCommissionRate)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: Center(child: CircularProgressIndicator()),
+              )
+            else
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: commissionRateController,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'[0-9.]'),
+                        ),
+                      ],
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.percent),
+                        labelText: 'Commission rate',
+                        hintText: 'e.g. 5',
+                        suffixText: '%',
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  SizedBox(
+                    height: 54,
+                    child: FilledButton(
+                      onPressed:
+                          savingCommissionRate ? null : saveCommissionRate,
+                      child: savingCommissionRate
+                          ? const SizedBox(
+                              width: 22,
+                              height: 22,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Text('Save'),
+                    ),
+                  ),
+                ],
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+"""
+    if init_marker not in admin_block:
+        raise SystemExit("PATCH_ERROR: Admin initState marker not found")
+    admin_block = admin_block.replace(init_marker, init_insert, 1)
+
+    build_marker = """            const Text(
+              'Manage users, balances, transactions and agent applications.',
+              style: TextStyle(color: Colors.white60),
+            ),
+            const SizedBox(height: 18),
+"""
+    build_insert = """            const Text(
+              'Manage users, balances, transactions and agent applications.',
+              style: TextStyle(color: Colors.white60),
+            ),
+            const SizedBox(height: 18),
+            buildCommissionSettingsSection(),
+            const SizedBox(height: 18),
+"""
+    if build_marker not in admin_block:
+        raise SystemExit("PATCH_ERROR: Admin build intro marker not found")
+    admin_block = admin_block.replace(build_marker, build_insert, 1)
+
+    text = text[:admin_start] + admin_block + text[admin_end:]
+    print("ADMIN_COMMISSION_INJECTED");
+} else {
+    print("ADMIN_COMMISSION_ALREADY_PRESENT");
+}
+
+admin_start = text.find("class AdminDashboardPage extends StatefulWidget")
+admin_end = text.find("class AdminCard", admin_start)
+admin_block = text[admin_start:admin_end]
+for (final marker in [
+  "buildCommissionSettingsSection()",
+  "Commission Settings",
+  "Commission rate",
+  "saveCommissionRate",
+]) {
+  if (!admin_block.contains(marker)) {
+    throw Exception("PATCH_ERROR: Admin commission control missing: " + marker);
+  }
+}
+print("ADMIN_COMMISSION_OK");
 
 # Final refinement: the Agent Dashboard should have only the bell icon.
 import re
