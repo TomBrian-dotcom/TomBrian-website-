@@ -982,7 +982,31 @@
         font-size: 12px;
       }
     }
-  </style>
+  
+    .notification-button {
+      position: relative;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      min-width: 19px;
+      height: 19px;
+      padding: 0 5px;
+      border-radius: 999px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 19px;
+      text-align: center;
+      border: 2px solid #ffffff;
+      box-sizing: border-box;
+      pointer-events: none;
+    }
+
+</style>
 
 </head>
 
@@ -997,10 +1021,12 @@
 
 <div class="header-actions">
   <button
-    class="icon-button"
+    class="icon-button notification-button"
     onclick="openNotifications()"
+    aria-label="Notifications"
   >
     🔔
+    <span id="notificationBadge" class="notification-badge hidden" aria-label="Unread notifications">0</span>
   </button>
 
   <button
@@ -1132,11 +1158,7 @@
   </div>
 </section>
 
-<div class="notice">
-  <strong>TomBrian Services</strong><br>
-  Top-up and withdrawal requests are now recorded securely and sent to admin processing.
-  
-</div>
+
 
   </main>
 
@@ -2190,6 +2212,7 @@
         loadCommission();
         loadTransactions();
         loadSettings();
+        loadUnreadNotificationCount();
 
 
         $("connectionText").textContent =
@@ -2247,6 +2270,7 @@
             loadBalance();
             loadCommission();
             loadTransactions();
+            loadUnreadNotificationCount();
 
           }, 0);
         }
@@ -3389,6 +3413,39 @@
     /* =========================================================
        NOTIFICATIONS
     ========================================================= */
+    async function loadUnreadNotificationCount() {
+      const badge = $("notificationBadge");
+      if (!badge) return;
+
+      if (!currentUser) {
+        badge.classList.add("hidden");
+        return;
+      }
+
+      try {
+        const result = await supabase
+          .from("notifications")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", currentUser.id)
+          .eq("is_read", false);
+
+        if (result.error) throw result.error;
+
+        const count = Number(result.count || 0);
+
+        if (count > 0) {
+          badge.textContent = count > 99 ? "99+" : String(count);
+          badge.classList.remove("hidden");
+        } else {
+          badge.textContent = "0";
+          badge.classList.add("hidden");
+        }
+      } catch (error) {
+        console.warn("Unread notification count:", error);
+        badge.classList.add("hidden");
+      }
+    }
+
     window.openNotifications =
       async function() {
         await loadBalance();
@@ -3442,10 +3499,16 @@
               }).map(function(n) { return n.id; });
 
               if (unreadIds.length) {
-                await supabase.from("notifications")
+                const readResult = await supabase.from("notifications")
                   .update({ is_read: true })
                   .in("id", unreadIds);
+
+                if (readResult.error) {
+                  console.warn("Marking notifications read:", readResult.error);
+                }
               }
+
+              await loadUnreadNotificationCount();
             }
           } catch (error) {
             console.warn("Notifications loading:", error);
