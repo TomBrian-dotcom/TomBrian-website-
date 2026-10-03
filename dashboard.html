@@ -1844,6 +1844,7 @@
         type="tel"
         placeholder="07XXXXXXXX"
       >
+      <div id="servicePhoneHint" style="color:var(--muted);font-size:12px;margin-top:6px;"></div>
 
     </div>
 
@@ -3564,9 +3565,26 @@
           "Service";
 
 
-        $("servicePhone").value =
+        const servicePhone = $("servicePhone");
+        const servicePhoneHint = $("servicePhoneHint");
+
+        servicePhone.value =
           currentProfilePhone ||
           "";
+
+        if (servicePhone) {
+          const isWithdrawal = action === "withdraw";
+          servicePhone.readOnly = isWithdrawal;
+          servicePhone.style.background = isWithdrawal ? "#f3f4f6" : "";
+          servicePhone.style.cursor = isWithdrawal ? "not-allowed" : "";
+        }
+
+        if (servicePhoneHint) {
+          servicePhoneHint.textContent =
+            action === "withdraw"
+              ? "🔒 Withdrawal is sent only to your registered TomBrian number."
+              : "";
+        }
 
 
         $("serviceAmount").value =
@@ -3598,7 +3616,11 @@
           return;
         }
 
-        const phone = $("servicePhone").value.trim();
+        const enteredPhone = $("servicePhone").value.trim();
+        const phone =
+          currentAction === "withdraw"
+            ? String(currentProfilePhone || "").trim()
+            : enteredPhone;
         const amount = Number($("serviceAmount").value);
         const submitButton = $("serviceSubmitButton");
 
