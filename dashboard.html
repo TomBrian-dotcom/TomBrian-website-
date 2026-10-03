@@ -1358,6 +1358,112 @@
 <div class="account-section">
 
   <div class="account-section-title">
+    SUPPORT
+  </div>
+
+  <button
+    class="account-item"
+    onclick="openSupportPage()"
+  >
+    <div class="account-item-icon">
+      🆘
+    </div>
+
+    <div class="account-item-content">
+      <div class="account-item-title">
+        Support Center
+      </div>
+
+      <div class="account-item-subtitle">
+        Get help with your TomBrian account and services
+      </div>
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+  </button>
+
+  <a
+    class="account-item"
+    href="tel:0746880971"
+    style="text-decoration:none;color:inherit;"
+  >
+    <div class="account-item-icon">
+      📞
+    </div>
+
+    <div class="account-item-content">
+      <div class="account-item-title">
+        Call TomBrian
+      </div>
+
+      <div class="account-item-subtitle">
+        0746 880 971 / 0726 510 670
+      </div>
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+  </a>
+
+  <a
+    class="account-item"
+    href="https://wa.me/254746880971"
+    target="_blank"
+    rel="noopener"
+    style="text-decoration:none;color:inherit;"
+  >
+    <div class="account-item-icon">
+      💬
+    </div>
+
+    <div class="account-item-content">
+      <div class="account-item-title">
+        WhatsApp
+      </div>
+
+      <div class="account-item-subtitle">
+        Chat with TomBrian Support
+      </div>
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+  </a>
+
+  <a
+    class="account-item"
+    href="mailto:tombriankoech@gmail.com"
+    style="text-decoration:none;color:inherit;"
+  >
+    <div class="account-item-icon">
+      ✉️
+    </div>
+
+    <div class="account-item-content">
+      <div class="account-item-title">
+        Email Support
+      </div>
+
+      <div class="account-item-subtitle">
+        tombriankoech@gmail.com
+      </div>
+    </div>
+
+    <div class="chevron">
+      ›
+    </div>
+  </a>
+
+</div>
+
+
+<div class="account-section">
+
+  <div class="account-section-title">
     Security
   </div>
 
@@ -1757,6 +1863,111 @@
 </div>
 
   </section>
+
+  <!-- SUPPORT PAGE -->
+
+  <section class="page" id="supportPage">
+
+    <div class="page-header">
+
+      <button
+        class="back-button"
+        onclick="backToAccount()"
+      >
+        ←
+      </button>
+
+      <h2>
+        Support Center
+      </h2>
+
+    </div>
+
+    <div class="about-card">
+
+      <div class="about-logo">
+        🆘
+      </div>
+
+      <h2>
+        TomBrian Support
+      </h2>
+
+      <div class="tagline">
+        We are here to help.
+      </div>
+
+      <div class="about-info">
+
+        <div class="about-row">
+          <strong>
+            Phone
+          </strong>
+          <span>
+            0746 880 971<br>
+            0726 510 670
+          </span>
+        </div>
+
+        <div class="about-row">
+          <strong>
+            WhatsApp
+          </strong>
+          <span>
+            Chat with TomBrian Support
+          </span>
+        </div>
+
+        <div class="about-row">
+          <strong>
+            Email
+          </strong>
+          <span>
+            tombriankoech@gmail.com
+          </span>
+        </div>
+
+      </div>
+
+      <div class="modal-actions" style="margin-top:18px;">
+
+        <a
+          class="primary-button"
+          href="tel:0746880971"
+          style="text-decoration:none;text-align:center;"
+        >
+          📞 Call Support
+        </a>
+
+        <a
+          class="primary-button"
+          href="https://wa.me/254746880971"
+          target="_blank"
+          rel="noopener"
+          style="text-decoration:none;text-align:center;"
+        >
+          💬 WhatsApp
+        </a>
+
+        <a
+          class="secondary-button"
+          href="mailto:tombriankoech@gmail.com"
+          style="text-decoration:none;text-align:center;"
+        >
+          ✉️ Email
+        </a>
+
+      </div>
+
+      <div style="margin-top:18px;color:var(--muted);font-size:13px;line-height:1.6;">
+        For account, top-up, withdrawal, airtime or notification assistance,
+        contact TomBrian using any of the channels above.
+      </div>
+
+    </div>
+
+  </section>
+
 
   <!-- BOTTOM NAV -->
 
@@ -3160,6 +3371,29 @@
         setActiveNav("navAccount");
 
         loadSettings();
+      };
+
+
+    /* =========================================================
+       ABOUT
+    ========================================================= */
+
+    window.openSupportPage =
+      function() {
+
+        $("dashboardPage")
+          .classList.add("hidden");
+
+        document
+          .querySelectorAll(".page")
+          .forEach(function(page) {
+            page.classList.remove("active");
+          });
+
+        $("supportPage")
+          .classList.add("active");
+
+        setActiveNav("navAccount");
       };
 
 
