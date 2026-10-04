@@ -3924,11 +3924,26 @@
 
           if (currentAction === "buy") {
             if (amount > currentBalance) {
-              throw new Error(
-                "Insufficient funds. Your balance is KES " +
-                Number(currentBalance).toFixed(2) + "."
+              const result = await supabase.functions.invoke("mpesa-transactions", {
+                body: {
+                  action: "topup",
+                  amount: amount,
+                  phone: phone
+                }
+              });
+
+              if (result.error) throw result.error;
+              if (result.data?.error) throw new Error(result.data.error);
+
+              closeService();
+              showMessageBox(
+                result.data?.customer_message ||
+                "Your M-Pesa STK Push has been sent. Enter your M-Pesa PIN to pay for the airtime request.",
+                "success"
               );
+              return;
             }
+
             showMessageBox(
               "Airtime purchase processing is not enabled yet.",
               "error"
