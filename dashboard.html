@@ -2045,7 +2045,7 @@
 
     <div class="form-group">
 
-      <label for="servicePhone">
+      <label for="servicePhone" id="servicePhoneLabel">
         Phone Number
       </label>
 
@@ -2056,6 +2056,24 @@
         placeholder="07XXXXXXXX"
       >
       <div id="servicePhoneHint" style="color:var(--muted);font-size:12px;margin-top:6px;"></div>
+
+    </div>
+
+    <div class="form-group hidden" id="recipientPhoneGroup">
+
+      <label for="recipientPhone">
+        Recipient Number
+      </label>
+
+      <input
+        class="form-input"
+        id="recipientPhone"
+        type="tel"
+        placeholder="07XXXXXXXX"
+      >
+      <div style="color:var(--muted);font-size:12px;margin-top:6px;">
+        Number that will receive the airtime.
+      </div>
 
     </div>
 
@@ -3801,14 +3819,27 @@
 
         const servicePhone = $("servicePhone");
         const servicePhoneHint = $("servicePhoneHint");
+        const servicePhoneLabel = $("servicePhoneLabel");
+        const recipientPhoneGroup = $("recipientPhoneGroup");
+        const recipientPhone = $("recipientPhone");
 
         servicePhone.value =
           currentProfilePhone ||
           "";
 
+        if (recipientPhone) recipientPhone.value = "";
+
+        if (servicePhoneLabel) {
+          servicePhoneLabel.textContent =
+            action === "sell" ? "M-Pesa Number" : "Phone Number";
+        }
+
+        if (recipientPhoneGroup) {
+          recipientPhoneGroup.classList.toggle("hidden", action !== "sell");
+        }
+
         if (servicePhone) {
           const isWithdrawal = action === "withdraw";
-          servicePhone.readOnly = isWithdrawal;
           servicePhone.style.background = isWithdrawal ? "#f3f4f6" : "";
           servicePhone.style.cursor = isWithdrawal ? "not-allowed" : "";
         }
@@ -3817,7 +3848,9 @@
           servicePhoneHint.textContent =
             action === "withdraw"
               ? "🔒 Withdrawal is sent only to your registered TomBrian number."
-              : "";
+              : action === "sell"
+                ? "M-Pesa STK Push will be sent to this number."
+                : "";
         }
 
 
@@ -3855,11 +3888,25 @@
           currentAction === "withdraw"
             ? String(currentProfilePhone || "").trim()
             : enteredPhone;
+        const recipientPhone =
+          currentAction === "sell"
+            ? $("recipientPhone").value.trim()
+            : "";
         const amount = Number($("serviceAmount").value);
         const submitButton = $("serviceSubmitButton");
 
         if (!phone) {
-          showMessageBox("Please enter a phone number.", "error");
+          showMessageBox(
+            currentAction === "sell"
+              ? "Please enter the M-Pesa number."
+              : "Please enter a phone number.",
+            "error"
+          );
+          return;
+        }
+
+        if (currentAction === "sell" && !recipientPhone) {
+          showMessageBox("Please enter the recipient number.", "error");
           return;
         }
 
@@ -3953,7 +4000,7 @@
 
           if (currentAction === "sell") {
             showMessageBox(
-              "Airtime selling processing is not enabled yet.",
+              "Sell Airtime payment and fulfilment is not yet connected to the airtime provider.",
               "error"
             );
             return;
