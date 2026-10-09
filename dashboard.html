@@ -3968,11 +3968,25 @@
                 const response = result.error.context;
 
                 if (
-                  response &&
-                  typeof response.clone === "function"
-                ) {
-                  const details = await response.clone().json();
+  response &&
+  typeof response.clone === "function"
+) {
+  const responseText = await response.clone().text();
 
+  if (responseText.trim()) {
+    try {
+      const details = JSON.parse(responseText);
+
+      message =
+        details.error ||
+        details.message ||
+        details.details ||
+        message;
+    } catch (_) {
+      message = responseText;
+    }
+  }
+                }
                   message =
                     details.error ||
                     details.message ||
