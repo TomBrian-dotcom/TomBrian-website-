@@ -3949,25 +3949,57 @@
           }
 
           if (currentAction === "topup") {
-            const result = await supabase.functions.invoke("mpesa-transactions", {
-              body: {
-                action: "topup",
-                amount: amount,
-                phone: phone
+            const result = await supabase.functions.invoke(
+              "mpesa-transactions",
+              {
+                body: {
+                  action: "topup",
+                  amount: amount,
+                  phone: phone
+                }
               }
-            });
+            );
 
-            if (result.error) throw result.error;
-            if (result.data?.error) throw new Error(result.data.error);
+            if (result.error) {
+              let message =
+                result.error.message || "Top up request failed.";
+
+              try {
+                const response = result.error.context;
+
+                if (
+                  response &&
+                  typeof response.clone === "function"
+                ) {
+                  const details = await response.clone().json();
+
+                  message =
+                    details.error ||
+                    details.message ||
+                    details.details ||
+                    message;
+                }
+              } catch (_) {
+                // Keep the original error if response details are unavailable.
+              }
+
+              throw new Error(message);
+            }
+
+            if (result.data?.error) {
+              throw new Error(result.data.error);
+            }
 
             closeService();
+
             showMessageBox(
               result.data?.customer_message ||
-              "M-Pesa prompt sent. Enter your M-Pesa PIN on your phone to complete the top up.",
+                "M-Pesa prompt requested. If your phone receives an STK prompt, enter your M-Pesa PIN to complete the top up.",
               "success"
             );
+
             return;
-          }
+    }
 
           if (currentAction === "buy") {
             if (amount > currentBalance) {
