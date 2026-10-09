@@ -3961,44 +3961,35 @@
             );
 
             if (result.error) {
-              let message =
-                result.error.message || "Top up request failed.";
+  let message =
+    result.error.message || "Top up request failed.";
 
-              try {
-                const response = result.error.context;
+  try {
+    const response = result.error.context;
 
-                if (
-  response &&
-  typeof response.clone === "function"
-) {
-  const responseText = await response.clone().text();
+    if (response && typeof response.clone === "function") {
+      const responseText = await response.clone().text();
 
-  if (responseText.trim()) {
-    try {
-      const details = JSON.parse(responseText);
+      if (responseText.trim()) {
+        try {
+          const details = JSON.parse(responseText);
 
-      message =
-        details.error ||
-        details.message ||
-        details.details ||
-        message;
-    } catch (_) {
-      message = responseText;
+          message =
+            details.error ||
+            details.message ||
+            details.details ||
+            message;
+        } catch (_) {
+          message = responseText;
+        }
+      }
     }
+  } catch (_) {
+    // Keep the original error if response details are unavailable.
   }
-                }
-                  message =
-                    details.error ||
-                    details.message ||
-                    details.details ||
-                    message;
-                }
-              } catch (_) {
-                // Keep the original error if response details are unavailable.
-              }
 
-              throw new Error(message);
-            }
+  throw new Error(message);
+    }
 
             if (result.data?.error) {
               throw new Error(result.data.error);
