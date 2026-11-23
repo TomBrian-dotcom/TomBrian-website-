@@ -517,7 +517,43 @@
       border: 1px solid var(--border);
       border-radius: 18px;
       overflow: hidden;
-      margin-bottom: 25px;
+      margin: 0 0 25px;
+      box-shadow: 0 4px 15px rgba(15,23,42,.04);
+    }
+
+    .transactions-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .transactions-card-header h2 {
+      font-size: 17px;
+      font-weight: 850;
+      margin-bottom: 4px;
+    }
+
+    .transactions-card-header p {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .transactions-card-icon {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: var(--green-light);
+      font-size: 19px;
+    }
+
+    .transactions-card .empty-state {
+      padding: 22px 16px;
     }
 
     .transaction {
@@ -1382,16 +1418,19 @@
 
 </section>
 
-<div class="section-title">
-  Recent Transactions
-</div>
+<section class="transactions-card" aria-labelledby="transactionsHeading">
+  <div class="transactions-card-header">
+    <div>
+      <h2 id="transactionsHeading">Recent Transactions</h2>
+      <p>Your latest 3 account activities</p>
+    </div>
+    <span class="transactions-card-icon" aria-hidden="true">🧾</span>
+  </div>
 
-<section
-  class="transactions-card"
-  id="transactionsList"
->
-  <div class="empty-state">
-    No transactions yet.
+  <div id="transactionsList">
+    <div class="empty-state">
+      No transactions yet.
+    </div>
   </div>
 </section>
 
@@ -3524,7 +3563,7 @@
                 ascending: false
               }
             )
-            .limit(10);
+            .limit(3);
 
 
         if (result.error) {
