@@ -311,6 +311,42 @@
       font-size: 23px;
     }
 
+    .offers-panel {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 15px rgba(15,23,42,.04);
+    }
+
+    .offers-panel-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .offers-panel-header .action-icon {
+      margin: 0;
+      flex-shrink: 0;
+    }
+
+    .offers-panel-header h2 {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .offers-panel-header p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .offers-panel .offers-grid {
+      margin-bottom: 0;
+    }
+
     .offers-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -1168,9 +1204,17 @@
 
 </section>
 
-<div class="section-title">Available Data, SMS &amp; Minutes Offers</div>
-<section id="websiteOffersList" class="offers-grid" aria-live="polite">
-  <div class="empty-state">Loading available offers...</div>
+<section class="offers-panel" aria-labelledby="buyOffersTitle">
+  <div class="offers-panel-header">
+    <div class="action-icon">📶</div>
+    <div>
+      <h2 id="buyOffersTitle">Buy Data and Minutes</h2>
+      <p>Choose from our available Data, SMS and Minutes offers.</p>
+    </div>
+  </div>
+  <div id="websiteOffersList" class="offers-grid" aria-live="polite">
+    <div class="empty-state">Loading available offers...</div>
+  </div>
 </section>
 
 <!-- AGENT -->
