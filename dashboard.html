@@ -3390,16 +3390,18 @@
             ? "KSh " + Number(offer.selling_price).toFixed(0)
             : "price unavailable"));
         card.addEventListener("click", function() {
+          if (String(selectedWebsiteOfferId) === String(offer.id)) {
+            window.handleWebsiteOfferBuyNow();
+            return;
+          }
           selectedWebsiteOfferId = offer.id;
           renderWebsiteOffers();
           const selected = $("selectedWebsiteOfferNotice");
           if (selected) {
             selected.textContent = (offer.offer_name || typeLabel + " offer") +
-              " selected. Tap BUY NOW to continue.";
+              " selected. Tap BUY NOW on this offer to continue.";
             selected.classList.remove("hidden");
           }
-          const buyArea = $("websiteBuyNowArea");
-          if (buyArea) buyArea.classList.remove("hidden");
         });
 
         const badge = document.createElement("span");
@@ -3427,14 +3429,21 @@
           ? "KSh " + numericPrice.toFixed(0)
           : "Price unavailable";
 
+        const isSelected = String(selectedWebsiteOfferId) === String(offer.id);
         const hint = document.createElement("span");
         hint.className = "offer-select-hint";
-        hint.textContent = String(selectedWebsiteOfferId) === String(offer.id)
-          ? "✓ Selected"
-          : "Tap to select";
+        hint.textContent = isSelected ? "✓ Selected" : "Tap to select";
 
         meta.append(validity, price);
         card.append(badge, name, detail, meta, hint);
+
+        if (isSelected) {
+          const buyNow = document.createElement("span");
+          buyNow.className = "primary-button";
+          buyNow.style.cssText = "display:block;width:100%;box-sizing:border-box;text-align:center;margin-top:14px;padding:13px;font-weight:700;";
+          buyNow.textContent = "BUY NOW";
+          card.appendChild(buyNow);
+        }
         list.appendChild(card);
       });
     }
