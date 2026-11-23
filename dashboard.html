@@ -311,6 +311,64 @@
       font-size: 23px;
     }
 
+    .offers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 13px;
+      margin-bottom: 28px;
+    }
+
+    .offer-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 17px;
+      box-shadow: 0 4px 15px rgba(15,23,42,.04);
+    }
+
+    .offer-type {
+      display: inline-block;
+      color: var(--green-dark);
+      background: var(--green-light);
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .offer-name {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      overflow-wrap: anywhere;
+    }
+
+    .offer-amount {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .offer-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border-top: 1px solid var(--border);
+      padding-top: 11px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .offer-price {
+      color: var(--dark);
+      font-size: 17px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
     .transactions-card {
       background: white;
       border: 1px solid var(--border);
@@ -1108,6 +1166,11 @@
     <p>Withdraw funds</p>
   </button>
 
+</section>
+
+<div class="section-title">Available Data, SMS &amp; Minutes Offers</div>
+<section id="websiteOffersList" class="offers-grid" aria-live="polite">
+  <div class="empty-state">Loading available offers...</div>
 </section>
 
 <!-- AGENT -->
@@ -2441,6 +2504,7 @@
         loadBalance();
         loadCommission();
         loadTransactions();
+        loadWebsiteOffers();
         loadSettings();
         loadUnreadNotificationCount();
 
@@ -3073,6 +3137,79 @@
 
 
     /* =========================================================
+       CUSTOMER OFFERS (READ-ONLY; MANAGED IN THE APP)
+    ========================================================= */
+
+    async function loadWebsiteOffers() {
+      const list = $("websiteOffersList");
+      if (!list) return;
+
+      list.innerHTML = '<div class="empty-state">Loading available offers...</div>';
+
+      try {
+        const result = await supabase
+          .from("data_minutes_offers")
+          .select("id, offer_name, offer_type, data_amount, minutes_amount, validity_text, selling_price, is_active")
+          .eq("is_active", true)
+          .order("selling_price", { ascending: true });
+
+        if (result.error) throw result.error;
+
+        const offers = result.data || [];
+        list.innerHTML = "";
+
+        if (offers.length === 0) {
+          list.innerHTML = '<div class="empty-state">No offers are currently available. Please check again later.</div>';
+          return;
+        }
+
+        offers.forEach(function(offer) {
+          const type = String(offer.offer_type || "data").toLowerCase();
+          const typeLabel = type === "sms" ? "SMS" : (type === "minutes" ? "Minutes" : "Data");
+          const amount = type === "minutes"
+            ? String(offer.minutes_amount ?? "") + " minutes"
+            : String(offer.data_amount ?? "") + (type === "sms" ? " SMS" : "");
+
+          const card = document.createElement("article");
+          card.className = "offer-card";
+
+          const badge = document.createElement("span");
+          badge.className = "offer-type";
+          badge.textContent = typeLabel;
+
+          const name = document.createElement("h3");
+          name.className = "offer-name";
+          name.textContent = offer.offer_name || typeLabel + " offer";
+
+          const detail = document.createElement("p");
+          detail.className = "offer-amount";
+          detail.textContent = amount || "Offer amount not specified";
+
+          const meta = document.createElement("div");
+          meta.className = "offer-meta";
+
+          const validity = document.createElement("span");
+          validity.textContent = offer.validity_text || "Validity not specified";
+
+          const price = document.createElement("strong");
+          price.className = "offer-price";
+          const numericPrice = Number(offer.selling_price);
+          price.textContent = Number.isFinite(numericPrice)
+            ? "KSh " + numericPrice.toFixed(0)
+            : "Price unavailable";
+
+          meta.append(validity, price);
+          card.append(badge, name, detail, meta);
+          list.appendChild(card);
+        });
+      } catch (error) {
+        console.warn("Website offers:", error);
+        list.innerHTML = '<div class="empty-state">Offers could not be loaded right now. Please try again later.</div>';
+      }
+    }
+
+
+    /* =========================================================
        TRANSACTIONS
     ========================================================= */
 
@@ -3468,6 +3605,7 @@
 
         loadBalance();
         loadTransactions();
+        loadWebsiteOffers();
         loadCommission();
       };
 
