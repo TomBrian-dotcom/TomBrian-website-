@@ -440,6 +440,33 @@
       border-radius: 16px;
       padding: 17px;
       box-shadow: 0 4px 15px rgba(15,23,42,.04);
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      color: inherit;
+      transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+
+    .offer-card:hover,
+    .offer-card:focus-visible {
+      border-color: var(--green);
+      box-shadow: var(--shadow);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .offer-card.selected {
+      border: 2px solid var(--green);
+      padding: 16px;
+      background: #f0fdf4;
+    }
+
+    .offer-select-hint {
+      display: block;
+      margin-top: 12px;
+      color: var(--green-dark);
+      font-size: 12px;
+      font-weight: 800;
     }
 
     .offer-type {
@@ -1312,6 +1339,7 @@
   <div id="websiteOffersList" class="offers-grid" aria-live="polite">
     <div class="empty-state">Loading available offers...</div>
   </div>
+  <p id="selectedWebsiteOfferNotice" class="notice hidden" role="status" aria-live="polite"></p>
 </section>
 
 <!-- AGENT -->
@@ -3311,6 +3339,8 @@
       renderWebsiteOffers();
     };
 
+    let selectedWebsiteOfferId = null;
+
     function renderWebsiteOffers() {
       const list = $("websiteOffersList");
       if (!list) return;
@@ -3343,8 +3373,27 @@
           : String(offer.data_amount ?? "") +
             (selectedWebsiteOfferCategory === "sms" ? " SMS" : "");
 
-        const card = document.createElement("article");
-        card.className = "offer-card";
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "offer-card" +
+          (String(selectedWebsiteOfferId) === String(offer.id) ? " selected" : "");
+        card.setAttribute("aria-pressed",
+          String(selectedWebsiteOfferId) === String(offer.id) ? "true" : "false");
+        card.setAttribute("aria-label",
+          "Select " + (offer.offer_name || typeLabel + " offer") +
+          ", " + (Number.isFinite(Number(offer.selling_price))
+            ? "KSh " + Number(offer.selling_price).toFixed(0)
+            : "price unavailable"));
+        card.addEventListener("click", function() {
+          selectedWebsiteOfferId = offer.id;
+          renderWebsiteOffers();
+          const selected = $("selectedWebsiteOfferNotice");
+          if (selected) {
+            selected.textContent = (offer.offer_name || typeLabel + " offer") +
+              " selected. M-Pesa STK Push is not connected for offer purchases yet.";
+            selected.classList.remove("hidden");
+          }
+        });
 
         const badge = document.createElement("span");
         badge.className = "offer-type";
@@ -3371,8 +3420,14 @@
           ? "KSh " + numericPrice.toFixed(0)
           : "Price unavailable";
 
+        const hint = document.createElement("span");
+        hint.className = "offer-select-hint";
+        hint.textContent = String(selectedWebsiteOfferId) === String(offer.id)
+          ? "✓ Selected"
+          : "Tap to select";
+
         meta.append(validity, price);
-        card.append(badge, name, detail, meta);
+        card.append(badge, name, detail, meta, hint);
         list.appendChild(card);
       });
     }
