@@ -1339,6 +1339,11 @@
   <div id="websiteOffersList" class="offers-grid" aria-live="polite">
     <div class="empty-state">Loading available offers...</div>
   </div>
+  <div id="websiteBuyNowArea" class="hidden" style="margin-top:16px;">
+    <button type="button" id="websiteBuyNowButton" class="primary-button"
+      style="width:100%;min-height:50px;font-size:15px;"
+      onclick="handleWebsiteOfferBuyNow()">BUY NOW</button>
+  </div>
   <p id="selectedWebsiteOfferNotice" class="notice hidden" role="status" aria-live="polite"></p>
 </section>
 
@@ -3390,9 +3395,11 @@
           const selected = $("selectedWebsiteOfferNotice");
           if (selected) {
             selected.textContent = (offer.offer_name || typeLabel + " offer") +
-              " selected. M-Pesa STK Push is not connected for offer purchases yet.";
+              " selected. Tap BUY NOW to continue.";
             selected.classList.remove("hidden");
           }
+          const buyArea = $("websiteBuyNowArea");
+          if (buyArea) buyArea.classList.remove("hidden");
         });
 
         const badge = document.createElement("span");
@@ -3431,6 +3438,28 @@
         list.appendChild(card);
       });
     }
+
+    window.handleWebsiteOfferBuyNow = function() {
+      if (!selectedWebsiteOfferId) {
+        showMessageBox("Please select an offer first.", "error");
+        return;
+      }
+
+      const offer = websiteOffers.find(function(item) {
+        return String(item.id) === String(selectedWebsiteOfferId);
+      });
+
+      if (!offer) {
+        showMessageBox("That offer is no longer available. Please refresh the offers.", "error");
+        return;
+      }
+
+      showMessageBox(
+        "Your selected offer is " + (offer.offer_name || "ready") +
+        ". M-Pesa STK Push for offer purchases is not connected yet, so no payment has been requested.",
+        "error"
+      );
+    };
 
     async function loadWebsiteOffers() {
       const list = $("websiteOffersList");
