@@ -3487,7 +3487,12 @@
       });
     }
 
-    window.handleWebsiteOfferBuyNow = function() {
+    window.handleWebsiteOfferBuyNow = async function() {
+      if (!currentUser) {
+        showMessageBox("Please sign in again before purchasing an offer.", "error");
+        return;
+      }
+
       if (!selectedWebsiteOfferId) {
         showMessageBox("Please select an offer first.", "error");
         return;
@@ -3502,11 +3507,100 @@
         return;
       }
 
-      showMessageBox(
-        "Your selected offer is " + (offer.offer_name || "ready") +
-        ". M-Pesa STK Push for offer purchases is not connected yet, so no payment has been requested.",
-        "error"
+      const amount = Number(offer.selling_price);
+      if (!Number.isFinite(amount) || amount <= 0) {
+        showMessageBox("This offer has an invalid price. Please contact support.", "error");
+        return;
+      }
+
+      const phoneInput = window.prompt(
+        "Enter the Kenyan M-Pesa number that will make this payment (07XXXXXXXX or 2547XXXXXXXX):",
+        currentProfilePhone || currentUser.user_metadata?.phone || currentUser.phone || ""
       );
+
+      if (phoneInput === null) return;
+
+      const phoneDigits = String(phoneInput).replace(/\\D/g, "");
+      const validPhone =
+        (phoneDigits.startsWith("254") && phoneDigits.length === 12) ||
+        (phoneDigits.startsWith("0") && phoneDigits.length === 10) ||
+        (phoneDigits.startsWith("7") && phoneDigits.length === 9);
+
+      if (!validPhone) {
+        showMessageBox("Please enter a valid Kenyan M-Pesa phone number.", "error");
+        return;
+      }
+
+      const formattedPhone = phoneDigits.startsWith("0")
+        ? "254" + phoneDigits.slice(1)
+        : (phoneDigits.startsWith("7") ? "254" + phoneDigits : phoneDigits);
+
+      const confirmed = window.confirm(
+        "Offer: " + (offer.offer_name || "Selected offer") +
+        "\\nAmount: KES " + amount.toFixed(2) +
+        "\\nM-Pesa number: " + formattedPhone +
+        "\\n\\nContinue to request an M-Pesa payment prompt?"
+      );
+
+      if (!confirmed) return;
+
+      const buyButton = $("websiteBuyNowButton");
+      if (buyButton) {
+        buyButton.disabled = true;
+        buyButton.textContent = "REQUESTING STK...";
+      }
+
+      try {
+        const result = await supabase.functions.invoke("mpesa-transactions", {
+          body: {
+            action: "offer_purchase",
+            offer_id: String(offer.id),
+            phone: formattedPhone
+          }
+        });
+
+        if (result.error) {
+          let message = result.error.message || "Could not request the M-Pesa prompt.";
+          try {
+            const response = result.error.context;
+            if (response && typeof response.clone === "function") {
+              const responseText = await response.clone().text();
+              if (responseText.trim()) {
+                try {
+                  const details = JSON.parse(responseText);
+                  message = details.error || details.message || details.details || message;
+                } catch (_) {
+                  message = responseText;
+                }
+              }
+            }
+          } catch (_) {
+            // Keep the original function error when response details are unavailable.
+          }
+          throw new Error(message);
+        }
+
+        if (result.data?.error) {
+          throw new Error(result.data.error);
+        }
+
+        showMessageBox(
+          result.data?.customer_message ||
+            "Your M-Pesa payment prompt has been requested. Check the selected phone.",
+          "success"
+        );
+      } catch (error) {
+        console.error("Website offer STK request:", error);
+        showMessageBox(
+          error?.message || "Could not request the M-Pesa prompt. Please try again later.",
+          "error"
+        );
+      } finally {
+        if (buyButton) {
+          buyButton.disabled = false;
+          buyButton.textContent = "BUY NOW";
+        }
+      }
     };
 
     async function loadWebsiteOffers() {
