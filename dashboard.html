@@ -3520,7 +3520,7 @@
 
       if (phoneInput === null) return;
 
-      const phoneDigits = String(phoneInput).replace(/\\D/g, "");
+      const phoneDigits = String(phoneInput).replace(/\D/g, "");
       const validPhone =
         (phoneDigits.startsWith("254") && phoneDigits.length === 12) ||
         (phoneDigits.startsWith("0") && phoneDigits.length === 10) ||
@@ -3537,9 +3537,9 @@
 
       const confirmed = window.confirm(
         "Offer: " + (offer.offer_name || "Selected offer") +
-        "\\nAmount: KES " + amount.toFixed(2) +
-        "\\nM-Pesa number: " + formattedPhone +
-        "\\n\\nContinue to request an M-Pesa payment prompt?"
+        "\nAmount: KES " + amount.toFixed(2) +
+        "\nM-Pesa number: " + formattedPhone +
+        "\n\\nContinue to request an M-Pesa payment prompt?"
       );
 
       if (!confirmed) return;
