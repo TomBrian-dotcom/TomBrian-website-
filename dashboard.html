@@ -1474,6 +1474,15 @@
 
 </div>
 
+<div id="adminDashboardLink" class="account-section hidden" style="margin-bottom:18px;">
+  <div class="account-section-title">Administration</div>
+  <a class="account-item" href="admin.html" style="text-decoration:none;color:inherit;">
+    <div class="account-item-icon">🛡️</div>
+    <div class="account-item-content"><div class="account-item-title">Admin Dashboard</div><div class="account-item-subtitle">Manage TomBrian and monitor purchases</div></div>
+    <span class="chevron">›</span>
+  </a>
+</div>
+
 <div class="account-balance">
 
   <div class="account-balance-label">
@@ -2883,6 +2892,14 @@
 
       currentProfilePhone =
         String(phone || "").trim();
+
+      const adminLink = $("adminDashboardLink");
+      if (adminLink) {
+        adminLink.classList.toggle(
+          "hidden",
+          String(currentProfile?.role || "").toLowerCase() !== "admin"
+        );
+      }
 
 
       currentReferralCode =
