@@ -41,7 +41,7 @@ const esc=value=>String(value??"—").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&
 const money=value=>"KES "+Number(value||0).toFixed(2);
 async function checkAdmin(){
  const {data:{session},error}=await supabase.auth.getSession();if(error)throw error;
- if(!session){location.replace("login.html");return false;}
+ if(!session){location.replace("admin-login.html");return false;}
  const {data:profile,error:profileError}=await supabase.from("profiles").select("role").eq("id",session.user.id).maybeSingle();
  if(profileError)throw profileError;
  if(String(profile?.role||"").toLowerCase()!=="admin"){status("Access denied. This account does not have the administrator role.","error");return false;}
