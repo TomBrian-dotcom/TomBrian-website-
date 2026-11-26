@@ -2444,8 +2444,15 @@
       class="form-input"
       id="editPhone"
       type="tel"
+      inputmode="numeric"
+      autocomplete="tel-national"
+      maxlength="10"
+      pattern="(07|01)[0-9]{8}"
       placeholder="07XXXXXXXX"
     >
+    <div style="color:var(--muted);font-size:12px;margin-top:6px;">
+      Use your active Kenyan number (07XXXXXXXX or 01XXXXXXXX).
+    </div>
 
   </div>
 
@@ -2475,6 +2482,7 @@
 
     <button
       class="primary-button"
+      id="editProfileSaveButton"
       onclick="saveProfile()"
     >
       Save Changes
@@ -4614,178 +4622,111 @@
 
     window.openEditProfile =
       function() {
-
-        const nameElement =
-          $("accountProfileName");
-
-
-        const name =
-          nameElement
-            ? nameElement.textContent
-            : "Customer";
-
-
         $("editFullName").value =
-          name === "Customer"
-            ? ""
-            : name;
-
+          currentProfile?.full_name ||
+          $("accountProfileName")?.textContent ||
+          "";
 
         $("editPhone").value =
-          currentProfilePhone ||
-          "";
-
+          currentProfilePhone || "";
 
         $("editEmail").value =
-          currentUser?.email ||
-          "";
+          currentUser?.email || "";
 
-
-        $("editProfileModal")
-          .classList.remove("hidden");
+        $("editProfileModal").classList.remove("hidden");
       };
 
 
     window.closeEditProfile =
       function() {
-
-        $("editProfileModal")
-          .classList.add("hidden");
+        $("editProfileModal").classList.add("hidden");
       };
 
 
     window.saveProfile =
       async function() {
+        if (!currentUser) {
+          showMessageBox("Your session has expired. Please sign in again.", "error");
+          return;
+        }
 
-        if (!currentUser) return;
-
-
-        const fullName =
-          $("editFullName")
-            .value
-            .trim();
-
-
-        const phone =
-          $("editPhone")
-            .value
-            .trim();
-
+        const fullName = $("editFullName").value.trim();
+        const phone = $("editPhone").value.trim();
+        const saveButton = $("editProfileSaveButton");
 
         if (!fullName) {
-
-          showMessageBox(
-            "Please enter your full name.",
-            "error"
-          );
-
+          showMessageBox("Please enter your full name.", "error");
           return;
         }
 
-
-        if (!phone) {
-
-          showMessageBox(
-            "Please enter your phone number.",
-            "error"
-          );
-
+        if (fullName.length > 80) {
+          showMessageBox("Your name must be 80 characters or fewer.", "error");
           return;
         }
 
+        if (!/^(07|01)\\d{8}$/.test(phone)) {
+          showMessageBox("Enter a valid Kenyan phone number, for example 0712345678 or 0112345678.", "error");
+          return;
+        }
+
+        if (saveButton) {
+          saveButton.disabled = true;
+          saveButton.textContent = "Saving...";
+        }
 
         try {
-
-          /*
-           * Update Auth metadata.
-           */
-
-          const authResult =
-            await supabase.auth.updateUser({
-
-              data: {
-
-                full_name:
-                  fullName,
-
-                phone:
-                  phone
-              }
-            });
-
-
-          if (authResult.error) {
-            throw authResult.error;
-          }
-
-
-          /*
-           * Update profiles.
-           *
-           * IMPORTANT:
-           * referral_code is deliberately
-           * not changed.
-           */
-
-          const profileResult =
-            await supabase
-              .from("profiles")
-              .update({
-
-                full_name:
-                  fullName,
-
-                phone:
-                  phone
-
-              })
-              .eq(
-                "id",
-                currentUser.id
-              );
-
+          // Save only the two columns permitted by the profiles UPDATE grant.
+          const profileResult = await supabase
+            .from("profiles")
+            .update({
+              full_name: fullName,
+              phone: phone
+            })
+            .eq("id", currentUser.id)
+            .select("id, full_name, phone")
+            .single();
 
           if (profileResult.error) {
-
-            console.warn(
-              "Profile update:",
-              profileResult.error
-            );
+            if (profileResult.error.code === "23505") {
+              throw new Error("That phone number is already registered to another TomBrian account.");
+            }
+            throw profileResult.error;
           }
 
+          // Keep Auth metadata in step; profiles remains the source of truth.
+          const authResult = await supabase.auth.updateUser({
+            data: {
+              full_name: fullName,
+              phone: phone
+            }
+          });
 
-          currentProfilePhone =
-            phone;
+          if (authResult.error) {
+            console.warn("Profile saved, but Auth metadata could not be refreshed:", authResult.error);
+          }
 
+          currentProfile = {
+            ...(currentProfile || {}),
+            ...profileResult.data
+          };
+          currentProfilePhone = phone;
 
           await loadProfile();
-
-
           generateReferralInfo();
-
-
           closeEditProfile();
 
-
-          showMessageBox(
-            "Profile updated successfully.",
-            "success"
-          );
-
-
+          showMessageBox("Your profile has been updated. The admin customer record will show the new details after refresh.", "success");
         } catch (error) {
-
-          console.error(
-            "Profile update error:",
-            error
-          );
-
-
+          console.error("Profile update error:", error);
           showMessageBox(
-            error?.message ||
-            "Could not update your profile.",
+            error?.message || "Could not update your profile. Please try again.",
             "error"
           );
+        } finally {
+          if (saveButton) {
+            saveButton.disabled = false;
+            saveButton.textContent = "Save Changes";
+          }
         }
       };
 
