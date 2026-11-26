@@ -1168,6 +1168,11 @@
       background: var(--danger);
     }
 
+    .message-box.info {
+      background: #17233d;
+      border: 1px solid #d9a441;
+    }
+
     @media (max-width: 700px) {
       .actions-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -4354,6 +4359,29 @@
 
     window.openService =
       function(action) {
+
+        // Airtime, top-up, sell-airtime and withdrawal are not currently available.
+        // Guide customers directly to the active Data and Minutes offers instead.
+        if (["buy", "sell", "topup", "withdraw"].includes(action)) {
+          showMessageBox(
+            "This service is currently unavailable. You can still buy Data or Minutes from the offers below.",
+            "info"
+          );
+
+          const offersPanel = $("buyOffersPanel");
+          if (offersPanel && offersPanel.classList.contains("hidden")) {
+            toggleWebsiteOffers();
+          }
+
+          selectWebsiteOfferCategory("data");
+
+          const offersTrigger = $("buyOffersTrigger");
+          if (offersTrigger) {
+            offersTrigger.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+
+          return;
+        }
 
         currentAction =
           action;
