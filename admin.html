@@ -26,9 +26,21 @@ th,td{text-align:left;padding:12px 13px;border-bottom:1px solid var(--line);font
 <div class="card"><div class="metric-label">Registered customers</div><div class="metric" id="customerCount">—</div></div>
 <div class="card"><div class="metric-label">All offer purchases</div><div class="metric" id="purchaseCount">—</div></div>
 <div class="card"><div class="metric-label">Completed payments</div><div class="metric" id="completedCount">—</div></div>
-<div class="card"><div class="metric-label">Active offers</div><div class="metric" id="offerCount">—</div></div>
+<div class="card"><div class="metric-label">Active offers</div><div class="metric" id="offerCount">—</div><button id="manageOffersBtn" style="margin-top:12px;width:100%">Manage Offers</button></div>
 </div>
 <section class="section"><div class="section-head"><h2>Recent offer purchases</h2><span class="muted">Latest 50 records</span></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Offer</th><th>Phone</th><th>Amount</th><th>Status</th><th>M-Pesa receipt</th></tr></thead><tbody id="purchaseRows"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody></table></div></section>
+<section class="section hidden" id="offerManagement">
+<div class="section-head"><h2>Manage Offers</h2><button id="closeOfferManager">Close</button></div>
+<form id="offerForm" class="card" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+<label class="muted">Offer name<input id="offerName" required maxlength="100" placeholder="e.g. 250MB 24HRS" style="display:block;width:100%;margin-top:6px;padding:11px;border-radius:9px;border:1px solid var(--line);background:#090d16;color:white"></label>
+<label class="muted">Category<select id="offerType" required style="display:block;width:100%;margin-top:6px;padding:11px;border-radius:9px;border:1px solid var(--line);background:#090d16;color:white"><option value="data">Data</option><option value="minutes">Minutes</option><option value="sms">SMS</option></select></label>
+<label class="muted">Validity<input id="offerValidity" required maxlength="60" placeholder="e.g. 24hrs" style="display:block;width:100%;margin-top:6px;padding:11px;border-radius:9px;border:1px solid var(--line);background:#090d16;color:white"></label>
+<label class="muted">Price (KES)<input id="offerPrice" required type="number" min="1" step="0.01" placeholder="20" style="display:block;width:100%;margin-top:6px;padding:11px;border-radius:9px;border:1px solid var(--line);background:#090d16;color:white"></label>
+<div class="actions" style="grid-column:1/-1"><button id="saveOfferBtn" type="submit">Add Offer</button><button id="cancelOfferEdit" type="button">Clear</button></div>
+<input id="editingOfferId" type="hidden">
+</form>
+<div class="table-wrap" style="margin-top:12px"><table><thead><tr><th>Offer</th><th>Category</th><th>Validity</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead><tbody id="manageOfferRows"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody></table></div>
+</section>
 <section class="section"><div class="section-head"><h2>Offers</h2><span class="muted">Current database records</span></div><div class="table-wrap"><table><thead><tr><th>Offer</th><th>Category</th><th>Validity</th><th>Price</th><th>Status</th></tr></thead><tbody id="offerRows"><tr><td colspan="5" class="empty">Loading…</td></tr></tbody></table></div></section>
 <p class="muted" style="margin-top:18px">Monitoring-only first release. Offer editing and deletion will be enabled after confirming administrator-only database write policies.</p>
 </div></main>
@@ -68,11 +80,44 @@ async function loadData(){
  const rows=recent.data||[];
  el("purchaseRows").innerHTML=rows.length?rows.map(x=>'<tr><td>'+esc(x.created_at?new Date(x.created_at).toLocaleString():"—")+'</td><td>'+esc(x.offer_name)+'</td><td>'+esc(x.callback_phone||x.phone)+'</td><td>'+esc(money(x.amount))+'</td><td><span class="pill '+esc(String(x.status||"").toLowerCase())+'">'+esc(x.status)+'</span></td><td>'+esc(x.mpesa_receipt)+'</td></tr>').join(""):'<tr><td colspan="6" class="empty">No offer purchases found.</td></tr>';
  const list=offerList.data||[];
- el("offerRows").innerHTML=list.length?list.map(x=>'<tr><td>'+esc(x.offer_name)+'</td><td>'+esc(x.offer_type)+'</td><td>'+esc(x.validity_text)+'</td><td>'+esc(money(x.selling_price))+'</td><td><span class="pill">'+(x.is_active?"Active":"Inactive")+'</span></td></tr>').join(""):'<tr><td colspan="5" class="empty">No offers found.</td></tr>';
+ renderOfferTables(list);
  status("Dashboard refreshed successfully • "+new Date().toLocaleString(),"ok");
  }catch(error){console.error("Admin dashboard:",error);status("Could not load dashboard data: "+(error.message||"Please check database permissions."),"error");}
  finally{refreshButton.disabled=false;refreshButton.textContent=originalLabel;}
 }
+let cachedOffers=[];
+function renderOfferTables(list){
+ cachedOffers=list||[];
+ el("offerRows").innerHTML=cachedOffers.length?cachedOffers.map(x=>'<tr><td>'+esc(x.offer_name)+'</td><td>'+esc(x.offer_type)+'</td><td>'+esc(x.validity_text)+'</td><td>'+esc(money(x.selling_price))+'</td><td><span class="pill">'+(x.is_active?"Active":"Inactive")+'</span></td></tr>').join(""):'<tr><td colspan="5" class="empty">No offers found.</td></tr>';
+ if(el("manageOfferRows")) el("manageOfferRows").innerHTML=cachedOffers.length?cachedOffers.map(x=>'<tr><td>'+esc(x.offer_name)+'</td><td>'+esc(x.offer_type)+'</td><td>'+esc(x.validity_text)+'</td><td>'+esc(money(x.selling_price))+'</td><td>'+ (x.is_active?"Active":"Inactive")+'</td><td><div class="actions"><button type="button" data-edit="'+esc(x.id)+'">Edit</button><button type="button" data-toggle="'+esc(x.id)+'">'+(x.is_active?"Deactivate":"Activate")+'</button><button type="button" data-delete="'+esc(x.id)+'">Delete</button></div></td></tr>').join(""):'<tr><td colspan="6" class="empty">No offers found.</td></tr>';
+}
+function clearOfferForm(){el("offerForm").reset();el("editingOfferId").value="";el("saveOfferBtn").textContent="Add Offer";}
+el("manageOffersBtn").addEventListener("click",()=>{el("offerManagement").classList.remove("hidden");el("offerManagement").scrollIntoView({behavior:"smooth"});});
+el("closeOfferManager").addEventListener("click",()=>el("offerManagement").classList.add("hidden"));
+el("cancelOfferEdit").addEventListener("click",clearOfferForm);
+el("offerForm").addEventListener("submit",async event=>{
+ event.preventDefault();const id=el("editingOfferId").value;
+ const payload={offer_name:el("offerName").value.trim(),offer_type:el("offerType").value,validity_text:el("offerValidity").value.trim(),selling_price:Number(el("offerPrice").value),is_active:true};
+ if(!payload.offer_name||!payload.validity_text||!Number.isFinite(payload.selling_price)||payload.selling_price<=0){status("Enter a valid offer name, validity and price.","error");return;}
+ el("saveOfferBtn").disabled=true;
+ try{
+  const result=id?await supabase.from("data_minutes_offers").update(payload).eq("id",id):await supabase.from("data_minutes_offers").insert(payload);
+  if(result.error)throw result.error;
+  clearOfferForm();status(id?"Offer updated successfully.":"Offer added successfully.","ok");await loadData();
+ }catch(error){status("Could not save offer: "+(error.message||"Check administrator database permissions."),"error");}
+ finally{el("saveOfferBtn").disabled=false;}
+});
+el("manageOfferRows").addEventListener("click",async event=>{
+ const button=event.target.closest("button");if(!button)return;
+ const id=button.dataset.edit||button.dataset.toggle||button.dataset.delete;
+ const offer=cachedOffers.find(x=>String(x.id)===String(id));if(!offer)return;
+ try{
+  if(button.dataset.edit){el("editingOfferId").value=offer.id;el("offerName").value=offer.offer_name||"";el("offerType").value=offer.offer_type||"data";el("offerValidity").value=offer.validity_text||"";el("offerPrice").value=offer.selling_price||"";el("saveOfferBtn").textContent="Save Changes";el("offerForm").scrollIntoView({behavior:"smooth"});return;}
+  if(button.dataset.delete){if(!confirm("Permanently delete "+offer.offer_name+"? This cannot be undone."))return;const result=await supabase.from("data_minutes_offers").delete().eq("id",offer.id);if(result.error)throw result.error;status("Offer deleted.","ok");}
+  if(button.dataset.toggle){const result=await supabase.from("data_minutes_offers").update({is_active:!offer.is_active}).eq("id",offer.id);if(result.error)throw result.error;status(offer.is_active?"Offer deactivated.":"Offer activated.","ok");}
+  await loadData();
+ }catch(error){status("Offer action failed: "+(error.message||"Check administrator database permissions."),"error");}
+});
 el("refreshBtn").addEventListener("click",async()=>{
  try{
    if(await checkAdmin()) await loadData();
