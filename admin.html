@@ -95,7 +95,6 @@ function renderTransactions(rows){
 
 function renderOfferTables(list){
  cachedOffers=list||[];
- el("offerRows").innerHTML=cachedOffers.length?cachedOffers.map(x=>'<tr><td>'+esc(x.offer_name)+'</td><td>'+esc(x.offer_type)+'</td><td>'+esc(x.validity_text)+'</td><td>'+esc(money(x.selling_price))+'</td><td><span class="pill">'+(x.is_active?"Active":"Inactive")+'</span></td></tr>').join(""):'<tr><td colspan="5" class="empty">No offers found.</td></tr>';
  if(el("manageOfferRows")) el("manageOfferRows").innerHTML=cachedOffers.length?cachedOffers.map(x=>'<tr><td>'+esc(x.offer_name)+'</td><td>'+esc(x.offer_type)+'</td><td>'+esc(x.validity_text)+'</td><td>'+esc(money(x.selling_price))+'</td><td>'+ (x.is_active?"Active":"Inactive")+'</td><td><div class="actions"><button type="button" data-edit="'+esc(x.id)+'">Edit</button><button type="button" data-toggle="'+esc(x.id)+'">'+(x.is_active?"Deactivate":"Activate")+'</button><button type="button" data-delete="'+esc(x.id)+'">Delete</button></div></td></tr>').join(""):'<tr><td colspan="6" class="empty">No offers found.</td></tr>';
 }
 function clearOfferForm(){el("offerForm").reset();el("editingOfferId").value="";el("saveOfferBtn").textContent="Add Offer";}
