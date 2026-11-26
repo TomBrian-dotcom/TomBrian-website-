@@ -48,7 +48,11 @@ async function checkAdmin(){
  el("adminContent").classList.remove("hidden");status("Administrator access verified.","ok");return true;
 }
 async function loadData(){
- el("refreshBtn").disabled=true;
+ const refreshButton=el("refreshBtn");
+ const originalLabel=refreshButton.textContent;
+ refreshButton.disabled=true;
+ refreshButton.textContent="Refreshing…";
+ status("Refreshing dashboard data…");
  try{
  const results=await Promise.all([
  supabase.from("profiles").select("id",{count:"exact",head:true}),
@@ -65,10 +69,18 @@ async function loadData(){
  el("purchaseRows").innerHTML=rows.length?rows.map(x=>'<tr><td>'+esc(x.created_at?new Date(x.created_at).toLocaleString():"—")+'</td><td>'+esc(x.offer_name)+'</td><td>'+esc(x.callback_phone||x.phone)+'</td><td>'+esc(money(x.amount))+'</td><td><span class="pill '+esc(String(x.status||"").toLowerCase())+'">'+esc(x.status)+'</span></td><td>'+esc(x.mpesa_receipt)+'</td></tr>').join(""):'<tr><td colspan="6" class="empty">No offer purchases found.</td></tr>';
  const list=offerList.data||[];
  el("offerRows").innerHTML=list.length?list.map(x=>'<tr><td>'+esc(x.offer_name)+'</td><td>'+esc(x.offer_type)+'</td><td>'+esc(x.validity_text)+'</td><td>'+esc(money(x.selling_price))+'</td><td><span class="pill">'+(x.is_active?"Active":"Inactive")+'</span></td></tr>').join(""):'<tr><td colspan="5" class="empty">No offers found.</td></tr>';
+ status("Dashboard refreshed successfully • "+new Date().toLocaleString(),"ok");
  }catch(error){console.error("Admin dashboard:",error);status("Could not load dashboard data: "+(error.message||"Please check database permissions."),"error");}
- finally{el("refreshBtn").disabled=false;}
+ finally{refreshButton.disabled=false;refreshButton.textContent=originalLabel;}
 }
-el("refreshBtn").addEventListener("click",loadData);
+el("refreshBtn").addEventListener("click",async()=>{
+ try{
+   if(await checkAdmin()) await loadData();
+ }catch(error){
+   console.error("Admin refresh:",error);
+   status("Refresh failed: "+(error.message||"Please sign in again."),"error");
+ }
+});
 el("logoutBtn").addEventListener("click",async()=>{await supabase.auth.signOut();location.replace("login.html");});
 try{if(await checkAdmin())await loadData();}catch(error){console.error(error);status("Admin verification failed: "+(error.message||"Please try again."),"error");}
 supabase.auth.onAuthStateChange(event=>{if(event==="SIGNED_OUT")location.replace("login.html");});
