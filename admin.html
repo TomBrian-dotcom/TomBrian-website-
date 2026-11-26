@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TomBrian | Admin</title>
+<style>
+:root{color-scheme:dark;--bg:#05070d;--panel:#111624;--panel2:#171e2d;--gold:#d9a441;--muted:#98a2b3;--line:#293244}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f7f8fb;font-family:Arial,Helvetica,sans-serif}
+header{position:sticky;top:0;z-index:5;background:#090d16;border-bottom:1px solid var(--line);padding:15px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{font-size:20px;font-weight:900;color:var(--gold)}.sub{font-size:12px;color:var(--muted);margin-top:3px}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);border-radius:10px;padding:10px 13px;background:var(--panel2);color:#fff}
+main{max-width:1100px;margin:auto;padding:22px 16px 60px}h1{font-size:25px;margin:0 0 6px}.muted{color:var(--muted);font-size:13px;line-height:1.5}
+.status{margin:16px 0;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);font-size:13px}
+.status.error{border-color:#71343a;color:#ffb1b1}.status.ok{border-color:#245b46;color:#a6f0cb}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0}.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:16px;min-width:0}
+.metric-label{font-size:12px;color:var(--muted)}.metric{font-size:27px;font-weight:900;margin-top:9px;color:var(--gold)}
+.section{margin-top:24px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px}h2{font-size:18px;margin:0}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel)}table{width:100%;border-collapse:collapse;min-width:650px}
+th,td{text-align:left;padding:12px 13px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:top}th{color:var(--muted);font-weight:700;background:#151c2a}tr:last-child td{border-bottom:0}
+.pill{display:inline-block;border-radius:30px;padding:4px 8px;background:#253044;color:#d9e1ee;font-size:11px;text-transform:capitalize}.pill.completed{background:#143d30;color:#9aebc7}.pill.failed{background:#482329;color:#ffb0b0}
+.empty{padding:20px;color:var(--muted);font-size:13px}.actions{display:flex;gap:8px;align-items:center}.hidden{display:none!important}
+@media(max-width:720px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}header{align-items:flex-start}.metric{font-size:24px}}
+</style></head><body>
+<header><div><div class="brand">TomBrian Admin</div><div class="sub">Secure business management</div></div><div class="actions"><button id="refreshBtn">Refresh</button><button id="logoutBtn">Sign out</button></div></header>
+<main><h1>Admin Dashboard</h1><p class="muted">Overview of customers, offer purchases and available offers.</p>
+<div id="status" class="status">Checking your administrator access…</div>
+<div id="adminContent" class="hidden">
+<div class="grid">
+<div class="card"><div class="metric-label">Registered customers</div><div class="metric" id="customerCount">—</div></div>
+<div class="card"><div class="metric-label">All offer purchases</div><div class="metric" id="purchaseCount">—</div></div>
+<div class="card"><div class="metric-label">Completed payments</div><div class="metric" id="completedCount">—</div></div>
+<div class="card"><div class="metric-label">Active offers</div><div class="metric" id="offerCount">—</div></div>
+</div>
+<section class="section"><div class="section-head"><h2>Recent offer purchases</h2><span class="muted">Latest 50 records</span></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Offer</th><th>Phone</th><th>Amount</th><th>Status</th><th>M-Pesa receipt</th></tr></thead><tbody id="purchaseRows"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody></table></div></section>
+<section class="section"><div class="section-head"><h2>Offers</h2><span class="muted">Current database records</span></div><div class="table-wrap"><table><thead><tr><th>Offer</th><th>Category</th><th>Validity</th><th>Price</th><th>Status</th></tr></thead><tbody id="offerRows"><tr><td colspan="5" class="empty">Loading…</td></tr></tbody></table></div></section>
+<p class="muted" style="margin-top:18px">Monitoring-only first release. Offer editing and deletion will be enabled after confirming administrator-only database write policies.</p>
+</div></main>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+const supabase=createClient("https://ekqhsnzkovzmepxdajtu.supabase.co","sb_publishable_v4DmfQMCBRvJE_dJvgk1og_v6JMXE_r");
+const el=id=>document.getElementById(id);
+const status=(message,type="")=>{el("status").textContent=message;el("status").className="status"+(type?" "+type:"");};
+const esc=value=>String(value??"—").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=value=>"KES "+Number(value||0).toFixed(2);
+async function checkAdmin(){
+ const {data:{session},error}=await supabase.auth.getSession();if(error)throw error;
+ if(!session){location.replace("login.html");return false;}
+ const {data:profile,error:profileError}=await supabase.from("profiles").select("role").eq("id",session.user.id).maybeSingle();
+ if(profileError)throw profileError;
+ if(String(profile?.role||"").toLowerCase()!=="admin"){status("Access denied. This account does not have the administrator role.","error");return false;}
+ el("adminContent").classList.remove("hidden");status("Administrator access verified.","ok");return true;
+}
+async function loadData(){
+ el("refreshBtn").disabled=true;
+ try{
+ const results=await Promise.all([
+ supabase.from("profiles").select("id",{count:"exact",head:true}),
+ supabase.from("offer_purchase_requests").select("id",{count:"exact",head:true}),
+ supabase.from("offer_purchase_requests").select("id",{count:"exact",head:true}).eq("status","completed"),
+ supabase.from("data_minutes_offers").select("id",{count:"exact",head:true}).eq("is_active",true),
+ supabase.from("offer_purchase_requests").select("offer_name,amount,phone,callback_phone,status,mpesa_receipt,created_at").order("created_at",{ascending:false}).limit(50),
+ supabase.from("data_minutes_offers").select("offer_name,offer_type,validity_text,selling_price,is_active").order("selling_price",{ascending:true})
+ ]);
+ for(const result of results)if(result.error)throw result.error;
+ const [customers,purchases,completed,offers,recent,offerList]=results;
+ el("customerCount").textContent=customers.count??"—";el("purchaseCount").textContent=purchases.count??"—";el("completedCount").textContent=completed.count??"—";el("offerCount").textContent=offers.count??"—";
+ const rows=recent.data||[];
+ el("purchaseRows").innerHTML=rows.length?rows.map(x=>'<tr><td>'+esc(x.created_at?new Date(x.created_at).toLocaleString():"—")+'</td><td>'+esc(x.offer_name)+'</td><td>'+esc(x.callback_phone||x.phone)+'</td><td>'+esc(money(x.amount))+'</td><td><span class="pill '+esc(String(x.status||"").toLowerCase())+'">'+esc(x.status)+'</span></td><td>'+esc(x.mpesa_receipt)+'</td></tr>').join(""):'<tr><td colspan="6" class="empty">No offer purchases found.</td></tr>';
+ const list=offerList.data||[];
+ el("offerRows").innerHTML=list.length?list.map(x=>'<tr><td>'+esc(x.offer_name)+'</td><td>'+esc(x.offer_type)+'</td><td>'+esc(x.validity_text)+'</td><td>'+esc(money(x.selling_price))+'</td><td><span class="pill">'+(x.is_active?"Active":"Inactive")+'</span></td></tr>').join(""):'<tr><td colspan="5" class="empty">No offers found.</td></tr>';
+ }catch(error){console.error("Admin dashboard:",error);status("Could not load dashboard data: "+(error.message||"Please check database permissions."),"error");}
+ finally{el("refreshBtn").disabled=false;}
+}
+el("refreshBtn").addEventListener("click",loadData);
+el("logoutBtn").addEventListener("click",async()=>{await supabase.auth.signOut();location.replace("login.html");});
+try{if(await checkAdmin())await loadData();}catch(error){console.error(error);status("Admin verification failed: "+(error.message||"Please try again."),"error");}
+supabase.auth.onAuthStateChange(event=>{if(event==="SIGNED_OUT")location.replace("login.html");});
+</script></body></html>
