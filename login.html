@@ -606,17 +606,28 @@
 
 
           /* ---------------------------------------------------
-             CHECK USER
+             CHECK USER AND ACCOUNT ROLE
              --------------------------------------------------- */
 
           if (!data.user) {
-
             throw new Error(
               "Login was not completed. Please try again."
             );
-
           }
 
+          const { data: profile, error: profileError } =
+            await supabase
+              .from("profiles")
+              .select("role")
+              .eq("id", data.user.id)
+              .maybeSingle();
+
+          if (profileError) {
+            throw profileError;
+          }
+
+          const isAdmin =
+            String(profile?.role || "").toLowerCase() === "admin";
 
           /* ---------------------------------------------------
              SUCCESS
@@ -627,23 +638,14 @@
             "success"
           );
 
-
-          loginButton.textContent =
-            "Success!";
-
+          loginButton.textContent = "Success!";
 
           /* ---------------------------------------------------
-             REDIRECT
+             ROLE-BASED REDIRECT
              --------------------------------------------------- */
 
-          setTimeout(
-            function() {
-
-              window.location.href =
-                "dashboard.html";
-
-            },
-            1000
+          window.location.replace(
+            isAdmin ? "admin.html" : "dashboard.html"
           );
 
 
