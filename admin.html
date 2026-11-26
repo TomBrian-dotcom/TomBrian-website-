@@ -100,7 +100,8 @@ el("offerType").addEventListener("change",()=>{const minutes=el("offerType").val
 el("offerForm").addEventListener("submit",async event=>{
  event.preventDefault();const id=el("editingOfferId").value;
  const type=el("offerType").value;const detail=el("offerDetail").value.trim();
- const payload={offer_name:el("offerName").value.trim(),offer_type:type,data_amount:type==="data"?detail:null,minutes_amount:type==="minutes"?Number(detail):null,validity_text:el("offerValidity").value.trim(),selling_price:Number(el("offerPrice").value),is_active:true};
+ const payload={offer_name:el("offerName").value.trim(),offer_type:type,data_amount:type==="data"?detail:null,minutes_amount:type==="minutes"?Number(detail):null,validity_text:el("offerValidity").value.trim(),selling_price:Number(el("offerPrice").value)};
+ if(!id)payload.is_active=true;
  if(!payload.offer_name||!detail||(type==="minutes"&&(!Number.isInteger(payload.minutes_amount)||payload.minutes_amount<=0))||!payload.validity_text||!Number.isFinite(payload.selling_price)||payload.selling_price<=0){status("Enter a valid offer name, validity and price.","error");return;}
  el("saveOfferBtn").disabled=true;
  try{
