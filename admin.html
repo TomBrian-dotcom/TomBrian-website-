@@ -28,7 +28,7 @@ th,td{text-align:left;padding:12px 13px;border-bottom:1px solid var(--line);font
 <div class="card"><div class="metric-label">Completed payments</div><div class="metric" id="completedCount">—</div></div>
 <div class="card"><div class="metric-label">Active offers</div><div class="metric" id="offerCount">—</div><button id="manageOffersBtn" style="margin-top:12px;width:100%">Manage Offers</button></div>
 </div>
-<section class="section"><div class="section-head"><h2>Recent offer purchases</h2><span class="muted">Latest 50 records</span></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Offer</th><th>Phone</th><th>Amount</th><th>Status</th><th>M-Pesa receipt</th></tr></thead><tbody id="purchaseRows"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody></table></div></section>
+<section class="section"><div class="section-head"><h2>Transaction History</h2><span class="muted" id="historyCount">Latest 50 records</span></div><form id="historySearchForm" class="actions" style="margin:0 0 12px;flex-wrap:wrap"><input id="historySearch" type="search" placeholder="Search phone, offer, receipt or status" style="flex:1;min-width:190px;padding:11px;border-radius:9px;border:1px solid var(--line);background:#111624;color:white"><button type="submit" id="historySearchBtn">Search</button><button type="button" id="clearHistorySearch">Clear</button></form><div class="table-wrap"><table><thead><tr><th>Date</th><th>Offer</th><th>Phone</th><th>Amount</th><th>Status</th><th>M-Pesa receipt</th></tr></thead><tbody id="purchaseRows"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody></table></div></section>
 <section class="section hidden" id="offerManagement">
 <div class="section-head"><h2>Manage Offers</h2><button id="closeOfferManager">Close</button></div>
 <form id="offerForm" class="card" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
@@ -42,8 +42,7 @@ th,td{text-align:left;padding:12px 13px;border-bottom:1px solid var(--line);font
 </form>
 <div class="table-wrap" style="margin-top:12px"><table><thead><tr><th>Offer</th><th>Category</th><th>Validity</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead><tbody id="manageOfferRows"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody></table></div>
 </section>
-<section class="section"><div class="section-head"><h2>Offers</h2><span class="muted">Current database records</span></div><div class="table-wrap"><table><thead><tr><th>Offer</th><th>Category</th><th>Validity</th><th>Price</th><th>Status</th></tr></thead><tbody id="offerRows"><tr><td colspan="5" class="empty">Loading…</td></tr></tbody></table></div></section>
-<p class="muted" style="margin-top:18px">Offer creation and editing support the database-approved Data and Minutes categories. SMS requires a separate database and customer-app update before it can be enabled.</p>
+
 </div></main>
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
@@ -73,12 +72,13 @@ async function loadData(){
  supabase.from("offer_purchase_requests").select("id",{count:"exact",head:true}).eq("status","completed"),
  supabase.from("data_minutes_offers").select("id",{count:"exact",head:true}).eq("is_active",true),
  supabase.from("offer_purchase_requests").select("offer_name,amount,phone,callback_phone,status,mpesa_receipt,created_at").order("created_at",{ascending:false}).limit(50),
- supabase.from("data_minutes_offers").select("id,offer_name,offer_type,validity_text,selling_price,is_active").order("selling_price",{ascending:true})
+ supabase.from("data_minutes_offers").select("id,offer_name,offer_type,data_amount,minutes_amount,sms_amount,validity_text,selling_price,is_active").order("selling_price",{ascending:true})
  ]);
  for(const result of results)if(result.error)throw result.error;
  const [customers,purchases,completed,offers,recent,offerList]=results;
  el("customerCount").textContent=customers.count??"—";el("purchaseCount").textContent=purchases.count??"—";el("completedCount").textContent=completed.count??"—";el("offerCount").textContent=offers.count??"—";
  const rows=recent.data||[];
+ cachedTransactions=rows;renderTransactions(rows);
  el("purchaseRows").innerHTML=rows.length?rows.map(x=>'<tr><td>'+esc(x.created_at?new Date(x.created_at).toLocaleString():"—")+'</td><td>'+esc(x.offer_name)+'</td><td>'+esc(x.callback_phone||x.phone)+'</td><td>'+esc(money(x.amount))+'</td><td><span class="pill '+esc(String(x.status||"").toLowerCase())+'">'+esc(x.status)+'</span></td><td>'+esc(x.mpesa_receipt)+'</td></tr>').join(""):'<tr><td colspan="6" class="empty">No offer purchases found.</td></tr>';
  const list=offerList.data||[];
  renderOfferTables(list);
@@ -87,12 +87,20 @@ async function loadData(){
  finally{refreshButton.disabled=false;refreshButton.textContent=originalLabel;}
 }
 let cachedOffers=[];
+let cachedTransactions=[];
+function renderTransactions(rows){
+ el("historyCount").textContent=rows.length+" matching records (latest 50 loaded)";
+ el("purchaseRows").innerHTML=rows.length?rows.map(x=>"<tr><td>"+esc(x.created_at?new Date(x.created_at).toLocaleString():"—")+"</td><td>"+esc(x.offer_name)+"</td><td>"+esc(x.callback_phone||x.phone)+"</td><td>"+esc(money(x.amount))+"</td><td><span class=\"pill "+esc(String(x.status||"").toLowerCase())+"\">"+esc(x.status)+"</span></td><td>"+esc(x.mpesa_receipt)+"</td></tr>").join(""):"<tr><td colspan=\"6\" class=\"empty\">No matching transactions found.</td></tr>";
+}
+
 function renderOfferTables(list){
  cachedOffers=list||[];
  el("offerRows").innerHTML=cachedOffers.length?cachedOffers.map(x=>'<tr><td>'+esc(x.offer_name)+'</td><td>'+esc(x.offer_type)+'</td><td>'+esc(x.validity_text)+'</td><td>'+esc(money(x.selling_price))+'</td><td><span class="pill">'+(x.is_active?"Active":"Inactive")+'</span></td></tr>').join(""):'<tr><td colspan="5" class="empty">No offers found.</td></tr>';
  if(el("manageOfferRows")) el("manageOfferRows").innerHTML=cachedOffers.length?cachedOffers.map(x=>'<tr><td>'+esc(x.offer_name)+'</td><td>'+esc(x.offer_type)+'</td><td>'+esc(x.validity_text)+'</td><td>'+esc(money(x.selling_price))+'</td><td>'+ (x.is_active?"Active":"Inactive")+'</td><td><div class="actions"><button type="button" data-edit="'+esc(x.id)+'">Edit</button><button type="button" data-toggle="'+esc(x.id)+'">'+(x.is_active?"Deactivate":"Activate")+'</button><button type="button" data-delete="'+esc(x.id)+'">Delete</button></div></td></tr>').join(""):'<tr><td colspan="6" class="empty">No offers found.</td></tr>';
 }
 function clearOfferForm(){el("offerForm").reset();el("editingOfferId").value="";el("saveOfferBtn").textContent="Add Offer";}
+el("historySearchForm").addEventListener("submit",event=>{event.preventDefault();const q=el("historySearch").value.trim().toLowerCase();const filtered=q?cachedTransactions.filter(x=>[x.offer_name,x.phone,x.callback_phone,x.mpesa_receipt,x.status,x.amount,x.created_at].some(v=>String(v??"").toLowerCase().includes(q))):cachedTransactions;renderTransactions(filtered);});
+el("clearHistorySearch").addEventListener("click",()=>{el("historySearch").value="";renderTransactions(cachedTransactions);});
 el("manageOffersBtn").addEventListener("click",()=>{el("offerManagement").classList.remove("hidden");el("offerManagement").scrollIntoView({behavior:"smooth"});});
 el("closeOfferManager").addEventListener("click",()=>el("offerManagement").classList.add("hidden"));
 el("cancelOfferEdit").addEventListener("click",clearOfferForm);
