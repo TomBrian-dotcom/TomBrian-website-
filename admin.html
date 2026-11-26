@@ -72,7 +72,7 @@ async function loadData(){
  supabase.from("offer_purchase_requests").select("id",{count:"exact",head:true}).eq("status","completed"),
  supabase.from("data_minutes_offers").select("id",{count:"exact",head:true}).eq("is_active",true),
  supabase.from("offer_purchase_requests").select("offer_name,amount,phone,callback_phone,status,mpesa_receipt,created_at").order("created_at",{ascending:false}).limit(50),
- supabase.from("data_minutes_offers").select("offer_name,offer_type,validity_text,selling_price,is_active").order("selling_price",{ascending:true})
+ supabase.from("data_minutes_offers").select("id,offer_name,offer_type,validity_text,selling_price,is_active").order("selling_price",{ascending:true})
  ]);
  for(const result of results)if(result.error)throw result.error;
  const [customers,purchases,completed,offers,recent,offerList]=results;
