@@ -23,11 +23,12 @@ th,td{text-align:left;padding:12px 13px;border-bottom:1px solid var(--line);font
 <div id="status" class="status">Checking your administrator access…</div>
 <div id="adminContent" class="hidden">
 <div class="grid">
-<div class="card"><div class="metric-label">Registered customers</div><div class="metric" id="customerCount">—</div></div>
+<div class="card"><div class="metric-label">Registered customers</div><div class="metric" id="customerCount">—</div><button id="viewCustomersBtn" style="margin-top:12px;width:100%">View Customers</button></div>
 <div class="card"><div class="metric-label">All offer purchases</div><div class="metric" id="purchaseCount">—</div></div>
 <div class="card"><div class="metric-label">Completed payments</div><div class="metric" id="completedCount">—</div></div>
 <div class="card"><div class="metric-label">Active offers</div><div class="metric" id="offerCount">—</div><button id="manageOffersBtn" style="margin-top:12px;width:100%">Manage Offers</button></div>
 </div>
+<section class="section hidden" id="customerRecords"><div class="section-head"><h2>Customer Records</h2><button id="closeCustomersBtn">Close Customers</button></div><p class="muted" id="customerRecordsStatus">Records are visible only in the verified administrator dashboard.</p><div class="table-wrap"><table><thead><tr><th>Name</th><th>Phone</th><th>Role</th><th>Registered</th></tr></thead><tbody id="customerRows"><tr><td colspan="4" class="empty">Tap View Customers to load records.</td></tr></tbody></table></div></section>
 <section class="section"><div class="section-head"><h2>Transaction History</h2><span class="muted" id="historyCount">Latest 50 records</span></div><form id="historySearchForm" class="actions" style="margin:0 0 12px;flex-wrap:wrap"><input id="historySearch" type="search" placeholder="Search phone, offer, receipt or status" style="flex:1;min-width:190px;padding:11px;border-radius:9px;border:1px solid var(--line);background:#111624;color:white"><button type="submit" id="historySearchBtn">Search</button><button type="button" id="clearHistorySearch">Clear</button></form><div class="table-wrap"><table><thead><tr><th>Date</th><th>Offer</th><th>Phone</th><th>Amount</th><th>Status</th><th>M-Pesa receipt</th></tr></thead><tbody id="purchaseRows"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody></table></div></section>
 <section class="section hidden" id="offerManagement">
 <div class="section-head"><h2>Manage Offers</h2><button id="closeOfferManager">Close</button></div>
@@ -98,6 +99,21 @@ function renderOfferTables(list){
  if(el("manageOfferRows")) el("manageOfferRows").innerHTML=cachedOffers.length?cachedOffers.map(x=>'<tr><td>'+esc(x.offer_name)+'</td><td>'+esc(x.offer_type)+'</td><td>'+esc(x.validity_text)+'</td><td>'+esc(money(x.selling_price))+'</td><td>'+ (x.is_active?"Active":"Inactive")+'</td><td><div class="actions"><button type="button" data-edit="'+esc(x.id)+'">Edit</button><button type="button" data-toggle="'+esc(x.id)+'">'+(x.is_active?"Deactivate":"Activate")+'</button><button type="button" data-delete="'+esc(x.id)+'">Delete</button></div></td></tr>').join(""):'<tr><td colspan="6" class="empty">No offers found.</td></tr>';
 }
 function clearOfferForm(){el("offerForm").reset();el("editingOfferId").value="";el("saveOfferBtn").textContent="Add Offer";}
+async function loadCustomerRecords(){
+ const button=el("viewCustomersBtn");button.disabled=true;button.textContent="Loading…";el("customerRecords").classList.remove("hidden");el("customerRecordsStatus").textContent="Loading customer records…";el("customerRows").innerHTML='<tr><td colspan="4" class="empty">Loading…</td></tr>';
+ try{
+  if(!(await checkAdmin()))throw new Error("Administrator access could not be verified.");
+  const {data,error}=await supabase.from("profiles").select("full_name,phone,role,created_at").order("created_at",{ascending:false}).limit(500);
+  if(error)throw error;
+  const rows=data||[];
+  el("customerRows").innerHTML=rows.length?rows.map(x=>"<tr><td>"+esc(x.full_name)+"</td><td>"+esc(x.phone)+"</td><td>"+esc(x.role)+"</td><td>"+esc(x.created_at?new Date(x.created_at).toLocaleDateString():"—")+"</td></tr>").join(""):'<tr><td colspan="4" class="empty">No customer records found.</td></tr>';
+  el("customerRecordsStatus").textContent=rows.length+" records loaded (maximum 500).";
+  el("customerRecords").scrollIntoView({behavior:"smooth",block:"start"});
+ }catch(error){el("customerRecordsStatus").textContent="Could not load customer records: "+(error.message||"Check administrator access and profiles table permissions.");el("customerRows").innerHTML='<tr><td colspan="4" class="empty">Customer records unavailable.</td></tr>';}
+ finally{button.disabled=false;button.textContent="View Customers";}
+}
+el("viewCustomersBtn").addEventListener("click",loadCustomerRecords);
+el("closeCustomersBtn").addEventListener("click",()=>{el("customerRecords").classList.add("hidden");});
 el("historySearchForm").addEventListener("submit",event=>{event.preventDefault();const q=el("historySearch").value.trim().toLowerCase();const filtered=q?cachedTransactions.filter(x=>[x.offer_name,x.phone,x.callback_phone,x.mpesa_receipt,x.status,x.amount,x.created_at].some(v=>String(v??"").toLowerCase().includes(q))):cachedTransactions;renderTransactions(filtered);});
 el("clearHistorySearch").addEventListener("click",()=>{el("historySearch").value="";renderTransactions(cachedTransactions);});
 el("manageOffersBtn").addEventListener("click",()=>{el("offerManagement").classList.remove("hidden");el("offerManagement").scrollIntoView({behavior:"smooth"});});
