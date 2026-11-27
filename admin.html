@@ -38,6 +38,9 @@ th,td{text-align:left;padding:12px 13px;border-bottom:1px solid var(--line);font
 <label class="muted"><span id="offerDetailLabel">Data amount</span><input id="offerDetail" required maxlength="60" placeholder="e.g. 250MB" style="display:block;width:100%;margin-top:6px;padding:11px;border-radius:9px;border:1px solid var(--line);background:#090d16;color:white"></label>
 <label class="muted">Validity<input id="offerValidity" required maxlength="60" placeholder="e.g. 24hrs" style="display:block;width:100%;margin-top:6px;padding:11px;border-radius:9px;border:1px solid var(--line);background:#090d16;color:white"></label>
 <label class="muted">Price (KES)<input id="offerPrice" required type="number" min="1" step="0.01" placeholder="20" style="display:block;width:100%;margin-top:6px;padding:11px;border-radius:9px;border:1px solid var(--line);background:#090d16;color:white"></label>
+<label class="muted" style="grid-column:1/-1;display:flex;align-items:center;gap:8px"><input id="scheduleEnabled" type="checkbox"> Enable automatic scheduling (Kenya time)</label>
+<label class="muted">Activate Time<input id="activateTime" type="time" style="display:block;width:100%;margin-top:6px;padding:11px;border-radius:9px;border:1px solid var(--line);background:#090d16;color:white"></label>
+<label class="muted">Deactivate Time<input id="deactivateTime" type="time" style="display:block;width:100%;margin-top:6px;padding:11px;border-radius:9px;border:1px solid var(--line);background:#090d16;color:white"></label>
 <div class="actions" style="grid-column:1/-1"><button id="saveOfferBtn" type="submit">Add Offer</button><button id="cancelOfferEdit" type="button">Clear</button></div>
 <input id="editingOfferId" type="hidden">
 </form>
@@ -73,7 +76,7 @@ async function loadData(){
  supabase.from("offer_purchase_requests").select("id",{count:"exact",head:true}).eq("status","completed"),
  supabase.from("data_minutes_offers").select("id",{count:"exact",head:true}).eq("is_active",true),
  supabase.from("offer_purchase_requests").select("offer_name,amount,phone,callback_phone,status,mpesa_receipt,created_at").order("created_at",{ascending:false}).limit(50),
- supabase.from("data_minutes_offers").select("id,offer_name,offer_type,data_amount,minutes_amount,sms_amount,validity_text,selling_price,is_active").order("selling_price",{ascending:true})
+ supabase.from("data_minutes_offers").select("id,offer_name,offer_type,data_amount,minutes_amount,sms_amount,validity_text,selling_price,is_active,activate_time,deactivate_time,schedule_enabled").order("selling_price",{ascending:true})
  ]);
  for(const result of results)if(result.error)throw result.error;
  const [customers,purchases,completed,offers,recent,offerList]=results;
@@ -98,7 +101,7 @@ function renderOfferTables(list){
  cachedOffers=list||[];
  if(el("manageOfferRows")) el("manageOfferRows").innerHTML=cachedOffers.length?cachedOffers.map(x=>'<tr><td>'+esc(x.offer_name)+'</td><td>'+esc(x.offer_type)+'</td><td>'+esc(x.validity_text)+'</td><td>'+esc(money(x.selling_price))+'</td><td>'+ (x.is_active?"Active":"Inactive")+'</td><td><div class="actions"><button type="button" data-edit="'+esc(x.id)+'">Edit</button><button type="button" data-toggle="'+esc(x.id)+'">'+(x.is_active?"Deactivate":"Activate")+'</button><button type="button" data-delete="'+esc(x.id)+'">Delete</button></div></td></tr>').join(""):'<tr><td colspan="6" class="empty">No offers found.</td></tr>';
 }
-function clearOfferForm(){el("offerForm").reset();el("editingOfferId").value="";el("saveOfferBtn").textContent="Add Offer";}
+function clearOfferForm(){el("offerForm").reset();el("editingOfferId").value="";el("saveOfferBtn").textContent="Add Offer";el("activateTime").value="";el("deactivateTime").value="";el("scheduleEnabled").checked=false;}
 async function loadCustomerRecords(){
  const button=el("viewCustomersBtn");button.disabled=true;button.textContent="Loading…";el("customerRecords").classList.remove("hidden");el("customerRecordsStatus").textContent="Loading customer records…";el("customerRows").innerHTML='<tr><td colspan="4" class="empty">Loading…</td></tr>';
  try{
@@ -123,9 +126,12 @@ el("offerType").addEventListener("change",()=>{const type=el("offerType").value;
 el("offerForm").addEventListener("submit",async event=>{
  event.preventDefault();const id=el("editingOfferId").value;
  const type=el("offerType").value;const detail=el("offerDetail").value.trim();
- const payload={offer_name:el("offerName").value.trim(),offer_type:type,data_amount:type==="data"?detail:null,minutes_amount:type==="minutes"?Number(detail):null,sms_amount:type==="sms"?Number(detail):null,validity_text:el("offerValidity").value.trim(),selling_price:Number(el("offerPrice").value)};
+ const scheduleEnabled=el("scheduleEnabled").checked;
+ const activateTime=el("activateTime").value;
+ const deactivateTime=el("deactivateTime").value;
+ const payload={offer_name:el("offerName").value.trim(),offer_type:type,data_amount:type==="data"?detail:null,minutes_amount:type==="minutes"?Number(detail):null,sms_amount:type==="sms"?Number(detail):null,validity_text:el("offerValidity").value.trim(),selling_price:Number(el("offerPrice").value),schedule_enabled:scheduleEnabled,activate_time:scheduleEnabled?activateTime||null:null,deactivate_time:scheduleEnabled?deactivateTime||null:null};
  if(!id)payload.is_active=true;
- if(!payload.offer_name||!detail||((type==="minutes"||type==="sms")&&(!Number.isInteger(type==="minutes"?payload.minutes_amount:payload.sms_amount)||(type==="minutes"?payload.minutes_amount:payload.sms_amount)<=0))||!payload.validity_text||!Number.isFinite(payload.selling_price)||payload.selling_price<=0){status("Enter a valid offer name, validity and price.","error");return;}
+ if(!payload.offer_name||!detail||((type==="minutes"||type==="sms")&&(!Number.isInteger(type==="minutes"?payload.minutes_amount:payload.sms_amount)||(type==="minutes"?payload.minutes_amount:payload.sms_amount)<=0))||!payload.validity_text||!Number.isFinite(payload.selling_price)||payload.selling_price<=0||(scheduleEnabled&&(!activateTime||!deactivateTime||activateTime===deactivateTime))){status("Enter valid offer details. Scheduled offers need different activation and deactivation times.","error");return;}
  el("saveOfferBtn").disabled=true;
  try{
   const result=id?await supabase.from("data_minutes_offers").update(payload).eq("id",id):await supabase.from("data_minutes_offers").insert(payload);
@@ -139,7 +145,7 @@ el("manageOfferRows").addEventListener("click",async event=>{
  const id=button.dataset.edit||button.dataset.toggle||button.dataset.delete;
  const offer=cachedOffers.find(x=>String(x.id)===String(id));if(!offer)return;
  try{
-  if(button.dataset.edit){el("editingOfferId").value=offer.id;el("offerName").value=offer.offer_name||"";el("offerType").value=offer.offer_type||"data";el("offerDetail").value=offer.offer_type==="minutes"?(offer.minutes_amount??""):offer.offer_type==="sms"?(offer.sms_amount??""):(offer.data_amount??"");el("offerDetailLabel").textContent=offer.offer_type==="minutes"?"Minutes amount":offer.offer_type==="sms"?"SMS amount":"Data amount";el("offerValidity").value=offer.validity_text||"";el("offerPrice").value=offer.selling_price||"";el("saveOfferBtn").textContent="Save Changes";el("offerForm").scrollIntoView({behavior:"smooth"});return;}
+  if(button.dataset.edit){el("editingOfferId").value=offer.id;el("offerName").value=offer.offer_name||"";el("offerType").value=offer.offer_type||"data";el("offerDetail").value=offer.offer_type==="minutes"?(offer.minutes_amount??""):offer.offer_type==="sms"?(offer.sms_amount??""):(offer.data_amount??"");el("offerDetailLabel").textContent=offer.offer_type==="minutes"?"Minutes amount":offer.offer_type==="sms"?"SMS amount":"Data amount";el("offerValidity").value=offer.validity_text||"";el("offerPrice").value=offer.selling_price||"";el("scheduleEnabled").checked=!!offer.schedule_enabled;el("activateTime").value=offer.activate_time?String(offer.activate_time).slice(0,5):"";el("deactivateTime").value=offer.deactivate_time?String(offer.deactivate_time).slice(0,5):"";el("saveOfferBtn").textContent="Save Changes";el("offerForm").scrollIntoView({behavior:"smooth"});return;}
   if(button.dataset.delete){if(!confirm("Permanently delete "+offer.offer_name+"? This cannot be undone."))return;const result=await supabase.from("data_minutes_offers").delete().eq("id",offer.id);if(result.error)throw result.error;status("Offer deleted.","ok");}
   if(button.dataset.toggle){const result=await supabase.from("data_minutes_offers").update({is_active:!offer.is_active}).eq("id",offer.id);if(result.error)throw result.error;status(offer.is_active?"Offer deactivated.":"Offer activated.","ok");}
   await loadData();
